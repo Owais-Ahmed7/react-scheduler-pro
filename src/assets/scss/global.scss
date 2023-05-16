@@ -1,0 +1,43 @@
+//bootstrap
+@import "bootstrap/dist/css/bootstrap.min.css";
+
+//components
+@import "./components/helper";
+
+//icons
+@import "./icons/icons";
+
+.calendar-td:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+}
+
+.calendar-td-h {
+    height: 70px;
+}
+
+.calendar-td-w {
+    width: 100px;
+}
+
+.day-time-w {
+    width: 10%;
+}
+
+.day-block-w {
+    width: 90%;
+}
+
+/* booking sidebar */
+.booking-sidebar {
+    flex-basis: 250px;
+    flex-grow: 0;
+    flex-shrink: 0;
+    border: 1px solid #1d1d1d;
+}
+
+.treatment-head {
+    @media (max-width: 800px) {
+       display: none;     
+    }
+}
