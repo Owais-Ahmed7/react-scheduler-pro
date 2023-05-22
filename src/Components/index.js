@@ -9,11 +9,16 @@ import { getDay, getMonthDates, getWeekDates } from "../utils/date-utils";
 
 /**
  * 
- * @param {*} props 
+ * @param {Object} props - Object contains all the passed props according to user usage.
+ * @param {String} props.startTime - Start time is used in day and week layout its the start time of schedular time (e.g startTime = 10:00 AM).
+ * @param {String} props.endTime - End time is used in day and week layout its the end time of schedular time (e.g endTime = 8:00 PM).
+ * @param {Array} props.timeDifference - Time difference is the difference between times of schedular in day & week layout (e.g timeDifference = ['1', 'hour / minutes']).
+ * @param {String} props.fontSize - Font size is the adjustment of font user can do according to its own use case.
+ * @param {String} props.colorTheme - Theme or Color theme user can pass custom color or can pass default bootstrap color themes. (e.g colorTheme = 'primary / info / '#1d1d1d').
+ * @param {Array} props.layouts - Layout are the layouts (Day, Week, Month). User can decide how many layouts he want and have the freedom to select all or any one / two of them (e.g layouts = ['day', 'week', 'month']).
  * @returns 
  */
 const Schedular = (props) => {
-  //const dispatch = useDispatch();
   //dates ranging from current month 1st date to next 35th
   const [trackMonth, setTrackMonth] = useState(moment().startOf("month"));
   let [monthDates, setMonthDates] = useState([]);
@@ -35,35 +40,35 @@ const Schedular = (props) => {
   const [layout, setLayout] = useState("day");
 
   /* Toggle Appointment Popover */
-  const [prevId, setPrevId] = useState("");
-  const toggleAppointment = (e, id) => {
-    e.stopPropagation();
-    const popover = document.getElementById(id);
-    const container = document.getElementById('day-layout-table');
+  // const [prevId, setPrevId] = useState("");
+  // const toggleAppointment = (e, id) => {
+  //   e.stopPropagation();
+  //   const popover = document.getElementById(id);
+  //   const container = document.getElementById('day-layout-table');
 
-    const bounds = popover.getBoundingClientRect();
-    const winHeight = window.innerHeight;
+  //   const bounds = popover.getBoundingClientRect();
+  //   const winHeight = window.innerHeight;
 
-    //check wheather space from bottom is less that your tooltip height
-    const rBottom = winHeight - bounds.bottom;
+  //   //check wheather space from bottom is less that your tooltip height
+  //   const rBottom = winHeight - bounds.bottom;
 
-    if (popover.classList.contains("popover__show")) {
-      popover.classList.remove("popover__show");
-    } else {
-      /*@Remove previous popover */
-      if (prevId)
-        document.getElementById(prevId).classList.remove("popover__show");
-      popover.classList.add("popover__show");
-      setPrevId(id);
-    }
-  };
+  //   if (popover.classList.contains("popover__show")) {
+  //     popover.classList.remove("popover__show");
+  //   } else {
+  //     /*@Remove previous popover */
+  //     if (prevId)
+  //       document.getElementById(prevId).classList.remove("popover__show");
+  //     popover.classList.add("popover__show");
+  //     setPrevId(id);
+  //   }
+  // };
 
   /* All Appointments List */
-  const [isAppointmentList, setIsAppointmentList] = useState(false);
-  const toggleAppointments = (e) => {
-    e.stopPropagation();
-    setIsAppointmentList(!isAppointmentList);
-  };
+  // const [isAppointmentList, setIsAppointmentList] = useState(false);
+  // const toggleAppointments = (e) => {
+  //   e.stopPropagation();
+  //   setIsAppointmentList(!isAppointmentList);
+  // };
 
   /* Schedular Form Modal */
   const [isForm, setForm] = useState(false);
@@ -86,7 +91,7 @@ const Schedular = (props) => {
 
 
   //appointment info modal
-  const [isAppointInfo, setIsAppointInfo] = useState(false);
+  // const [isAppointInfo, setIsAppointInfo] = useState(false);
 
   // useEffect(() => {
   //   document.addEventListener("click", handleDocClick);

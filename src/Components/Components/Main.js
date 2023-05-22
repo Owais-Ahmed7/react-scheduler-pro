@@ -5,13 +5,13 @@ import React from 'react';
 // import Week from './Week';
 import Day from './Day';
 
-const Main = (props) => {
+const Main = ({ layout, ...rest }) => {
   return (
     <React.Fragment>
       <div className='w-100'>
-        {props.layout === 'day' && <Day {...props} />}
-        {/* {props.layout === 'week' && <Week {...props} />}
-        {props.layout === 'month' && <Month {...props} />} */}
+        {layout === 'day' && <Day {...rest} />}
+        {/* {layout === 'week' && <Week {...rest} />}
+        {layout === 'month' && <Month {...rest} />} */}
       </div>
     </React.Fragment>
   );

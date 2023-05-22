@@ -52,16 +52,16 @@ const calendarTimes = (startTime = '12:00 AM', endTime = '11:00 PM', timeDuratio
 const appointments = [
   {
     name: 'First Appointment',
-    date: new Date('2023-05-15T04:30:00.000+00:00')
+    date: new Date('2023-05-23T04:30:00.000+00:00')
   },
   {
     name: 'Second Appointment',
-    date: new Date('2023-05-15T06:30:00.000+00:00')
+    date: new Date('2023-05-23T06:30:00.000+00:00')
   }
 ]
 
 export {
-  fiveMintTimes,
+  // fiveMintTimes,
   calendarTimes,
   appointments
 };

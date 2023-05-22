@@ -23,17 +23,8 @@ const Header = ({
 }) => {
   const handleNext = () => {
     if (layout === 'month') {
-      // getMonthDates(
-      //   moment(monthDates[monthDates?.length - 1])
-      //     .clone()
-      //     .add(1, 'days'),
-      //   'next'
-      // );
       setTrackMonth(moment(trackMonth).add(1, 'month'));
-      getMonthDates(
-        // moment(monthDates[0]).subtract(1, 'days'),
-        'next'
-      );
+      getMonthDates('next');
     }
     if (layout === 'week') {
       getWeekDates(
@@ -51,10 +42,7 @@ const Header = ({
   const handlePrevios = () => {
     if (layout === 'month') {
       setTrackMonth(moment(trackMonth).subtract(1, 'month'));
-      getMonthDates(
-        // moment(monthDates[0]).subtract(1, 'days'),
-        'prev'
-      );
+      getMonthDates('prev');
     }
     if (layout === 'week') {
       getWeekDates(moment(weekDates[0]).subtract(1, 'days'), 'prev');

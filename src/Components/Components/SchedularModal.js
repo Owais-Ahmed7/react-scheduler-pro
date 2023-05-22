@@ -8,7 +8,7 @@ import {
   Button,
 } from 'reactstrap';
 
-const CalendarModal = (props) => {
+const SchedularModal = (props) => {
   const [title, setTitle] = useState('');
   return (
     <React.Fragment>
@@ -48,4 +48,4 @@ const CalendarModal = (props) => {
   );
 };
 
-export default CalendarModal;
+export default SchedularModal;

@@ -1,8 +1,7 @@
 import React from 'react';
 // import PopoverContent from './PopoverContent';
 
-const AppointmentWidget = (props) => {
-  const appoint = props.item;
+const AppointmentWidget = ({ item }) => {
   return (
     <React.Fragment>
       <div className='w-75'>
@@ -14,10 +13,10 @@ const AppointmentWidget = (props) => {
             // props.toggleAppoint(e);
           }}
           type='button'
-          style={{ textDecoration: appoint.isCancelled ? 'line-through' : 'none' }}
+          style={{ textDecoration: item.isCancelled ? 'line-through' : 'none' }}
           className='bg-primary text-capitalize bg-opacity-75 mb-1 text-white h-auto fs-10 pt-1 pb-1 p-2'
         >
-          {appoint?.name || 'Patient Name'}
+          {item.name || 'Event Name'}
         </div>
         {/* <div className='popover__wrapper'>
           <div
