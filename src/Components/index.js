@@ -105,9 +105,6 @@ const Schedular = (props) => {
           weekDates={weekDates}
           day={day}
           setDay={setDay}
-          getMonthDates={getMonthDates}
-          getWeekDates={getWeekDates}
-          getDay={getDay}
           trackMonth={trackMonth}
           setTrackMonth={setTrackMonth}
           {...props}

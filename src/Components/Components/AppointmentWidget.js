@@ -10,8 +10,8 @@ const AppointmentWidget = (props) => {
           // id={`appointmentPopover${idx}`}
           onClick={(e) => {
             // props.toggleAppointment(e, `appointmentPopover${appoint._id}`) it toggles appointment popover
-            props.setAppoint(appoint);
-            props.toggleAppoint(e);
+            // props.setAppoint(appoint);
+            // props.toggleAppoint(e);
           }}
           type='button'
           style={{ textDecoration: appoint.isCancelled ? 'line-through' : 'none' }}

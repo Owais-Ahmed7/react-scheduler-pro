@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 import {
   Dropdown,
   DropdownItem,
@@ -6,66 +6,72 @@ import {
   DropdownMenu,
   Row,
   Col,
-} from "reactstrap";
-import moment from "moment";
+} from 'reactstrap';
+import moment from 'moment';
 
-const Header = (props) => {
+//utility functions
+import { getDay, getWeekDates, getMonthDates } from '../../utils/date-utils';
+
+const Header = ({
+  layout,
+  setTrackMonth,
+  trackMonth,
+  weekDates,
+  day,
+  setDay,
+  setLayout,
+}) => {
   const handleNext = () => {
-    if (props.layout === "month") {
-      // props.getMonthDates(
-      //   moment(props.monthDates[props.monthDates?.length - 1])
+    if (layout === 'month') {
+      // getMonthDates(
+      //   moment(monthDates[monthDates?.length - 1])
       //     .clone()
       //     .add(1, 'days'),
       //   'next'
       // );
-      props.setTrackMonth(moment(props.trackMonth).add(1, "month"));
-      props.getMonthDates(
-        // moment(props.monthDates[0]).subtract(1, 'days'),
-        "next"
+      setTrackMonth(moment(trackMonth).add(1, 'month'));
+      getMonthDates(
+        // moment(monthDates[0]).subtract(1, 'days'),
+        'next'
       );
     }
-    if (props.layout === "week") {
-      props.getWeekDates(
-        moment(props.weekDates[props.weekDates?.length - 1])
+    if (layout === 'week') {
+      getWeekDates(
+        moment(weekDates[weekDates?.length - 1])
           .clone()
-          .add(1, "days"),
-        "next"
+          .add(1, 'days'),
+        'next'
       );
     }
-    if (props.layout === "day") {
-      props.getDay(props.day, "next");
+    if (layout === 'day') {
+      getDay(day, '', 'next', setDay);
     }
   };
 
   const handlePrevios = () => {
-    if (props.layout === "month") {
-      props.setTrackMonth(moment(props.trackMonth).subtract(1, "month"));
-      props.getMonthDates(
-        // moment(props.monthDates[0]).subtract(1, 'days'),
-        "prev"
+    if (layout === 'month') {
+      setTrackMonth(moment(trackMonth).subtract(1, 'month'));
+      getMonthDates(
+        // moment(monthDates[0]).subtract(1, 'days'),
+        'prev'
       );
     }
-    if (props.layout === "week") {
-      props.getWeekDates(
-        moment(props.weekDates[0]).subtract(1, "days"),
-        "prev"
-      );
+    if (layout === 'week') {
+      getWeekDates(moment(weekDates[0]).subtract(1, 'days'), 'prev');
     }
-    if (props.layout === "day") {
-      props.getDay(props.day, "prev");
+    if (layout === 'day') {
+      getDay(day, '', 'prev', setDay);
     }
   };
 
   const handleTodayDate = () => {
-    props.setDay(moment());
+    setDay(moment());
   };
 
   const currentMonth = () => {
-    if (props.layout === "month")
-      return moment(props.trackMonth).format("D MMMM YYYY");
-    if (props.layout === "week")
-      return moment(props.weekDates[0]).format("MMMM YYYY");
-    if (props.layout === "day") return moment(props.day).format("D MMMM YYYY");
+    if (layout === 'month') return moment(trackMonth).format('D MMMM YYYY');
+    if (layout === 'week') return moment(weekDates[0]).format('MMMM YYYY');
+    if (layout === 'day') return moment(day).format('D MMMM YYYY');
   };
 
   /* settings dropdown */
@@ -80,12 +86,12 @@ const Header = (props) => {
     <React.Fragment>
       <div>
         <Row className="align-items-center">
-          {/* <div>{props.title || "Brand Title"}</div> */}
+          {/* <div>{title || "Brand Title"}</div> */}
           <Col className="mb-3" xs={12} md={6}>
             <Dropdown
               isOpen={filterDropdown}
               toggle={toggleFilterDropdown}
-              direction={"down"}
+              direction={'down'}
             >
               <DropdownToggle size="sm" outline color="primary" caret>
                 Filter Appointments
@@ -137,7 +143,7 @@ const Header = (props) => {
                   <div className="ms-3">
                     <button
                       onClick={() => {
-                        props.setLayout("day");
+                        setLayout('day');
                         handleTodayDate();
                       }}
                       className="btn btn-outline-primary btn-sm"
@@ -148,33 +154,31 @@ const Header = (props) => {
                   <div className="ms-3">
                     <div className="btn-group" role="group">
                       <button
-                        onClick={() => props.setLayout("day")}
+                        onClick={() => setLayout('day')}
                         style={{
-                          backgroundColor:
-                            props.layout === "day" ? "#1e90ff" : null,
-                          color: props.layout === "day" ? "#FFF" : null,
+                          backgroundColor: layout === 'day' ? '#1e90ff' : null,
+                          color: layout === 'day' ? '#FFF' : null,
                         }}
                         className="btn btn-outline-primary btn-sm"
                       >
                         Day
                       </button>
                       <button
-                        onClick={() => props.setLayout("week")}
+                        onClick={() => setLayout('week')}
                         style={{
-                          backgroundColor:
-                            props.layout === "week" ? "#1e90ff" : null,
-                          color: props.layout === "week" ? "#FFF" : null,
+                          backgroundColor: layout === 'week' ? '#1e90ff' : null,
+                          color: layout === 'week' ? '#FFF' : null,
                         }}
                         className="btn btn-outline-primary btn-sm"
                       >
                         Week
                       </button>
                       <button
-                        onClick={() => props.setLayout("month")}
+                        onClick={() => setLayout('month')}
                         style={{
                           backgroundColor:
-                            props.layout === "month" ? "#1e90ff" : null,
-                          color: props.layout === "month" ? "#FFF" : null,
+                            layout === 'month' ? '#1e90ff' : null,
+                          color: layout === 'month' ? '#FFF' : null,
                         }}
                         className="btn btn-outline-primary btn-sm"
                       >
