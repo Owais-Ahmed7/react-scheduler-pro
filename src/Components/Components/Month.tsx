@@ -1,8 +1,14 @@
 import React from 'react';
 import moment from 'moment';
-import _ from 'lodash';
+import chunk from '../../utils/chunk';
 
-const Month = (props) => {
+interface MonthProps {
+    monthDates: string[];
+    toggleForm: () => void;
+    currentDate: string;
+}
+
+const Month: React.FC<MonthProps> = ({ monthDates, toggleForm, currentDate }) => {
   return (
     <React.Fragment>
       <div>
@@ -20,21 +26,21 @@ const Month = (props) => {
               </tr>
             </thead>
             <tbody>
-              {_.chunk(props.dates || [], 7).map((chunk) => {
+              {chunk(monthDates || [], 7).map((chunk) => {
                 return (
                   <tr key={chunk[0]}>
                     {chunk.map((date, idx) => (
                       <td
-                        onClick={props.toggle}
-                        className='calendar-td calendar-td-h calendar-td-w pe-auto'
+                        onClick={toggleForm}
+                        className='calendar-td calendar-td-h calendar-td-w text-end'
                         key={date + idx}
                       >
                         <span
                           className={
                             moment(date).format('DD-MM-YYYY') ===
-                            moment(props.currentDate).format('DD-MM-YYYY')
-                              ? 'p-1 ps-2 pe-2 rounded-circle font-size-14 text-white bg-primary'
-                              : 'p-1 rounded-circle font-size-14'
+                            moment(currentDate).format('DD-MM-YYYY')
+                              ? 'p-1 rounded-circle font-size-14 text-white bg-primary'
+                              : 'p-1 rounded-circle font-size-14 ms-auto'
                           }
                         >
                           {moment(date).format('D')}

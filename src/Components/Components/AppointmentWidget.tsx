@@ -1,7 +1,16 @@
 import React from 'react';
 // import PopoverContent from './PopoverContent';
 
-const AppointmentWidget = ({ item }) => {
+interface Appointment {
+  // isCancelled: boolean,
+  name: String,
+}
+
+interface AppointmentWidgetProps {
+  item: Appointment,
+}
+
+const AppointmentWidget: React.FC<AppointmentWidgetProps> = ({ item }) => {
   return (
     <React.Fragment>
       <div className='w-75'>
@@ -12,8 +21,7 @@ const AppointmentWidget = ({ item }) => {
             // props.setAppoint(appoint);
             // props.toggleAppoint(e);
           }}
-          type='button'
-          style={{ textDecoration: item.isCancelled ? 'line-through' : 'none' }}
+          // style={{ textDecoration: item.isCancelled ? 'line-through' : 'none' }}
           className='bg-primary text-capitalize bg-opacity-75 mb-1 text-white h-auto fs-10 pt-1 pb-1 p-2'
         >
           {item.name || 'Event Name'}

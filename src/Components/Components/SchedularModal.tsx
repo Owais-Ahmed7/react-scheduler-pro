@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { Dispatch, ReactNode, SetStateAction, useState } from 'react';
 import {
   Modal,
   ModalHeader,
@@ -7,14 +7,23 @@ import {
   Input,
   Button,
 } from 'reactstrap';
+import { Scheduler } from 'timers/promises';
 
-const SchedularModal = (props) => {
+
+interface SchedularModalProps {
+  isOpen: boolean,
+  toggle: () => void,
+  children: ReactNode,
+  setEvent: Dispatch<SetStateAction<String>>
+}
+
+const SchedularModal: React.FC<SchedularModalProps> = ({ isOpen, toggle, children, setEvent }) => {
   const [title, setTitle] = useState('');
   return (
     <React.Fragment>
       <div>
-        <Modal isOpen={props.isOpen} toggle={props.toggle}>
-          <ModalHeader toggle={props.toggle}>Title</ModalHeader>
+        <Modal isOpen={isOpen} toggle={toggle}>
+          <ModalHeader toggle={toggle}>Title</ModalHeader>
           <ModalBody>
             <form>
               <Input
@@ -23,21 +32,21 @@ const SchedularModal = (props) => {
                 onChange={(e) => setTitle(e.target.value)}
                 placeholder='Title...'
               />
-              <div className='mt-2 mb-2'>{props.children}</div>
+              <div className='mt-2 mb-2'>{children}</div>
             </form>
           </ModalBody>
-          {/* {(props.isFooter === true || props.isFooter === 'true') && ( */}
+          {/* {(isFooter === true || isFooter === 'true') && ( */}
           <ModalFooter>
             <Button
               color='primary'
               onClick={() => {
-                props.toggle();
-                props.setEvent(title);
+                toggle();
+                setEvent(title);
               }}
             >
               Save
             </Button>
-            <Button color='secondary' onClick={props.toggle}>
+            <Button color='secondary' onClick={toggle}>
               Cancel
             </Button>
           </ModalFooter>

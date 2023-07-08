@@ -7,7 +7,7 @@ import moment from "moment";
  * @desc - it generate's an array of times from 12:00 AM to 11:55 PM with 5 minute difference in them.
  * @returns an array of times containg all the times form 12:00 AM to next mid night 11:50 PM
  */
-const fiveMintTimes = (startTime, endTime) => {
+const fiveMintTimes = (startTime: string, endTime: string) => {
   var times = [];
   var current = moment(startTime, "h:mm A");
 
@@ -28,7 +28,7 @@ const fiveMintTimes = (startTime, endTime) => {
  * @param {String} timeDuration - time duration for calendar timing.
  * @returns an array of times according to calendar start time and end time via params.
  */
-const calendarTimes = (startTime = '12:00 AM', endTime = '11:00 PM', timeDuration = '1 hour') => {
+const calendarTimes = (startTime: string = '12:00 AM', endTime: string = '11:00 PM', timeDuration: string = '1 hour') => {
   var times = [];
   var current = moment(startTime, "h:mm A");
 
@@ -52,11 +52,11 @@ const calendarTimes = (startTime = '12:00 AM', endTime = '11:00 PM', timeDuratio
 const appointments = [
   {
     name: 'First Appointment',
-    date: new Date('2023-05-23T04:30:00.000+00:00')
+    date: new Date('2023-07-01T04:30:00.000+00:00')
   },
   {
     name: 'Second Appointment',
-    date: new Date('2023-05-23T06:30:00.000+00:00')
+    date: new Date('2023-07-01T06:30:00.000+00:00')
   }
 ]
 

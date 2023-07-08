@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { Dispatch, SetStateAction, useState } from 'react';
 import {
   Dropdown,
   DropdownItem,
@@ -10,9 +10,21 @@ import {
 import moment from 'moment';
 
 //utility functions
-import { getDay, getWeekDates, getMonthDates } from '../../utils/date-utils';
+import { getDay, getWeekDates, getMonthDates } from '../../utils/schedular';
 
-const Header = ({
+interface HeaderProps {
+  layout: string;
+  setTrackMonth: Dispatch<SetStateAction<string>>;
+  trackMonth: string;
+  weekDates: string[];
+  day: string;
+  setDay: Dispatch<SetStateAction<string>>;
+  setLayout: Dispatch<SetStateAction<string>>;
+  setMonthDates: Dispatch<SetStateAction<string[]>>;
+  setWeekDates: Dispatch<SetStateAction<string[]>>;
+}
+
+const Header: React.FC<HeaderProps> = ({
   layout,
   setTrackMonth,
   trackMonth,
@@ -20,46 +32,57 @@ const Header = ({
   day,
   setDay,
   setLayout,
+  setMonthDates,
+  setWeekDates,
 }) => {
   const handleNext = () => {
     if (layout === 'month') {
-      setTrackMonth(moment(trackMonth).add(1, 'month'));
-      getMonthDates('next');
-    }
-    if (layout === 'week') {
+      setTrackMonth(moment(trackMonth).add(1, 'month').toISOString());
+      getMonthDates('next', trackMonth, setMonthDates);
+    } else if (layout === 'week') {
       getWeekDates(
         moment(weekDates[weekDates?.length - 1])
           .clone()
-          .add(1, 'days'),
-        'next'
+          .add(1, 'days')
+          .toISOString(),
+        'next',
+        setWeekDates
       );
-    }
-    if (layout === 'day') {
+    } else if (layout === 'day') {
       getDay(day, '', 'next', setDay);
     }
   };
 
   const handlePrevios = () => {
     if (layout === 'month') {
-      setTrackMonth(moment(trackMonth).subtract(1, 'month'));
-      getMonthDates('prev');
-    }
-    if (layout === 'week') {
-      getWeekDates(moment(weekDates[0]).subtract(1, 'days'), 'prev');
-    }
-    if (layout === 'day') {
+      setTrackMonth(moment(trackMonth).subtract(1, 'month').toISOString());
+      getMonthDates('prev', trackMonth, setMonthDates);
+    } else if (layout === 'week') {
+      getWeekDates(
+        moment(weekDates[0]).subtract(1, 'days').toISOString(),
+        'prev',
+        setWeekDates
+      );
+    } else if (layout === 'day') {
       getDay(day, '', 'prev', setDay);
     }
   };
 
   const handleTodayDate = () => {
-    setDay(moment());
+    setDay(moment().toISOString());
   };
 
   const currentMonth = () => {
-    if (layout === 'month') return moment(trackMonth).format('D MMMM YYYY');
-    if (layout === 'week') return moment(weekDates[0]).format('MMMM YYYY');
-    if (layout === 'day') return moment(day).format('D MMMM YYYY');
+    switch (layout) {
+      case 'month':
+        return moment(trackMonth).format('D MMMM YYYY');
+      case 'week':
+        return moment(weekDates[0]).format('MMMM YYYY');
+      case 'day':
+        return moment(day).format('D MMMM YYYY');
+      default:
+        return;
+    }
   };
 
   /* settings dropdown */
@@ -144,8 +167,8 @@ const Header = ({
                       <button
                         onClick={() => setLayout('day')}
                         style={{
-                          backgroundColor: layout === 'day' ? '#1e90ff' : null,
-                          color: layout === 'day' ? '#FFF' : null,
+                          backgroundColor: layout === 'day' ? '#1e90ff' : '',
+                          color: layout === 'day' ? '#FFF' : '',
                         }}
                         className="btn btn-outline-primary btn-sm"
                       >
@@ -154,8 +177,8 @@ const Header = ({
                       <button
                         onClick={() => setLayout('week')}
                         style={{
-                          backgroundColor: layout === 'week' ? '#1e90ff' : null,
-                          color: layout === 'week' ? '#FFF' : null,
+                          backgroundColor: layout === 'week' ? '#1e90ff' : '',
+                          color: layout === 'week' ? '#FFF' : '',
                         }}
                         className="btn btn-outline-primary btn-sm"
                       >
@@ -164,9 +187,8 @@ const Header = ({
                       <button
                         onClick={() => setLayout('month')}
                         style={{
-                          backgroundColor:
-                            layout === 'month' ? '#1e90ff' : null,
-                          color: layout === 'month' ? '#FFF' : null,
+                          backgroundColor: layout === 'month' ? '#1e90ff' : '',
+                          color: layout === 'month' ? '#FFF' : '',
                         }}
                         className="btn btn-outline-primary btn-sm"
                       >

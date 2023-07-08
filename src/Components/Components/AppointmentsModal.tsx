@@ -3,7 +3,13 @@ import { Modal, ModalHeader, ModalBody } from "reactstrap";
 
 const arr = [1, 2, 3, 4];
 
-const AppointmentsModal = (props) => {
+interface AppointmentModalProps {
+  isAppointmentList: boolean,
+  toggleAppointments: () => void,
+
+}
+
+const AppointmentsModal: React.FC<AppointmentModalProps> = (props) => {
   return (
     <React.Fragment>
       <Modal
@@ -23,7 +29,6 @@ const AppointmentsModal = (props) => {
                 // onClick={(e) =>
                 //   props.toggleAppointment(e, `appointmentPopover${idx}`)
                 // }
-                type="button"
                 className="bg-primary bg-opacity-75 mb-1 text-white w-100 h-auto fs-8 pt-1 pb-1 p-2"
               >
                 Appointment

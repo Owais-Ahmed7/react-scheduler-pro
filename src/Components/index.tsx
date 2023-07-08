@@ -1,14 +1,25 @@
-import React, { useEffect, useState } from "react";
-import moment from "moment";
+import React, { ReactNode, useEffect, useState } from 'react';
+import moment from 'moment';
 
 //components
-import Header from "./Components/Header";
-import Main from "./Components/Main";
-import FormModal from "./Components/FormModal";
-import { getDay, getMonthDates, getWeekDates } from "../utils/date-utils";
+import Header from './Components/Header';
+import Main from './Components/Main';
+import FormModal from './Components/FormModal';
+import { getDay, getMonthDates, getWeekDates } from '../utils/schedular';
+
+interface SchedularProps {
+  startTime: String;
+  endTime: String;
+  timeDifference: String[];
+  fontSize: String;
+  colorTheme: String;
+  layouts: String[];
+  data: any[];
+  EventFormContext: ReactNode;
+}
 
 /**
- * 
+ *
  * @param {Object} props - Object contains all the passed props according to user usage.
  * @param {String} props.startTime - Start time is used in day and week layout its the start time of schedular time (e.g startTime = 10:00 AM).
  * @param {String} props.endTime - End time is used in day and week layout its the end time of schedular time (e.g endTime = 8:00 PM).
@@ -16,28 +27,31 @@ import { getDay, getMonthDates, getWeekDates } from "../utils/date-utils";
  * @param {String} props.fontSize - Font size is the adjustment of font user can do according to its own use case.
  * @param {String} props.colorTheme - Theme or Color theme user can pass custom color or can pass default bootstrap color themes. (e.g colorTheme = 'primary / info / '#1d1d1d').
  * @param {Array} props.layouts - Layout are the layouts (Day, Week, Month). User can decide how many layouts he want and have the freedom to select all or any one / two of them (e.g layouts = ['day', 'week', 'month']).
- * @returns 
+ * @param {Array} props.data - User should pass the data(appointments / events) that are used to shown on Schedular.
+ * @returns
  */
-const Schedular = (props) => {
+const Schedular: React.FC<SchedularProps> = (props) => {
   //dates ranging from current month 1st date to next 35th
-  const [trackMonth, setTrackMonth] = useState(moment().startOf("month"));
-  let [monthDates, setMonthDates] = useState([]);
+  const [trackMonth, setTrackMonth] = useState<string>(
+    moment().startOf('month').toISOString()
+  );
+  let [monthDates, setMonthDates] = useState<string[]>([]);
   //week dates
-  let [weekDates, setWeekDates] = useState([]);
+  let [weekDates, setWeekDates] = useState<string[]>([]);
   //day dates
-  const [day, setDay] = useState(moment());
+  const [day, setDay] = useState<string>(moment().toISOString());
 
   //current date
-  const currentDate = new Date();
+  const currentDate = new Date().toISOString();
 
   useEffect(() => {
     getDay('', day, 'init', setDay);
-    getWeekDates(currentDate, '', 'init', setWeekDates);
+    getWeekDates(currentDate, 'init', setWeekDates);
     getMonthDates('init', trackMonth, setMonthDates);
-  }, [])
+  }, []);
 
   //change layout
-  const [layout, setLayout] = useState("day");
+  const [layout, setLayout] = useState<string>('day');
 
   /* Toggle Appointment Popover */
   // const [prevId, setPrevId] = useState("");
@@ -71,11 +85,11 @@ const Schedular = (props) => {
   // };
 
   /* Schedular Form Modal */
-  const [isForm, setForm] = useState(false);
+  const [isForm, setForm] = useState<boolean>(false);
   const toggleForm = () => setForm(!isForm);
 
   /* Schedular date time from selected box */
-  const [dateTime, setDateTime] = useState({
+  const [dateTime, setDateTime] = useState<{ date: string, time: string }>({
     date: '',
     time: '',
   });
@@ -88,7 +102,6 @@ const Schedular = (props) => {
   //     setPrevId("");
   //   }
   // };
-
 
   //appointment info modal
   // const [isAppointInfo, setIsAppointInfo] = useState(false);
@@ -104,24 +117,25 @@ const Schedular = (props) => {
     <React.Fragment>
       <div className="w-100">
         <Header
+          setMonthDates={setMonthDates}
+          setWeekDates={setWeekDates}
           setLayout={setLayout}
           layout={layout}
-          monthDates={monthDates}
+          // monthDates={monthDates}
           weekDates={weekDates}
           day={day}
           setDay={setDay}
           trackMonth={trackMonth}
           setTrackMonth={setTrackMonth}
-          {...props}
-        />
+          {...props}        />
         <Main
           day={day}
-          dates={monthDates}
-          weekDates={weekDates}
+          monthDates={monthDates}
+          // weekDates={weekDates}
           currentDate={currentDate}
           layout={layout}
           toggleForm={toggleForm}
-          isForm={isForm}
+          // isForm={isForm}
           setDateTime={setDateTime}
           {...props}
         />
@@ -130,6 +144,7 @@ const Schedular = (props) => {
           toggle={toggleForm}
           day={day}
           dateTime={dateTime}
+          EventFormContext={props.EventFormContext}
         />
       </div>
     </React.Fragment>

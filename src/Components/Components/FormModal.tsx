@@ -1,11 +1,22 @@
-import React, { useState } from 'react';
-import {
-  Modal,
-  ModalHeader,
-  ModalBody,
-} from 'reactstrap';
+import React, { ReactNode, useState } from 'react';
+import { Modal, ModalHeader, ModalBody } from 'reactstrap';
 
-const FormModal = ({ isOpen, toggle, ...rest }) => {
+interface FormModalProps {
+  isOpen: boolean;
+  toggle: () => void;
+  // children: ReactNode,
+  day: string;
+  dateTime: { date: string, time: string };
+  EventFormContext: ReactNode;
+}
+
+const FormModal: React.FC<FormModalProps> = ({
+  isOpen,
+  toggle,
+  EventFormContext,
+  // children,
+  ...rest
+}) => {
   // const [title, setTitle] = useState('');
 
   // const handleClick = () => {
@@ -20,8 +31,9 @@ const FormModal = ({ isOpen, toggle, ...rest }) => {
         <Modal isOpen={isOpen} toggle={toggle} size={'md'} centered>
           <ModalHeader toggle={toggle}>Appointment</ModalHeader>
           <ModalBody>
-            This is the schedular form modal
-            <div className='mt-2 mb-2'>{rest.children}</div>
+            {EventFormContext}
+            {/* This is the schedular form modal */}
+            {/* <div className="mt-2 mb-2">{children}</div> */}
           </ModalBody>
           {/* {(props.isFooter === true || props.isFooter === 'true') && ( */}
 
