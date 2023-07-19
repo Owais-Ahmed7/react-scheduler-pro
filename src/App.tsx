@@ -24,7 +24,7 @@ function App() {
 const EventFormContext = () => {
   return (
     <>
-      <div>Yallah Habibi how are you</div>
+      <div>Make your form according to you own will : )</div>
     </>
   );
 };

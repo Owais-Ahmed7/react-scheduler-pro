@@ -7,7 +7,6 @@ import {
   Input,
   Button,
 } from 'reactstrap';
-import { Scheduler } from 'timers/promises';
 
 
 interface SchedularModalProps {

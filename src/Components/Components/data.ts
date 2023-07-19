@@ -1,4 +1,4 @@
-import moment from "moment";
+import { parse, format, addMinutes, addHours } from 'date-fns';
 
 /**
  *
@@ -8,16 +8,15 @@ import moment from "moment";
  * @returns an array of times containg all the times form 12:00 AM to next mid night 11:50 PM
  */
 const fiveMintTimes = (startTime: string, endTime: string) => {
-  var times = [];
-  var current = moment(startTime, "h:mm A");
+  const times = [];
+  let currentTime = parse(startTime, 'h:mm a', new Date());
 
-  while (current.format("h:mm A") !== endTime) {
-    times.push(current.format("h:mm A"));
-    current.add(5, "minutes");
+  while (format(currentTime, 'h:mm a') !== endTime) {
+    times.push(format(currentTime, 'h:mm a'));
+    currentTime = addMinutes(currentTime, 5);
   }
-  //we push end time here because we didn't inculded it in loop
-  times.push(endTime);
 
+  times.push(endTime);
   return times;
 };
 
@@ -28,27 +27,30 @@ const fiveMintTimes = (startTime: string, endTime: string) => {
  * @param {String} timeDuration - time duration for calendar timing.
  * @returns an array of times according to calendar start time and end time via params.
  */
-const calendarTimes = (startTime: string = '12:00 AM', endTime: string = '11:00 PM', timeDuration: string = '1 hour') => {
-  var times = [];
-  var current = moment(startTime, "h:mm A");
+const calendarTimes = (startTime = '12:00 AM', endTime = '11:00 PM', timeDuration = '1 hour') => {
+  const times = [];
+  let currentTime = parse(startTime, 'h:mm a', new Date());
 
-  const timeDiff = () =>
-    timeDuration === "1 hour"
-      ? current.add(1, "hour")
-      : timeDuration === "15 minutes"
-      ? current.add(15, "minutes")
-      : current.add(30, "minutes");
+  const timeDiff = () => {
+    if (timeDuration === '1 hour') {
+      return addHours(currentTime, 1);
+    } else if (timeDuration === '15 minutes') {
+      return addMinutes(currentTime, 15);
+    } else {
+      return addMinutes(currentTime, 30);
+    }
+  };
 
-  while (current.format("h:mm A") !== endTime) {
-    times.push(current.format("h:mm A"));
-    timeDiff();
+  while (format(currentTime, 'h:mm a') !== endTime) {
+    times.push(format(currentTime, 'h:mm a'));
+    currentTime = timeDiff();
   }
-  //we push end time here because we didn't inculded it in loop
-  times.push(endTime);
 
+  times.push(endTime);
   return times;
 };
 
+//For test
 const appointments = [
   {
     name: 'First Appointment',
@@ -61,7 +63,7 @@ const appointments = [
 ]
 
 export {
-  // fiveMintTimes,
+  fiveMintTimes,
   calendarTimes,
   appointments
 };

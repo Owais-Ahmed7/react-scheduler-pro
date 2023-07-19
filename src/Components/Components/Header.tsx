@@ -1,27 +1,21 @@
 import React, { Dispatch, SetStateAction, useState } from 'react';
-import {
-  Dropdown,
-  DropdownItem,
-  DropdownToggle,
-  DropdownMenu,
-  Row,
-  Col,
-} from 'reactstrap';
-import moment from 'moment';
+import { Dropdown, DropdownToggle, DropdownMenu, Row, Col } from 'reactstrap';
+//import date-fns helpers
+import { addDays, addMonths, subDays, subMonths, format } from 'date-fns';
 
 //utility functions
 import { getDay, getWeekDates, getMonthDates } from '../../utils/schedular';
 
 interface HeaderProps {
   layout: string;
-  setTrackMonth: Dispatch<SetStateAction<string>>;
-  trackMonth: string;
-  weekDates: string[];
-  day: string;
-  setDay: Dispatch<SetStateAction<string>>;
   setLayout: Dispatch<SetStateAction<string>>;
-  setMonthDates: Dispatch<SetStateAction<string[]>>;
-  setWeekDates: Dispatch<SetStateAction<string[]>>;
+  trackMonth: Date;
+  setTrackMonth: Dispatch<SetStateAction<Date>>;
+  weekDates: Date[];
+  day: Date;
+  setDay: Dispatch<SetStateAction<Date>>;
+  setMonthDates: Dispatch<SetStateAction<Date[]>>;
+  setWeekDates: Dispatch<SetStateAction<Date[]>>;
 }
 
 const Header: React.FC<HeaderProps> = ({
@@ -37,49 +31,49 @@ const Header: React.FC<HeaderProps> = ({
 }) => {
   const handleNext = () => {
     if (layout === 'month') {
-      setTrackMonth(moment(trackMonth).add(1, 'month').toISOString());
-      getMonthDates('next', trackMonth, setMonthDates);
+      const addMonth = addMonths(trackMonth, 1);
+      setTrackMonth(addMonth);
+      const dates = getMonthDates(addMonth, 'next');
+      setMonthDates(dates);
     } else if (layout === 'week') {
-      getWeekDates(
-        moment(weekDates[weekDates?.length - 1])
-          .clone()
-          .add(1, 'days')
-          .toISOString(),
-        'next',
-        setWeekDates
+      const dates = getWeekDates(
+        addDays(weekDates[weekDates.length - 1], 1),
+        'next'
       );
+      setWeekDates(dates);
     } else if (layout === 'day') {
-      getDay(day, '', 'next', setDay);
+      const date = getDay(day, 'next');
+      setDay(date);
     }
   };
 
   const handlePrevios = () => {
     if (layout === 'month') {
-      setTrackMonth(moment(trackMonth).subtract(1, 'month').toISOString());
-      getMonthDates('prev', trackMonth, setMonthDates);
+      const subMonth = subMonths(trackMonth, 1);
+      setTrackMonth(subMonth);
+      const dates = getMonthDates(subMonth, 'prev');
+      setMonthDates(dates);
     } else if (layout === 'week') {
-      getWeekDates(
-        moment(weekDates[0]).subtract(1, 'days').toISOString(),
-        'prev',
-        setWeekDates
-      );
+      const dates = getWeekDates(subDays(weekDates[0], 1), 'prev');
+      setWeekDates(dates);
     } else if (layout === 'day') {
-      getDay(day, '', 'prev', setDay);
+      const date = getDay(day, 'prev');
+      setDay(date);
     }
   };
 
   const handleTodayDate = () => {
-    setDay(moment().toISOString());
+    setDay(new Date());
   };
 
   const currentMonth = () => {
     switch (layout) {
       case 'month':
-        return moment(trackMonth).format('D MMMM YYYY');
+        return format(trackMonth, 'MMMM yyyy');
       case 'week':
-        return moment(weekDates[0]).format('MMMM YYYY');
+        return format(weekDates[0], 'MMMM yyyy');
       case 'day':
-        return moment(day).format('D MMMM YYYY');
+        return format(day, 'dd MMMM yyyy');
       default:
         return;
     }

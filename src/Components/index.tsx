@@ -1,19 +1,19 @@
 import React, { ReactNode, useEffect, useState } from 'react';
-import moment from 'moment';
 
 //components
 import Header from './Components/Header';
 import Main from './Components/Main';
 import FormModal from './Components/FormModal';
-import { getDay, getMonthDates, getWeekDates } from '../utils/schedular';
+import { getMonthDates, getWeekDates } from '../utils/schedular';
+import { startOfMonth } from 'date-fns';
 
 interface SchedularProps {
-  startTime: String;
-  endTime: String;
-  timeDifference: String[];
-  fontSize: String;
-  colorTheme: String;
-  layouts: String[];
+  startTime: string;
+  endTime: string;
+  timeDifference: string[];
+  fontSize: string;
+  colorTheme: string;
+  layouts: string[];
   data: any[];
   EventFormContext: ReactNode;
 }
@@ -32,86 +32,35 @@ interface SchedularProps {
  */
 const Schedular: React.FC<SchedularProps> = (props) => {
   //dates ranging from current month 1st date to next 35th
-  const [trackMonth, setTrackMonth] = useState<string>(
-    moment().startOf('month').toISOString()
-  );
-  let [monthDates, setMonthDates] = useState<string[]>([]);
+  const [trackMonth, setTrackMonth] = useState<Date>(startOfMonth(new Date()));
+  let [monthDates, setMonthDates] = useState<Date[]>([]);
   //week dates
-  let [weekDates, setWeekDates] = useState<string[]>([]);
+  let [weekDates, setWeekDates] = useState<Date[]>([]);
   //day dates
-  const [day, setDay] = useState<string>(moment().toISOString());
-
+  const [day, setDay] = useState<Date>(new Date());
   //current date
-  const currentDate = new Date().toISOString();
+  const currentDate = new Date();
 
   useEffect(() => {
-    getDay('', day, 'init', setDay);
-    getWeekDates(currentDate, 'init', setWeekDates);
-    getMonthDates('init', trackMonth, setMonthDates);
+    const wkDates = getWeekDates(currentDate, 'init');
+    const mthDates = getMonthDates(trackMonth, 'init');
+    setWeekDates(wkDates);
+    setMonthDates(mthDates);
   }, []);
 
   //change layout
   const [layout, setLayout] = useState<string>('day');
-
-  /* Toggle Appointment Popover */
-  // const [prevId, setPrevId] = useState("");
-  // const toggleAppointment = (e, id) => {
-  //   e.stopPropagation();
-  //   const popover = document.getElementById(id);
-  //   const container = document.getElementById('day-layout-table');
-
-  //   const bounds = popover.getBoundingClientRect();
-  //   const winHeight = window.innerHeight;
-
-  //   //check wheather space from bottom is less that your tooltip height
-  //   const rBottom = winHeight - bounds.bottom;
-
-  //   if (popover.classList.contains("popover__show")) {
-  //     popover.classList.remove("popover__show");
-  //   } else {
-  //     /*@Remove previous popover */
-  //     if (prevId)
-  //       document.getElementById(prevId).classList.remove("popover__show");
-  //     popover.classList.add("popover__show");
-  //     setPrevId(id);
-  //   }
-  // };
-
-  /* All Appointments List */
-  // const [isAppointmentList, setIsAppointmentList] = useState(false);
-  // const toggleAppointments = (e) => {
-  //   e.stopPropagation();
-  //   setIsAppointmentList(!isAppointmentList);
-  // };
 
   /* Schedular Form Modal */
   const [isForm, setForm] = useState<boolean>(false);
   const toggleForm = () => setForm(!isForm);
 
   /* Schedular date time from selected box */
-  const [dateTime, setDateTime] = useState<{ date: string, time: string }>({
-    date: '',
+  const [dateTime, setDateTime] = useState<{ date: Date; time: string }>({
+    date: new Date(),
     time: '',
   });
 
-  /* Handle Popover Toggle (uncontrolled popover) */
-  // const handleDocClick = () => {
-  //   if (prevId) {
-  //     if (document.getElementById(prevId)?.classList?.length > 0)
-  //       document.getElementById(prevId).classList.remove("popover__show");
-  //     setPrevId("");
-  //   }
-  // };
-
-  //appointment info modal
-  // const [isAppointInfo, setIsAppointInfo] = useState(false);
-
-  // useEffect(() => {
-  //   document.addEventListener("click", handleDocClick);
-  //   return () => {
-  //     document.removeEventListener("click", handleDocClick);
-  //   };
-  // }, [handleDocClick]);
 
   return (
     <React.Fragment>
@@ -121,21 +70,20 @@ const Schedular: React.FC<SchedularProps> = (props) => {
           setWeekDates={setWeekDates}
           setLayout={setLayout}
           layout={layout}
-          // monthDates={monthDates}
           weekDates={weekDates}
           day={day}
           setDay={setDay}
           trackMonth={trackMonth}
           setTrackMonth={setTrackMonth}
-          {...props}        />
+          {...props}
+        />
         <Main
           day={day}
           monthDates={monthDates}
-          // weekDates={weekDates}
+          weekDates={weekDates}
           currentDate={currentDate}
           layout={layout}
           toggleForm={toggleForm}
-          // isForm={isForm}
           setDateTime={setDateTime}
           {...props}
         />

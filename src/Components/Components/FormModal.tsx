@@ -1,12 +1,11 @@
-import React, { ReactNode, useState } from 'react';
+import React, { ReactNode } from 'react';
 import { Modal, ModalHeader, ModalBody } from 'reactstrap';
 
 interface FormModalProps {
   isOpen: boolean;
   toggle: () => void;
-  // children: ReactNode,
-  day: string;
-  dateTime: { date: string, time: string };
+  day: Date;
+  dateTime: { date: Date, time: string };
   EventFormContext: ReactNode;
 }
 
