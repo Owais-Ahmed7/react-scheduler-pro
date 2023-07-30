@@ -1,9 +1,9 @@
 import React, { ReactNode, useEffect, useState } from 'react';
 
 //components
-import Header from './Components/Header';
-import Main from './Components/Main';
-import FormModal from './Components/FormModal';
+import Header from './Header';
+import Main from './Main';
+import FormModal from './Modals/FormModal';
 import { getMonthDates, getWeekDates } from '../utils/schedular';
 import { startOfMonth } from 'date-fns';
 
@@ -60,7 +60,6 @@ const Schedular: React.FC<SchedularProps> = (props) => {
     date: new Date(),
     time: '',
   });
-
 
   return (
     <React.Fragment>

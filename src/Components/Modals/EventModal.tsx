@@ -1,28 +1,28 @@
-import React from "react";
-import { Modal, ModalHeader, ModalBody } from "reactstrap";
-
-const arr = [1, 2, 3, 4];
+import React from 'react';
+import { Modal, ModalHeader, ModalBody } from 'reactstrap';
 
 interface AppointmentModalProps {
-  isAppointmentList: boolean,
-  toggleAppointments: () => void,
-
+  isAppointmentList: boolean;
+  toggleAppointments: () => void;
+  events: any[];
 }
 
-const AppointmentsModal: React.FC<AppointmentModalProps> = (props) => {
+const AppointmentsModal: React.FC<AppointmentModalProps> = ({
+  isAppointmentList,
+  toggleAppointments,
+  events,
+}) => {
   return (
     <React.Fragment>
       <Modal
-        isOpen={props.isAppointmentList}
-        toggle={props.toggleAppointments}
-        size={"md"}
+        isOpen={isAppointmentList}
+        toggle={toggleAppointments}
+        size={'md'}
         centered
       >
-        <ModalHeader toggle={props.toggleAppointments}>
-          All Appointments
-        </ModalHeader>
+        <ModalHeader toggle={toggleAppointments}>All Appointments</ModalHeader>
         <ModalBody>
-          {(arr || []).map((item, idx) => (
+          {(events || []).map((event, idx) => (
             <div key={idx}>
               <div
                 // id={`appointmentPopover${idx}`}
@@ -31,7 +31,7 @@ const AppointmentsModal: React.FC<AppointmentModalProps> = (props) => {
                 // }
                 className="bg-primary bg-opacity-75 mb-1 text-white w-100 h-auto fs-8 pt-1 pb-1 p-2"
               >
-                Appointment
+                {event.name}
               </div>
             </div>
           ))}

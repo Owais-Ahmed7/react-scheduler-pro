@@ -1,9 +1,13 @@
 import {
+  format,
   addDays,
   subDays,
   startOfWeek,
   eachDayOfInterval,
 } from 'date-fns';
+
+//events converted to map data structure
+import { appointmentMap } from '../Components/data';
 
 const getMonthDates = (trackMonth: Date, actionType: string): Date[] => {
   let getSunday = startOfWeek(trackMonth, { weekStartsOn: 0 });
@@ -34,4 +38,10 @@ const getDay = (currentDate: Date, actionType: string): Date => {
   return date;
 };
 
-export { getMonthDates, getWeekDates, getDay };
+const getEvents = (day: Date): any => {
+  const matchedEventDocument = appointmentMap.get(format(day, 'yyyy-MM-dd'));
+
+  return matchedEventDocument;
+};
+
+export { getMonthDates, getWeekDates, getDay, getEvents };

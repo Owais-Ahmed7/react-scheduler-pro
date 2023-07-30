@@ -4,7 +4,7 @@ import { Dropdown, DropdownToggle, DropdownMenu, Row, Col } from 'reactstrap';
 import { addDays, addMonths, subDays, subMonths, format } from 'date-fns';
 
 //utility functions
-import { getDay, getWeekDates, getMonthDates } from '../../utils/schedular';
+import { getDay, getWeekDates, getMonthDates } from '../utils/schedular';
 
 interface HeaderProps {
   layout: string;

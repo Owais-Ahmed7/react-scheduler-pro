@@ -1,9 +1,9 @@
 import React, { Dispatch, SetStateAction } from 'react';
 
 //components
-import Month from './Month';
-import Week from './Week';
-import Day from './Day';
+import Month from './Layouts/Month';
+import Week from './Layouts/Week';
+import Day from './Layouts/Day';
 
 interface MainProps {
   layout: string;
