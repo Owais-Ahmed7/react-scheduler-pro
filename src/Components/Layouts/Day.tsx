@@ -70,20 +70,16 @@ const Day: React.FC<DayProps> = ({
                   >
                     <table className="table table-bordered mb-0">
                       <tbody>
-                        {(calTimes || []).map((time, idx) => {
-                          const event = getEvents(day);
-
-                          return (
-                            <tr>
-                              <td
-                                key={time + idx}
-                                className="calendar-td calendar-td-h calendar-td-w day-time-w font-size-14"
-                              >
-                                {time}
-                              </td>
-                            </tr>
-                          );
-                        })}
+                        {(calTimes || []).map((time, idx) => (
+                          <tr key={`${time}-${idx}`}>
+                            <td
+                              key={time + idx}
+                              className="calendar-td calendar-td-h calendar-td-w day-time-w font-size-14"
+                            >
+                              {time}
+                            </td>
+                          </tr>
+                        ))}
                       </tbody>
                     </table>
                   </div>
@@ -128,6 +124,7 @@ const Day: React.FC<DayProps> = ({
                                     10; //10 half height of event widget
                                   return (
                                     <div
+                                      key={`${event.date.toISOString()}-${idx}`}
                                       className="w-75 e-appointment p-1"
                                       style={{
                                         top: `${computeTop}px`,
@@ -151,7 +148,7 @@ const Day: React.FC<DayProps> = ({
                       <tbody>
                         {(calTimes || []).map((time, idx) => {
                           return (
-                            <tr>
+                            <tr key={`${time}-${idx}`}>
                               <td
                                 key={time + idx}
                                 className="calendar-td calendar-td-h calendar-td-w day-time-w font-size-14"

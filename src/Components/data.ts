@@ -142,21 +142,9 @@ const appointmentMap = new Map();
  * @returns an array of appointments after proccessing
  */
 const getAppointmentsByDates = (date: Date) => {
-  const appointmentsList = appointments.filter((appointment) => {
-    console.log(
-      format(appointment.date, 'dd-MM-yyyy') === format(date, 'dd-MM-yyyy'),
-      'appintment date'
-    );
-
-    return (
+  const appointmentsList = appointments.filter(
+    (appointment) =>
       format(appointment.date, 'dd-MM-yyyy') === format(date, 'dd-MM-yyyy')
-    );
-  });
-
-  console.log(
-    appointmentsList,
-    'filtered appointments',
-    format(date, 'dd-MM-yyyy')
   );
 
   return appointmentsList;
