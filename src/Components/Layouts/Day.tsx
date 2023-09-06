@@ -1,9 +1,15 @@
-import React, { Dispatch, SetStateAction } from 'react';
-import { appointmentMap, calendarTimes } from '../data';
+import React, { Dispatch, SetStateAction, useEffect } from 'react';
+import {
+  appointmentMap,
+  appointments,
+  calendarTimes,
+  getAppointmentsByDates,
+} from '../data';
 // import AppointmentWidget from './AppointmentWidget';
 import { format, isAfter, isBefore, isSameDay } from 'date-fns';
 import AppointmentWidget from '../EventWidget';
 import { getEvents } from '../../utils/schedular';
+import { DEFAULT_SHEDULAR_HEIGHT } from '../../helpers/constants/schedular';
 
 interface DayProps {
   // setIsAppointInfo: Dispatch<SetStateAction<boolean>>;
@@ -28,6 +34,20 @@ const Day: React.FC<DayProps> = ({
   //   setIsAppointInfo(!isAppointInfo);
   // };
 
+  useEffect(() => {
+    // Get references to the content wrap and time cells wrap
+    const contentWrap = document.querySelector('.e-content-wrap');
+    const timeCellsWrap = document.querySelector('.e-time-cells-wrap');
+    // Add a scroll event listener to the content wrap
+    contentWrap?.addEventListener('scroll', function () {
+      // Get the current scroll position of the content wrap
+      const scrollTop = contentWrap.scrollTop;
+
+      // Set the scroll position of the time cells wrap to match the content wrap
+      timeCellsWrap?.scrollTo(0, scrollTop);
+    });
+  }, []);
+
   const calTimes = calendarTimes();
 
   return (
@@ -35,50 +55,115 @@ const Day: React.FC<DayProps> = ({
       <div className="w-100">
         <div id="day-layout-table" className="mt-3">
           <table className="table table-bordered mb-0">
-            <thead>
-              <tr>
-                <th className="fw-normal text-center align-middle day-time-w"></th>
-                <th className="fw-normal text-center align-middle text-primary day-block-w">
-                  {format(day, 'EEEE')}
-                </th>
-              </tr>
-            </thead>
             <tbody style={{ height: 'calc(100vh - 150px)', overflow: 'auto' }}>
-              {(calTimes || []).map((time, idx) => {
-                const event = getEvents(day);
+              <tr>
+                <td className="fw-normal text-center align-middle day-time-w"></td>
+                <td className="fw-normal text-center align-middle text-primary day-block-w">
+                  {format(day, 'EEEE')}
+                </td>
+              </tr>
+              <tr className="fs-10">
+                <td className="p-0">
+                  <div
+                    className="e-time-cells-wrap overflow-hidden"
+                    style={{ height: DEFAULT_SHEDULAR_HEIGHT }}
+                  >
+                    <table className="table table-bordered mb-0">
+                      <tbody>
+                        {(calTimes || []).map((time, idx) => {
+                          const event = getEvents(day);
 
-                return (
-                  <tr key={time + idx} className="fs-10">
-                    <td className="calendar-td calendar-td-h calendar-td-w day-time-w font-size-14">
-                      {time}
-                    </td>
-                    <td
-                      onClick={() => {
-                        toggleForm();
-                        setDateTime({
-                          date: new Date(day),
-                          time: time,
-                        });
-                      }}
-                      className="calendar-td calendar-td-h calendar-td-w day-block-w"
-                    >
-                      {(event?.events || []).map((event: any) => (
-                        <AppointmentWidget key={idx} item={event} {...rest} />
-                      ))}
-                      {/* {(appointmentMap || []).map((appoint, idx) => {
+                          return (
+                            <tr>
+                              <td
+                                key={time + idx}
+                                className="calendar-td calendar-td-h calendar-td-w day-time-w font-size-14"
+                              >
+                                {time}
+                              </td>
+                            </tr>
+                          );
+                        })}
+                      </tbody>
+                    </table>
+                  </div>
+                </td>
 
-                      const isSame = isSameDay(day, appoint.date)
-
-                      if (isSame) {
-                        return (
-                          <AppointmentWidget key={idx} item={appoint} {...rest} />
-                        );
-                      }
-                    })} */}
-                    </td>
-                  </tr>
-                );
-              })}
+                <td
+                  className="p-0"
+                  // onClick={() => {
+                  //   toggleForm();
+                  //   setDateTime({
+                  //     date: new Date(day),
+                  //     time: time,
+                  //   });
+                  // }}
+                  // className="calendar-td calendar-td-h calendar-td-w day-block-w"
+                >
+                  <div
+                    className="e-content-wrap position-relative"
+                    style={{ height: DEFAULT_SHEDULAR_HEIGHT }}
+                  >
+                    <table className="table table-bordered schedule-content-table">
+                      <thead>
+                        <tr>
+                          <td
+                            className="e-day-wrapper w-100 p-0"
+                            data-date=""
+                            data-group-index="0"
+                          >
+                            <div
+                              className="e-appointment-wrapper"
+                              id="e-appointment-wrapper-0"
+                            >
+                              {(getAppointmentsByDates(day) || []).map(
+                                (event, idx) => {
+                                  const getHour = event.date.getHours();
+                                  const getMinutes = event.date.getMinutes();
+                                  const computeMinutePercentage =
+                                    (getMinutes / 60) * 100;
+                                  const computeTop =
+                                    getHour * 100 +
+                                    computeMinutePercentage -
+                                    10; //10 half height of event widget
+                                  return (
+                                    <div
+                                      className="w-75 e-appointment p-1"
+                                      style={{
+                                        top: `${computeTop}px`,
+                                        left: '0%',
+                                        backgroundColor: 'palevioletred',
+                                      }}
+                                      role="button"
+                                      data-id={`appointment-${idx}`}
+                                    >
+                                      <h1 className="fs-10 mb-0">
+                                        {event.name}
+                                      </h1>
+                                    </div>
+                                  );
+                                }
+                              )}
+                            </div>
+                          </td>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {(calTimes || []).map((time, idx) => {
+                          return (
+                            <tr>
+                              <td
+                                key={time + idx}
+                                className="calendar-td calendar-td-h calendar-td-w day-time-w font-size-14"
+                              ></td>
+                            </tr>
+                          );
+                        })}
+                      </tbody>
+                    </table>
+                  </div>
+                </td>
+              </tr>
             </tbody>
           </table>
         </div>
@@ -88,56 +173,3 @@ const Day: React.FC<DayProps> = ({
 };
 
 export default Day;
-
-/* ---------
-Matching Algo Working on building new one which will be more cleaner and faster for day week month which will covers all layout requirments
-If you want to use this one in current code then put it inside <td></td> and pass your appointments how ever we have changed it to date-fns as
-it is more flexible and powerful instead of moment. 
---------- */
-
-// const formattedDate = format(day, 'yyyy-MM-dd');
-// const dateTime = (id: any) =>
-//   new Date(formattedDate + ' ' + calTimes[id]);
-
-// const isBtwTime = event
-//   ? isAfter(dateTime(idx), event.date) &&
-//     isBefore(dateTime(idx + 1), event.date)
-//   : null;
-
-// {(appointments || [])
-//   .filter((appoint, index) => {
-//     // console.log(appoint.date);
-//     const appointDate = appoint.date;
-//     const dayDate = moment(day).format('DD-MM-YYYY');
-//     const date = moment(appointDate).format('DD-MM-YYYY');
-//     const appointTime = moment(appointDate).format('HH:mm');
-//     const nextTime =
-//       calTimes[idx + 1] &&
-//       moment(calTimes[idx + 1], 'h:mm A').format('HH:mm');
-//     /* check here appointment time and date if the schedular time which is last have appointment
-//     then it will go to first condition which will be true else second condition which will be false
-//     because then schedular time will not be last which have appointment */
-//     const check =
-//       appointTime >=
-//         moment(time, 'h:mm A').format('HH:mm') && !nextTime
-//         ? dayDate === date &&
-//           appointTime >=
-//             moment(time, 'h:mm A').format('HH:mm')
-//         : dayDate === date &&
-//           appointTime >=
-//             moment(time, 'h:mm A').format('HH:mm') &&
-//           appointTime < nextTime;
-
-//     if (check) return appoint;
-//   })
-//   .map((newApp, appIdx) => (
-//     <React.Fragment key={appIdx}>
-//       <AppointmentWidget
-//         key={idx}
-//         item={newApp}
-//         // setAppoint={setAppoint}
-//         // toggleAppoint={toggleAppoint}
-//         {...rest}
-//       />
-//     </React.Fragment>
-//   ))}

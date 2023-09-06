@@ -1,0 +1,1 @@
+export const DEFAULT_SHEDULAR_HEIGHT = 600;

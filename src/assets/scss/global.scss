@@ -1,43 +1,69 @@
 //bootstrap
-@import "bootstrap/dist/css/bootstrap.min.css";
+@import 'bootstrap/dist/css/bootstrap.min.css';
 
 //components
-@import "./components/helper";
+@import './components/helper';
 
 //icons
-@import "./icons/icons";
+@import './icons/icons';
 
 .calendar-td:hover {
-    background-color: rgba(0, 0, 0, 0.1);
-    cursor: pointer;
+  background-color: rgba(0, 0, 0, 0.1);
+  cursor: pointer;
 }
 
 .calendar-td-h {
-    height: 100px;
+  height: 100px;
 }
 
 .calendar-td-w {
-    width: 100px;
+  width: 100px;
 }
 
 .day-time-w {
-    width: 10%;
+  width: 10%;
 }
 
 .day-block-w {
-    width: 90%;
+  width: 90%;
 }
 
 /* booking sidebar */
 .booking-sidebar {
-    flex-basis: 250px;
-    flex-grow: 0;
-    flex-shrink: 0;
-    border: 1px solid #1d1d1d;
+  flex-basis: 250px;
+  flex-grow: 0;
+  flex-shrink: 0;
+  border: 1px solid #1d1d1d;
 }
 
 .treatment-head {
-    @media (max-width: 800px) {
-       display: none;     
-    }
+  @media (max-width: 800px) {
+    display: none;
+  }
+}
+
+.schedule-content-table {
+  //   border: none none;
+  //   border-collapse: separate;
+  border-spacing: 0;
+  margin: 0;
+  table-layout: fixed;
+  width: 100%;
+}
+
+.e-time-cells-wrap {
+  position: relative;
+}
+
+.e-content-wrap {
+  overflow: auto;
+}
+
+.e-appointment {
+  background: #3f51b5;
+  border: 1px solid #e8eaf6;
+  border-radius: 2px;
+  color: #fff;
+  overflow: hidden;
+  position: absolute;
 }
