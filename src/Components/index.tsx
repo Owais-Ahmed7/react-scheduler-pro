@@ -8,8 +8,12 @@ import { getMonthDates, getWeekDates } from '../utils/schedular';
 import { startOfMonth } from 'date-fns';
 
 interface SchedularProps {
-  startTime: string;
-  endTime: string;
+  events: any[];
+  startHour: number;
+  endHour: number;
+  idFieldName: string;
+  startDateFieldName: string;
+  endDateFieldName: string;
   timeDifference: string[];
   fontSize: string;
   colorTheme: string;
@@ -21,8 +25,8 @@ interface SchedularProps {
 /**
  *
  * @param {Object} props - Object contains all the passed props according to user usage.
- * @param {String} props.startTime - Start time is used in day and week layout its the start time of schedular time (e.g startTime = 10:00 AM).
- * @param {String} props.endTime - End time is used in day and week layout its the end time of schedular time (e.g endTime = 8:00 PM).
+ * @param {Number} props.startTime - Start time is used in day and week layout its the start time of schedular time (e.g startTime = 10:00 AM).
+ * @param {Number} props.endTime - End time is used in day and week layout its the end time of schedular time (e.g endTime = 8:00 PM).
  * @param {Array} props.timeDifference - Time difference is the difference between times of schedular in day & week layout (e.g timeDifference = ['1', 'hour / minutes']).
  * @param {String} props.fontSize - Font size is the adjustment of font user can do according to its own use case.
  * @param {String} props.colorTheme - Theme or Color theme user can pass custom color or can pass default bootstrap color themes. (e.g colorTheme = 'primary / info / '#1d1d1d').
@@ -61,6 +65,8 @@ const Schedular: React.FC<SchedularProps> = (props) => {
     time: '',
   });
 
+  console.log(day, 'day in index js');
+
   return (
     <React.Fragment>
       <div className="w-100">
@@ -78,7 +84,8 @@ const Schedular: React.FC<SchedularProps> = (props) => {
         />
         <Main
           day={day}
-          monthDates={monthDates}
+          // monthDates={monthDates}
+          trackMonth={trackMonth}
           weekDates={weekDates}
           currentDate={currentDate}
           layout={layout}

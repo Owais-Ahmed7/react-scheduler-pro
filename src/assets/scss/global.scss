@@ -4,6 +4,9 @@
 //components
 @import './components/helper';
 
+//views
+@import './layout/month';
+
 //icons
 @import './icons/icons';
 
@@ -18,6 +21,23 @@
 
 .calendar-td-w {
   width: 100px;
+}
+
+.e-date-header {
+  cursor: pointer;
+  display: table;
+  min-width: 20px;
+  height: 20px;
+  line-height: 20px;
+  margin: 3px 3px 2px;
+  text-align: center;
+}
+
+.e-day-wrapper {
+  height: 0;
+  margin: 0;
+  padding: 0;
+  position: relative;
 }
 
 .day-time-w {

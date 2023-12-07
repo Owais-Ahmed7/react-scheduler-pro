@@ -1,159 +1,137 @@
-import {
-  parse,
-  format,
-  addMinutes,
-  addHours,
-  parseISO,
-  isSameDay,
-} from 'date-fns';
-
-/**
- *
- * @param {String} startTime - start time of doctor working timing.
- * @param {String} endTime - end time of doctor working timing.
- * @desc - it generate's an array of times from 12:00 AM to 11:55 PM with 5 minute difference in them.
- * @returns an array of times containg all the times form 12:00 AM to next mid night 11:50 PM
- */
-const fiveMintTimes = (startTime: string, endTime: string) => {
-  const times = [];
-  let currentTime = parse(startTime, 'h:mm a', new Date());
-
-  while (format(currentTime, 'h:mm a') !== endTime) {
-    times.push(format(currentTime, 'h:mm a'));
-    currentTime = addMinutes(currentTime, 5);
-  }
-
-  times.push(endTime);
-  return times;
-};
-
-/**
- *
- * @param {String} startTime - start time of calendar timing.
- * @param {String} endTime - end time of calendar timing.
- * @param {String} timeDuration - time duration for calendar timing.
- * @returns an array of times according to calendar start time and end time via params.
- */
-const calendarTimes = (
-  startTime = '12:00 AM',
-  endTime = '11:00 PM',
-  timeDuration = '1 hour'
-) => {
-  const times = [];
-  let currentTime = parse(startTime, 'h:mm a', new Date());
-
-  const timeDiff = () => {
-    if (timeDuration === '1 hour') {
-      return addHours(currentTime, 1);
-    } else if (timeDuration === '15 minutes') {
-      return addMinutes(currentTime, 15);
-    } else {
-      return addMinutes(currentTime, 30);
-    }
-  };
-
-  while (format(currentTime, 'h:mm a') !== endTime) {
-    times.push(format(currentTime, 'h:mm a'));
-    currentTime = timeDiff();
-  }
-
-  times.push(endTime);
-  return times;
-};
+import { format } from 'date-fns';
 
 //For test
 const appointments = [
-  {
-    name: 'First Appointment',
-    date: new Date('2023-07-16T04:30:00.000+00:00'),
-  },
   // {
+  //   id: '1',
   //   name: 'First Appointment',
-  //   date: new Date('2023-07-16T04:30:00.000+00:00'),
+  //   startDate: new Date(new Date().setHours(4)),
+  //   endDate: new Date(new Date(new Date().setHours(6)).setMinutes(5)),
+  // },
+  // {
+  //   id: '2',
+  //   name: 'Second Appointment',
+  //   startDate: new Date(new Date(new Date().setHours(6)).setMinutes(50)),
+  //   endDate: new Date(new Date(new Date().setHours(7)).setMinutes(50)),
+  // },
+  // {
+  //   id: '22',
+  //   name: 'Third Appointment',
+  //   startDate: new Date(new Date(new Date().setHours(6)).setMinutes(50)),
+  //   endDate: new Date(new Date(new Date().setHours(7)).setMinutes(50)),
+  // },
+  // {
+  //   id: '221',
+  //   name: 'Third Appointment h case',
+  //   startDate: new Date(new Date(new Date().setHours(6)).setMinutes(50)),
+  //   endDate: new Date(new Date(new Date().setHours(7)).setMinutes(50)),
+  // },
+  // {
+  //   id: '23',
+  //   name: 'Fourth Appointment',
+  //   startDate: new Date(new Date(new Date().setHours(7)).setMinutes(55)),
+  //   endDate: new Date(new Date(new Date().setHours(8)).setMinutes(50)),
+  // },
+  // {
+  //   id: '234',
+  //   name: 'Fourth Appointment H case',
+  //   startDate: new Date(new Date(new Date().setHours(7)).setMinutes(55)),
+  //   endDate: new Date(new Date(new Date().setHours(8)).setMinutes(50)),
+  // },
+  // {
+  //   id: '2344',
+  //   name: 'Fourth Appointment H case',
+  //   startDate: new Date(new Date(new Date().setHours(8)).setMinutes(55)),
+  //   endDate: new Date(new Date(new Date().setHours(9)).setMinutes(50)),
+  // },
+  // {
+  //   id: '23412',
+  //   name: 'Fourth Appointment H case',
+  //   startDate: new Date(new Date(new Date().setHours(8)).setMinutes(55)),
+  //   endDate: new Date(new Date(new Date().setHours(9)).setMinutes(50)),
+  // },
+  // {
+  //   id: '24',
+  //   name: 'Fifth Appointment',
+  //   startDate: new Date(new Date(new Date().setHours(7)).setMinutes(55)),
+  //   endDate: new Date(new Date(new Date().setHours(8)).setMinutes(50)),
   // },
   {
-    name: 'Second Appointment',
-    date: new Date('2023-07-17T06:30:00.000+00:00'),
+    id: '3',
+    name: 'Sixth Appointment',
+    startDate: new Date(new Date(new Date().setHours(6)).setMinutes(0)),
+    endDate: new Date(new Date().setHours(15)),
   },
   // {
-  //   name: 'Second Appointment',
-  //   date: new Date('2023-07-17T06:30:00.000+00:00'),
-  // },
-  // {
-  //   name: 'Second Appointment',
-  //   date: new Date('2023-07-18T06:30:00.000+00:00'),
+  //   id: '4',
+  //   name: 'Seventh Appointment',
+  //   startDate: new Date(new Date(new Date().setHours(6)).setMinutes(0)),
+  //   endDate: new Date(new Date().setHours(15)),
   // },
   {
-    name: 'Third Appointment',
-    date: new Date('2023-09-07T14:30:00.000+00:00'),
+    id: '5',
+    name: 'Eighth Appointment',
+    startDate: new Date(new Date(new Date().setHours(15)).setMinutes(0)),
+    endDate: new Date(new Date().setHours(16)),
   },
   {
-    name: 'Fourth Appointment',
-    date: new Date('2023-07-18T20:30:00.000+00:00'),
+    id: '6',
+    name: 'Tenth Appointment',
+    startDate: new Date(new Date(new Date().setHours(15)).setMinutes(30)),
+    endDate: new Date(new Date().setHours(17)),
   },
   // {
-  //   name: 'Second Appointment',
-  //   date: new Date('2023-07-18T06:30:00.000+00:00'),
+  //   id: '7',
+  //   name: 'Eelventh Appointment',
+  //   startDate: new Date(new Date(new Date().setHours(16)).setMinutes(30)),
+  //   endDate: new Date(new Date().setHours(18)),
   // },
   // {
-  //   name: 'Second Appointment',
-  //   date: new Date('2023-07-19T06:30:00.000+00:00'),
+  //   id: '7453',
+  //   name: 'Eelventh Appointment h case',
+  //   startDate: new Date(new Date(new Date().setHours(16)).setMinutes(30)),
+  //   endDate: new Date(new Date().setHours(18)),
   // },
   // {
-  //   name: 'Second Appointment',
-  //   date: new Date('2023-07-20T06:30:00.000+00:00'),
+  //   id: '74533',
+  //   name: 'Eelventh Appointment h case',
+  //   startDate: new Date(new Date(new Date().setHours(16)).setMinutes(30)),
+  //   endDate: new Date(new Date().setHours(18)),
   // },
   // {
-  //   name: 'Second Appointment',
-  //   date: new Date('2023-07-21T06:30:00.000+00:00'),
-  // },
-  // {
-  //   name: 'Second Appointment',
-  //   date: new Date('2023-07-22T06:30:00.000+00:00'),
+  //   id: '74532',
+  //   name: 'Eelventh Appointment h case',
+  //   startDate: new Date(new Date(new Date().setHours(16)).setMinutes(30)),
+  //   endDate: new Date(new Date().setHours(18)),
   // },
 ];
-
-/* -------------------------- Distribution Algorithm -------------------------- */
-
-// Create an empty Map to store appointments with dates as keys and arrays as values
-const appointmentMap = new Map();
-
-// // Loop through the appointments array and group events with the same date
-// appointments.forEach((appointment) => {
-//   const { date, ...rest } = appointment;
-//   const dateString = date.toISOString().split('T')[0]; // Convert date to string format 'YYYY-MM-DD'
-//   // const dateString = date.toISOString();
-
-//   // Check if the date key already exists in the Map
-//   if (appointmentMap.has(dateString)) {
-//     // If the date key exists, add the current appointment to the existing array
-//     appointmentMap.get(dateString).events.push({ ...rest });
-//   } else {
-//     // If the date key does not exist, create a new array with the current appointment as the first element
-//     appointmentMap.set(dateString, { date, events: [{ ...rest }] });
-//   }
-// });
-
-/* -------------------------- Distribution Algorithm -------------------------- */
 
 /**
  *
  * @param date - Pass the date for filtering the appointments
  * @returns an array of appointments after proccessing
  */
-const getAppointmentsByDates = (date: Date) => {
-  const appointmentsList = appointments.filter(
-    (appointment) =>
-      format(appointment.date, 'dd-MM-yyyy') === format(date, 'dd-MM-yyyy')
+const getAppointmentsByDates = (date: Date, events: any[]) => {
+  const eventsList = events.filter((appointment) => {
+    return (
+      format(appointment.startDate, 'yyyy-MM-dd') === format(date, 'yyyy-MM-dd')
+    );
+  });
+
+  const sortByStartDate = eventsList.sort(
+    (a: any, b: any) => a.startDate - b.startDate
   );
 
-  return appointmentsList;
+  return sortByStartDate;
 };
 
-export {
-  fiveMintTimes,
-  calendarTimes,
-  getAppointmentsByDates,
-  appointments,
-  appointmentMap,
+/**
+ *
+ * @param events - Pass the Events for sorting in ascending order.
+ * @returns an array of sorted events
+ */
+const sortEvents = (events: any[]) => {
+  return events.sort((a: any, b: any) => a.startDate - b.startDate);
 };
+
+export { getAppointmentsByDates, sortEvents, appointments };

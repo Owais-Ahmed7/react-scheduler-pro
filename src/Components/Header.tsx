@@ -33,8 +33,8 @@ const Header: React.FC<HeaderProps> = ({
     if (layout === 'month') {
       const addMonth = addMonths(trackMonth, 1);
       setTrackMonth(addMonth);
-      const dates = getMonthDates(addMonth, 'next');
-      setMonthDates(dates);
+      // const dates = getMonthDates(addMonth, 'next');
+      // setMonthDates(dates);
     } else if (layout === 'week') {
       const dates = getWeekDates(
         addDays(weekDates[weekDates.length - 1], 1),
@@ -51,8 +51,8 @@ const Header: React.FC<HeaderProps> = ({
     if (layout === 'month') {
       const subMonth = subMonths(trackMonth, 1);
       setTrackMonth(subMonth);
-      const dates = getMonthDates(subMonth, 'prev');
-      setMonthDates(dates);
+      // const dates = getMonthDates(subMonth, 'prev');
+      // setMonthDates(dates);
     } else if (layout === 'week') {
       const dates = getWeekDates(subDays(weekDates[0], 1), 'prev');
       setWeekDates(dates);
@@ -106,7 +106,7 @@ const Header: React.FC<HeaderProps> = ({
           </Col>
           <Col xs={12} md={6}>
             <Row>
-              <Col xs={12} md={12} lg={4} className="mb-3 align-items-center">
+              <Col xs={12} md={12} lg={6} className="mb-3 align-items-center">
                 <div className="d-flex align-items-center justify-content-center">
                   <button
                     className="btn btn-sm btn-light pe-auto"
@@ -143,7 +143,7 @@ const Header: React.FC<HeaderProps> = ({
                   </button>
                 </div>
               </Col>
-              <Col xs={12} md={12} lg={4} className="mb-3">
+              <Col xs={12} md={12} lg={6} className="mb-3">
                 <div className="d-flex justify-content-center">
                   <div className="ms-3">
                     <button
