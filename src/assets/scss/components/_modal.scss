@@ -1,0 +1,71 @@
+.scheduler-modal {
+  display: none;
+  height: 100%;
+  left: 0;
+  right: 0;
+  margin: auto;
+  outline: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 2;
+  font-family: 'Gothic', sans-serif;
+  z-index: 1005;
+
+  .modal-dialog {
+    position: relative;
+    width: auto;
+    margin: 1.75rem;
+    pointer-events: none;
+    margin: auto;
+
+    display: flex;
+    align-items: center;
+    min-height: calc(100% - 1.75rem * 2);
+    // z-index: 1005;
+
+    .modal-content {
+      background-color: #fff !important;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      pointer-events: auto;
+      background-color: var(--bs-modal-bg);
+      background-clip: padding-box;
+      border: 1px solid rgba(0, 0, 0, 0.175);
+      border-radius: 0.3rem;
+      outline: 0;
+      padding: 1rem 1.5rem;
+    }
+  }
+
+  .modal-sm {
+    width: 50vw;
+  }
+  .modal-md {
+    width: 70vw;
+  }
+  .modal-lg {
+    width: 80vw;
+  }
+  .modal-xl {
+    width: 100vw;
+  }
+}
+
+.scheduler-modal-backdrop {
+  background-color: rgba(0, 0, 0, 0.3);
+  height: 100vh;
+  left: 0;
+  position: fixed;
+  top: 0;
+  width: 100vw;
+  z-index: 1000;
+
+  .show {
+    opacity: 0.5;
+  }
+}

@@ -1,70 +1,89 @@
-# Getting Started with Create React App
+# React Scheduler Pro Component
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Installation
 
-## Available Scripts
+```jsx
+npm i react-scheduler-pro
+```
 
-In the project directory, you can run:
+or
 
-### `npm start`
+```jsx
+yarn add react-scheduler-pro
+```
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## Usage
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+```jsx
+import { Scheduler } from "react-scheduler-pro";
+```
 
-### `npm test`
+## Example
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+```jsx
+function App() {
+  const evs = [
+    {
+      _id: 1122,
+      name: 'abc event',
+      startDate: new Date(
+        new Date(new Date(new Date().setHours(1))).setDate(12)
+      ),
+      endDate: new Date(new Date(new Date(new Date().setHours(5))).setDate(15)),
+      resourceId: 2,
+      backgroundColor: '#FFA447',
+      isAllDay: true,
+    },
+    {
+      _id: 1123,
+      name: 'xyz event',
+      startDate: new Date(
+        new Date(new Date(new Date().setHours(1))).setDate(13)
+      ),
+      endDate: new Date(new Date(new Date(new Date().setHours(5))).setDate(31)),
+      resourceId: 1,
+      backgroundColor: '#0079FF',
+    },
+  ];
 
-### `npm run build`
+  const [events, setEvents] = useState<any[]>(evs);
+  const resources = [
+    { resourceId: 1, backgroundColor: '#0079FF', title: 'Board room' },
+    { resourceId: 2, backgroundColor: '#FFA447', title: 'Training room' }];
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+  return (
+    <div className="App p-2">
+      <Scheduler
+        schedulerHeight={500}
+        startHour={0}
+        endHour={23}
+        step={60}
+        locale={hi}
+        timezone={'Asia/Karachi'}
+        resources={resources}
+        events={events}
+        resourceFields={{
+          id: 'resourceId',
+          title: 'title',
+          backgroundColor: 'backgroundColor',
+        }}
+        fields={{
+          id: '_id',
+          subject: 'name',
+          start: 'startDate',
+          end: 'endDate',
+          backgroundColor: 'backgroundColor',
+          resourceId: 'resourceId',
+        }}
+        selectedDate={new Date()}
+        views={['day', 'week', 'month]}
+        view={'day'}
+      />
+    </div>
+  );
+}
+```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## Documenation
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+[![Documenatation](https://img.shields.io/twitter/url?label=%40aldabil&style=social&url=https%3A%2F%2Ftwitter.com%2Fintent%2Ffollow%3Fscreen_name%3Daldabil21)](https://twitter.com/intent/follow?screen_name=aldabil21)

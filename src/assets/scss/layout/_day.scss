@@ -1,0 +1,37 @@
+.e-day-wrapper {
+  height: 0;
+  margin: 0;
+  padding: 0;
+  position: relative;
+  width: 100%;
+}
+
+.e-left-indent {
+  width: 85px;
+
+  table {
+    tbody {
+      td {
+        background: #fff;
+        border: 0 1px 1px 0 solid rgba(0, 0, 0, 0.12);
+        color: rgba(0, 0, 0, 0.87);
+      }
+    }
+  }
+}
+
+.e-header-cells {
+  // padding: 8px 0;
+  height: 50px;
+  font-size: 13px;
+  border-left: 1px solid rgba(0, 0, 0, 0.12);
+
+  :first-child {
+    border-left-width: 0;
+  }
+}
+
+.e-all-day-appointment-wrapper {
+  overflow: visible !important;
+  position: relative;
+}

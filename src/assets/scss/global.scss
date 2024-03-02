@@ -1,26 +1,61 @@
 //bootstrap
-@import 'bootstrap/dist/css/bootstrap.min.css';
+// @import "bootstrap/dist/css/bootstrap.min.css";
+
+//variables
+@import './variable';
+
+//fonts
+@import './fonts/fonts';
 
 //components
 @import './components/helper';
+@import './components/utilities';
+@import './components/popover';
+@import './components/modal';
 
 //views
+@import './layout/day';
+@import './layout/week';
 @import './layout/month';
 
 //icons
 @import './icons/icons';
 
-.calendar-td:hover {
-  background-color: rgba(0, 0, 0, 0.1);
-  cursor: pointer;
+#e-table {
+  animation: 1s fadeIn;
 }
 
-.calendar-td-h {
-  height: 100px;
+.popover-animation {
+  animation: 0.5s fadeIn;
 }
 
-.calendar-td-w {
-  width: 100px;
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+// @keyframes popup {
+//   0% {
+//     width: 0;
+//     height: 0;
+//   }
+//   100% {
+//     width: 100%;
+//     height: 100%;
+//   }
+// }
+
+.background-primary {
+  background: #0079ff;
+}
+
+.scheduler {
+  position: relative;
+  font-family: 'Muli', sans-serif;
 }
 
 .e-date-header {
@@ -33,38 +68,138 @@
   text-align: center;
 }
 
-.e-day-wrapper {
-  height: 0;
-  margin: 0;
-  padding: 0;
-  position: relative;
-}
-
-.day-time-w {
-  width: 10%;
-}
-
-.day-block-w {
-  width: 90%;
-}
-
-/* booking sidebar */
-.booking-sidebar {
-  flex-basis: 250px;
-  flex-grow: 0;
-  flex-shrink: 0;
-  border: 1px solid #1d1d1d;
-}
-
-.treatment-head {
-  @media (max-width: 800px) {
-    display: none;
+table {
+  width: 100%;
+  tbody {
+    tr {
+      td {
+        vertical-align: top;
+        padding: 0 !important;
+        margin: 0 !important;
+        height: 100%;
+      }
+    }
   }
 }
 
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
+  padding: 0;
+  margin: 0;
+}
+
+.e-schedule-table {
+  border: 0 none;
+  border-collapse: separate;
+  border-spacing: 0;
+  margin: 0;
+  table-layout: fixed;
+  width: 100%;
+
+  .e-more-indicator {
+    color: rgba(0, 0, 0, 0.54);
+    cursor: pointer;
+    font-size: 12px;
+    line-height: 11px;
+    overflow: hidden;
+    padding: 2px 4px;
+    position: absolute;
+    text-overflow: ellipsis;
+    transition: 0.5s;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  .current-time-indicator {
+    position: absolute;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    z-index: 2;
+
+    :nth-child(1) {
+      height: 15px;
+      width: 17px;
+      margin-top: -6px;
+      margin-left: -7px;
+      background: rgb(255, 0, 0);
+      border-radius: 100%;
+    }
+
+    :nth-child(2) {
+      height: 2px;
+      width: 100%;
+      margin-top: -6px;
+      background-color: rgb(255, 0, 0);
+    }
+  }
+
+  tbody {
+    tr {
+      td {
+        background-color: #fff;
+        box-sizing: border-box;
+        font-weight: normal;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        transition: 0.5s;
+      }
+    }
+  }
+}
+
+.e-schedule-table .e-date-cells {
+  td {
+    &:hover {
+      background-color: #e0f4ff !important;
+    }
+  }
+}
+
+.e-content-table {
+  tbody {
+    tr {
+      td {
+        border-left: 1px solid rgba(0, 0, 0, 0.12);
+
+        &:first-child {
+          border-left-width: 0;
+        }
+      }
+    }
+  }
+}
+
+.e-date-header-container {
+  height: 100%;
+}
+
+.e-resource-cell {
+  color: rgba(0, 0, 0, 0.87);
+  font-size: 13px;
+  height: 40px;
+  border-left: 1px solid rgba(0, 0, 0, 0.12);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+
+  td {
+    &:first-child {
+      border-left-width: 0;
+    }
+  }
+}
+
+.e-date-header-wrapper {
+  max-height: unset;
+}
+
 .schedule-content-table {
-  //   border: none none;
-  //   border-collapse: separate;
   border-spacing: 0;
   margin: 0;
   table-layout: fixed;
@@ -73,6 +208,7 @@
 
 .e-time-cells-wrap {
   position: relative;
+  overflow: hidden;
 }
 
 .e-content-wrap {
@@ -80,10 +216,44 @@
 }
 
 .e-appointment {
-  background: #3f51b5;
+  background: #0079ff;
   border: 1px solid #e8eaf6;
   border-radius: 2px;
+  border-radius: 4px;
   color: #fff;
   overflow: hidden;
   position: absolute;
+}
+
+// .e-all-day-cells .e-date-cell {
+//   vertical-align: bottom;
+//   border-left: 1px solid rgba(0, 0, 0, 0.12);
+
+//   &:first-child {
+//     border-left-width: 0;
+//   }
+// }
+
+.e-date-header-wrapper {
+  table {
+    tbody {
+      tr {
+        td {
+          &:first-child {
+            .e-resource-cell {
+              border-left: none;
+            }
+
+            .e-header-cells:first-child {
+              border-left: none;
+            }
+
+            .e-all-day-cells:first-child {
+              border-left: none;
+            }
+          }
+        }
+      }
+    }
+  }
 }

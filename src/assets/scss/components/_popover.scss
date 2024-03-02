@@ -1,0 +1,44 @@
+// .popover-animation {
+//   animation: popup 1s 1;
+// }
+
+@keyframes popup {
+  0% {
+    width: 0;
+    height: 0;
+  }
+  100% {
+    width: 100%;
+    height: 100%;
+  }
+}
+
+.popover-shadow {
+  box-shadow: 0px 0px 10px 5px rgba(30, 32, 37, 0.12) !important;
+}
+
+.popover {
+  width: 350px;
+  position: relative;
+  z-index: 10;
+  background-color: #fff;
+
+  .events {
+    height: 150px;
+    overflow: auto;
+  }
+
+  .popover-head {
+    background-color: #0079ff;
+    // background: linear-gradient(306deg, rgb(0, 149, 255), rgb(21, 0, 255));
+  }
+}
+
+.popover-overlay {
+  position: fixed;
+  height: 100vh;
+  width: 100%;
+  top: 0;
+  left: 0;
+  z-index: 1;
+}
