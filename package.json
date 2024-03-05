@@ -3,7 +3,6 @@
   "version": "0.1.0",
   "author": "Owais Ahmad",
   "license": "MIT",
-  "private": true,
   "files": [
     "*"
   ],
