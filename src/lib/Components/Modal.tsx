@@ -3,13 +3,18 @@ import Portal from './Portal';
 
 interface ModalProps {
   isOpen: boolean;
-  toggle: () => void;
-  size: string;
+  toggle?: () => void;
+  size?: string;
   children: ReactNode;
 }
 
-const Modal: React.FC<ModalProps> = ({ isOpen, toggle, size, children }) => {
-  if (!isOpen) return <></>;
+const Modal: React.FC<ModalProps> = ({
+  isOpen,
+  toggle,
+  size = 'md',
+  children,
+}) => {
+  if (!isOpen) return <div></div>;
 
   return (
     <Portal node={document.body}>

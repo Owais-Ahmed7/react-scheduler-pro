@@ -40,15 +40,15 @@ export type fieldsType = {
   allDay: string;
 };
 
-export type event = {
-  [key: string]: string | Date;
-};
+// export type event = {
+//   [key: string]: string | Date;
+// };
 
-export type resource = {
-  [key: string]: string;
-};
+// export type resource = {
+//   [key: string]: string;
+// };
 
-export type onDeleteType = { event: event };
+export type onDeleteType = { event: any };
 export type eventFormContextType = {
   toggle: voidFunction;
   start: Date;
@@ -75,15 +75,15 @@ export type onDoubleClickType = {
 export type disptach = (name: string, value: string) => void;
 
 export interface SchedulerProps {
-  schedulerHeight: number;
-  events: event[] | null;
-  resources: resource[] | null;
+  schedulerHeight?: number;
+  events: any[] | null;
+  resources?: any[] | null;
 
   //dispatch
-  dispatch: disptach;
+  dispatch?: disptach;
 
   //message
-  message: {
+  message?: {
     today: string;
     month: string;
     week: string;
@@ -92,51 +92,51 @@ export interface SchedulerProps {
   };
 
   //modal size
-  modalSize: 'sm' | 'md' | 'lg' | 'xl';
+  modalSize?: 'sm' | 'md' | 'lg' | 'xl';
 
   //handle prev next
-  onNavigate: (props: onNavigateType) => void | null;
-  onView: (props: onViewType) => void | null;
-  onSlot: (props: onSlotType) => void | null;
-  onDoubleClick: (props: onDoubleClickType) => void | null;
+  onNavigate?: (props: onNavigateType) => void | null;
+  onView?: (props: onViewType) => void | null;
+  onSlot?: (props: onSlotType) => void | null;
+  onDoubleClick?: (props: onDoubleClickType) => void | null;
 
   //view
-  view: view;
-  views: view[];
+  view?: view;
+  views?: view[];
 
   //date
-  selectedDate: Date;
+  selectedDate?: Date;
 
   //hour format
-  hourFormat: 12 | 24;
+  hourFormat?: 12 | 24;
 
   //locale
-  locale: Locale;
-  timezone: string;
+  locale?: Locale;
+  timezone?: string;
 
   //week && day
-  step: number;
-  startHour: DayHours;
-  endHour: DayHours;
+  step?: number;
+  startHour?: DayHours;
+  endHour?: DayHours;
 
   //month
-  weekStartOn: days;
+  weekStartOn?: days;
 
-  //new event, prev event
-  eventDialog: {
+  //new any, prev event
+  eventDialog?: {
     date: Date | null;
     event: any | null;
     isOpen: boolean;
   };
 
-  fields: fieldsType;
-  resourceFields: {
+  fields?: fieldsType;
+  resourceFields?: {
     id: string;
     title: string;
     backgroundColor: string;
   };
 
-  eventFormContext: ({
+  eventFormContext?: ({
     toggle,
     start,
     end,
@@ -144,11 +144,13 @@ export interface SchedulerProps {
     resource,
   }: eventFormContextType) => JSX.Element | null;
 
-  allEventsPopoverTemplate: (props: allEventsPopoverType) => JSX.Element | null;
-  eventPopoverTemplate: (props: eventPopoverType) => JSX.Element | null;
-  eventTemplate: (props: eventItemType) => JSX.Element | null;
-  resourceTemplate: (props: resourceType) => JSX.Element | null;
+  allEventsPopoverTemplate?: (
+    props: allEventsPopoverType
+  ) => JSX.Element | null;
+  eventPopoverTemplate?: (props: eventPopoverType) => JSX.Element | null;
+  eventTemplate?: (props: eventItemType) => JSX.Element | null;
+  resourceTemplate?: (props: resourceType) => JSX.Element | null;
 
   //trigger popover
-  popover: { open: boolean; event: any | null };
+  popover?: { open: boolean; event: any | null };
 }

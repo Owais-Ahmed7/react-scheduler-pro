@@ -11,6 +11,7 @@ import { format } from 'date-fns';
 import { createPortal } from 'react-dom';
 import Portal from '../Portal';
 import { resource } from '../../types';
+import { accessor } from '../../utils/accessor';
 
 interface EventPopoverTypes {
   resource?: any;
@@ -54,8 +55,8 @@ const EventPopover: React.FC<EventPopoverTypes> = ({
 
   const togglePopover = () => setPopover(null);
 
-  console.log(event, 'event');
-  console.log(resource, 'resource');
+  // Example usage:
+  // console.log(nestedPropertyValue);
 
   return (
     <React.Fragment>
@@ -158,7 +159,7 @@ const EventPopover: React.FC<EventPopoverTypes> = ({
                     </div>
                     <div className="text-start">
                       <h5 className="text-white mt-3">
-                        {event[fields.subject]}
+                        {accessor(fields.subject, event)}
                       </h5>
                     </div>
                   </div>
@@ -178,7 +179,7 @@ const EventPopover: React.FC<EventPopoverTypes> = ({
                       </span>
                       <span className="fs-13">
                         {format(
-                          event[fields.start],
+                          accessor(fields.start, event),
                           timeFormat ? timeFormat : 'd MMM yyyy hh:mm a',
                           {
                             locale,
@@ -186,7 +187,7 @@ const EventPopover: React.FC<EventPopoverTypes> = ({
                         )}{' '}
                         -{' '}
                         {format(
-                          event[fields.end],
+                          accessor(fields.end, event),
                           timeFormat ? timeFormat : 'd MMM yyyy hh:mm a',
                           {
                             locale,
@@ -194,7 +195,7 @@ const EventPopover: React.FC<EventPopoverTypes> = ({
                         )}
                       </span>
                     </h6>
-                    {resources?.length && (
+                    {resource && (
                       <h6 className="d-flex align-items-center mt-2">
                         <span className="me-2">
                           <svg
@@ -209,13 +210,9 @@ const EventPopover: React.FC<EventPopoverTypes> = ({
                           </svg>
                         </span>
                         <span className="fs-13">
-                          {
-                            resources.find(
-                              (rs: any) =>
-                                rs[resourceFields.id] ===
-                                event[resourceFields.id]
-                            )?.[resourceFields.title]
-                          }
+                          {resource
+                            ? accessor(resourceFields.start, resource)
+                            : ''}
                         </span>
                       </h6>
                     )}

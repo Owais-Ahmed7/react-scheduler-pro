@@ -313,7 +313,8 @@ export const convertEventTimeZone = (
   };
 };
 
-const systemTimezone: string = Intl.DateTimeFormat().resolvedOptions().timeZone;
+export const systemTimezone: string =
+  Intl.DateTimeFormat().resolvedOptions().timeZone;
 export const getTimeZonedDate = (date: Date, timeZone?: string) => {
   return toDate(
     formatInTimeZone(date, timeZone || systemTimezone, 'yyyy-MM-dd HH:mm:ss')

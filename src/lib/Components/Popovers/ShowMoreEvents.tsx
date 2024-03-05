@@ -1,9 +1,16 @@
-import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import React, {
+  Dispatch,
+  SetStateAction,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import Portal from '../Portal';
 import useStore from '../../hooks/useStore';
 import { usePopper } from 'react-popper';
 import EventPopover from './Event';
 import { format } from 'date-fns';
+import { accessor } from '../../utils/accessor';
 
 interface ShowMoreEventsProps {
   dateAllEvents: { events: any[]; date: Date | null; resource: any[] | null };
@@ -24,8 +31,14 @@ const ShowMoreEvents: React.FC<ShowMoreEventsProps> = ({
   attributes,
   timeFormat,
 }) => {
-  const { fields, view, allEventsPopoverTemplate, resourceFields }: any =
-    useStore();
+  const {
+    fields,
+    view,
+    allEventsPopoverTemplate,
+    resourceFields,
+    onDoubleClick,
+    dispatch,
+  }: any = useStore();
 
   const [popover, setPopover] = useState<{} | null>(null);
 
@@ -70,6 +83,33 @@ const ShowMoreEvents: React.FC<ShowMoreEventsProps> = ({
     });
   };
 
+  const onClick = (event: any) => {
+    setPopover(event);
+  };
+
+  const onDoubleClck = ({ event, resource }: any) => {
+    dispatch('eventDialog', {
+      date: null,
+      event: event,
+      resource,
+      isOpen: true,
+    });
+  };
+
+  const timer: any = useRef();
+
+  const onClickHandler = (e: any, event: any) => {
+    clearTimeout(timer.current);
+
+    if (e.detail === 1) {
+      timer.current = setTimeout(() => onClick(event), 200);
+    } else if (e.detail === 2) {
+      onDoubleClick instanceof Function
+        ? onDoubleClick({ event, resource })
+        : onDoubleClck({ event, resource });
+    }
+  };
+
   return (
     <React.Fragment>
       {Boolean(events?.length) && (
@@ -89,7 +129,7 @@ const ShowMoreEvents: React.FC<ShowMoreEventsProps> = ({
               <div className="popover p-3">
                 <div className="d-flex justify-content-between align-items-center mb-2">
                   <div>
-                    <h6 className="text-start">
+                    <h6 className="popper-date text-start">
                       {date && format(date, 'd MMM')}
                     </h6>
                   </div>
@@ -108,18 +148,20 @@ const ShowMoreEvents: React.FC<ShowMoreEventsProps> = ({
                   {events.map((e, idx) => (
                     <div
                       onClick={(ev) => {
-                        setPopover(e);
+                        onClickHandler(ev, e);
                         setReferenceElement(ev.currentTarget);
                       }}
                       key={idx}
                       style={{
                         backgroundColor: resource
-                          ? resource[resourceFields.backgroundColor]
-                          : e[fields.backgroundColor],
+                          ? accessor(resourceFields.backgroundColor, resource)
+                          : accessor(fields.backgroundColor, e),
                       }}
-                      className="btn btn-sm text-start background-primary mb-1 py-1 px-2 text-white w-100"
+                      className="btn btn-sm btn-primary text-start mb-1 py-1 px-2 text-white w-100"
                     >
-                      <h6 className="fs-10 text-start">{e[fields.subject]}</h6>
+                      <h6 className="fs-10 text-start">
+                        {accessor(fields.subject, e)}
+                      </h6>
                       {/* <time className="">
                 <span>
                   {format(e[fields.start], 'dd MMM yyyy')}

@@ -1,11 +1,17 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { filterTodayEvents, getTimeZonedDate } from '../utils/schedular';
+import {
+  filterTodayEvents,
+  getTimeZonedDate,
+  systemTimezone,
+} from '../utils/schedular';
 import {
   addDays,
   addHours,
+  addMilliseconds,
   addMinutes,
   eachMinuteOfInterval,
   format,
+  toDate,
 } from 'date-fns';
 import { CELL_HEIGHT } from '../helpers/constants/schedular';
 import useStore from '../hooks/useStore';
@@ -14,6 +20,7 @@ import RenderEvents from '../Components/RenderEvents';
 import { getResourcedEvents } from '../utils/schedular';
 import DayGridHeader from './DayGridHeader';
 import { fieldsType } from '../types';
+import { getTimezoneOffset, zonedTimeToUtc } from 'date-fns-tz';
 
 interface Props {
   weekDays: number[];
@@ -135,31 +142,32 @@ const TimeGrid: React.FC<Props> = ({
                     addHours(start, time.getHours()),
                     time.getMinutes()
                   );
-                  const end = addMinutes(concatDate, step);
 
                   return (
                     <td
                       key={i}
                       colSpan={1}
-                      aria-label={`${start.toLocaleString('en', {
-                        dateStyle: 'full',
-                        timeStyle: 'long',
-                      })} - ${end.toLocaleString('en', {
-                        dateStyle: 'full',
-                        timeStyle: 'long',
-                      })}`}
+                      // aria-label={`${zStart.toLocaleString('en', {
+                      //   dateStyle: 'full',
+                      //   timeStyle: 'long',
+                      // })} - ${zEnd.toLocaleString('en', {
+                      //   dateStyle: 'full',
+                      //   timeStyle: 'long',
+                      // })}`}
                       style={{ height: CELL_HEIGHT }}
                       onClick={() => {
+                        const zStart = zonedTimeToUtc(concatDate, timezone);
+                        const zEnd = addMinutes(zStart, step);
                         if (onSlot instanceof Function)
                           onSlot({
-                            start: concatDate,
-                            end,
+                            start: zStart,
+                            end: zEnd,
                             resource,
                           });
                         else
                           dispatch('eventDialog', {
-                            start: concatDate,
-                            end,
+                            start: zStart,
+                            end: zEnd,
                             resource,
                             event: null,
                             isOpen: true,
@@ -213,7 +221,7 @@ const TimeGrid: React.FC<Props> = ({
                             <td
                               aria-label={time.toISOString()}
                               style={{ height: CELL_HEIGHT }}
-                              className="border-end border-top fs-12 text-center text-nowrap day-time-w py-0 align-middle"
+                              className="border-end border-top fs-12 text-center text-nowrap"
                             >
                               <span className="fs-7">
                                 {format(

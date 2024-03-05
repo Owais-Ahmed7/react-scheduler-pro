@@ -210,8 +210,8 @@ const Header: React.FC<HeaderProps> = () => {
                       }}
                       className={
                         view === 'day' && isToday(selectedDate)
-                          ? 'btn btn-sm text-primary'
-                          : 'btn btn-sm'
+                          ? 'btn btn-sm btn-light text-primary'
+                          : 'btn btn-sm btn-light'
                       }
                     >
                       {today}
@@ -225,8 +225,8 @@ const Header: React.FC<HeaderProps> = () => {
                           onClick={() => changeView('day')}
                           className={
                             view === 'day'
-                              ? 'btn btn-sm text-primary'
-                              : 'btn btn-sm'
+                              ? 'btn btn-sm btn-light text-primary'
+                              : 'btn btn-sm btn-light'
                           }
                         >
                           {day}
@@ -237,8 +237,8 @@ const Header: React.FC<HeaderProps> = () => {
                           onClick={() => changeView('week')}
                           className={
                             view === 'week'
-                              ? 'btn btn-sm text-primary'
-                              : 'btn btn-sm'
+                              ? 'btn btn-sm btn-light text-primary'
+                              : 'btn btn-sm btn-light'
                           }
                         >
                           {week}
@@ -249,8 +249,8 @@ const Header: React.FC<HeaderProps> = () => {
                           onClick={() => changeView('month')}
                           className={
                             view === 'month'
-                              ? 'btn btn-sm text-primary'
-                              : 'btn btn-sm'
+                              ? 'btn btn-sm btn-light text-primary'
+                              : 'btn btn-sm btn-light'
                           }
                         >
                           {month}

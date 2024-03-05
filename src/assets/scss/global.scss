@@ -14,12 +14,16 @@
 @import './components/modal';
 
 //views
-@import './layout/day';
-@import './layout/week';
-@import './layout/month';
+@import './views/day';
+@import './views/week';
+@import './views/month';
 
 //icons
 @import './icons/icons';
+
+.scheduler {
+  background-color: #fff;
+}
 
 #e-table {
   animation: 1s fadeIn;
@@ -66,6 +70,12 @@
   line-height: 20px;
   margin: 3px 3px 2px;
   text-align: center;
+}
+
+.e-time-cells-wrap {
+  td {
+    color: #1d1d1d;
+  }
 }
 
 table {

@@ -5,6 +5,7 @@ import { usePopper } from 'react-popper';
 import EventPopover from './Popovers/Event';
 import { v4 as uuid } from 'uuid';
 import { resource } from '../types';
+import { accessor } from '../utils/accessor';
 
 interface EventItemProps {
   hasPrevious?: boolean;
@@ -112,17 +113,7 @@ const EventItem: React.FC<EventItemProps> = ({
         onClick={(e) => {
           e.stopPropagation();
           onClickHandler(e);
-          // setPopover(event);
         }}
-        // onDoubleClick={(e) => {
-        //   e.stopPropagation();
-        //   dispatch('eventDialog', {
-        //     date: null,
-        //     event: event,
-        //     resource,
-        //     isOpen: true,
-        //   });
-        // }}
       >
         <div ref={setReferenceElement} className="e-appointment-details">
           <div className="d-flex">
@@ -159,7 +150,7 @@ const EventItem: React.FC<EventItemProps> = ({
               ) : (
                 <div>
                   <h6 className="fs-12 mb-0 e-subject">
-                    {event[fields.subject]}{' '}
+                    {accessor(fields.subject, event)}{' '}
                     {event[fields.allDay] ? '(All Day)' : ''}
                   </h6>
                   {showTime && (
@@ -227,8 +218,6 @@ const EventItem: React.FC<EventItemProps> = ({
     timeFormat,
     resource,
   ]);
-
-  console.log(resource, 'ihihh resrouce');
 
   return (
     <React.Fragment>
