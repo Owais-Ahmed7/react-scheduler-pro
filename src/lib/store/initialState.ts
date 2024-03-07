@@ -1,11 +1,11 @@
 import { enUS } from 'date-fns/esm/locale';
-import { SchedulerProps, event, resource } from '../types';
+import { SchedulerProps } from '../types';
 
-const initialState = {
+const initialState: SchedulerProps = {
   schedulerHeight: 600,
 
-  resources: [] as resource[],
-  events: [] as event[],
+  resources: [] as any[],
+  events: [] as any[],
 
   //message
   message: {

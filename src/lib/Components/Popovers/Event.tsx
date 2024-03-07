@@ -10,7 +10,6 @@ import useStore from '../../hooks/useStore';
 import { format } from 'date-fns';
 import { createPortal } from 'react-dom';
 import Portal from '../Portal';
-import { resource } from '../../types';
 import { accessor } from '../../utils/accessor';
 
 interface EventPopoverTypes {
@@ -38,6 +37,7 @@ const EventPopover: React.FC<EventPopoverTypes> = ({
     eventPopoverTemplate,
     resources,
     resourceFields,
+    onEditEvent,
     onDeleteEvent,
     dispatch,
   }: any = useStore();
@@ -98,12 +98,15 @@ const EventPopover: React.FC<EventPopoverTypes> = ({
                           onClick={(e) => {
                             e.stopPropagation();
                             togglePopover();
-                            dispatch('eventDialog', {
-                              date: null,
-                              event: event,
-                              resource,
-                              isOpen: true,
-                            });
+                            if (onEditEvent instanceof Function)
+                              onEditEvent({ event });
+                            else
+                              dispatch('eventDialog', {
+                                date: null,
+                                event: event,
+                                resource,
+                                isOpen: true,
+                              });
                           }}
                           className="btn btn-sm btn-light me-2"
                         >
@@ -121,7 +124,8 @@ const EventPopover: React.FC<EventPopoverTypes> = ({
                         <button
                           onClick={(e) => {
                             e.stopPropagation();
-                            onDeleteEvent({ event });
+                            if (onDeleteEvent instanceof Function)
+                              onDeleteEvent({ event });
                             togglePopover();
                           }}
                           className="btn btn-sm btn-light me-2"

@@ -1,6 +1,6 @@
 // StoreContext.js
-import React, { createContext, useReducer } from "react";
-import initialState from "./initialState";
+import React, { createContext, useReducer } from 'react';
+import initialState from './initialState';
 
 export const StoreContext = createContext(initialState);
 

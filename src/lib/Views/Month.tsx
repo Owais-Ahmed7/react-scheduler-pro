@@ -26,10 +26,6 @@ import {
 import ShowMoreEvents from '../Components/Popovers/ShowMoreEvents';
 
 const weekDays = [0, 1, 2, 3, 4, 5, 6];
-interface Props {
-  // toggleForm: (date: Date) => void;
-  // currentDate: Date;
-}
 
 const Month = () => {
   const {
@@ -90,10 +86,10 @@ const Month = () => {
 
     function bodyListener(e: any) {
       const popoverContainer = document.querySelector('.more-events-popover');
-      console.log('close event popper 1');
+      // console.log('close event popper 1');
       if (popoverContainer && !popoverContainer.contains(e.target as Node)) {
         if (Boolean(dateAllEvents.events.length)) {
-          console.log('close event popper 2');
+          // console.log('close event popper 2');
 
           setDateAllEvents({ events: [], date: null, resource: null });
         }

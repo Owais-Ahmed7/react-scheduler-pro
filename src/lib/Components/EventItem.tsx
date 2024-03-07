@@ -4,15 +4,15 @@ import useStore from '../hooks/useStore';
 import { usePopper } from 'react-popper';
 import EventPopover from './Popovers/Event';
 import { v4 as uuid } from 'uuid';
-import { resource } from '../types';
 import { accessor } from '../utils/accessor';
+import { on } from 'events';
 
 interface EventItemProps {
   hasPrevious?: boolean;
   className?: string;
   hasNext?: boolean;
   event: any;
-  resource?: resource;
+  resource?: any;
   timeFormat?: string;
   showTime?: boolean;
   eventStyles: {};
@@ -37,8 +37,11 @@ const EventItem: React.FC<EventItemProps> = ({
     locale,
     dispatch,
     view,
-    onDoubleClick,
+    onClickEvent,
+    onDoubleClickEvent,
   }: any = useStore();
+
+  console.log(onClickEvent, 'on click event');
 
   const [popover, setPopover] = useState<HTMLElement | null>(null);
   const [referenceElement, setReferenceElement] =
@@ -89,10 +92,15 @@ const EventItem: React.FC<EventItemProps> = ({
     clearTimeout(timer.current);
 
     if (e.detail === 1) {
-      timer.current = setTimeout(onClick, 200);
+      timer.current = setTimeout(
+        onClickEvent instanceof Function
+          ? () => onClickEvent({ event, resource })
+          : onClick,
+        200
+      );
     } else if (e.detail === 2) {
-      onDoubleClick instanceof Function
-        ? onDoubleClick({ event, resource })
+      onDoubleClickEvent instanceof Function
+        ? onDoubleClickEvent({ event, resource })
         : onDoubleClck();
     }
   };

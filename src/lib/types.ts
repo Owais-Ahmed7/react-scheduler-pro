@@ -63,14 +63,20 @@ export type allEventsPopoverType = {
   view: view;
   togglePopover: voidFunction;
 };
+export type onEditEventType = { event: any };
+export type onDeleteEventType = { event: any };
 export type eventItemType = { event: any; view: view };
 export type resourceType = { resource: any; view: view };
 export type onNavigateType = { date: Date; start: Date; end: Date; view: view };
 export type onViewType = { view: view };
-export type onSlotType = { start: Date; end: Date; resource: resourceType };
-export type onDoubleClickType = {
-  event: eventItemType;
-  resource: resourceType;
+export type onSlotType = { start: Date; end: Date; resource: any };
+export type onDoubleClickEventType = {
+  event: any;
+  resource: any;
+};
+export type onClickEventType = {
+  event: any;
+  resource: any;
 };
 export type disptach = (name: string, value: string) => void;
 
@@ -98,7 +104,10 @@ export interface SchedulerProps {
   onNavigate?: (props: onNavigateType) => void | null;
   onView?: (props: onViewType) => void | null;
   onSlot?: (props: onSlotType) => void | null;
-  onDoubleClick?: (props: onDoubleClickType) => void | null;
+  onEditEvent?: (props: onEditEventType) => void | null;
+  onDeleteEvent?: (props: onDeleteEventType) => void | null;
+  onClickEvent?: (props: onClickEventType) => void | null;
+  onDoubleClickEvent?: (props: onDoubleClickEventType) => void | null;
 
   //view
   view?: view;
