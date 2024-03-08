@@ -45,39 +45,18 @@ function App() {
       backgroundColor: '#0079FF',
     },
   ];
-
   const [events, setEvents] = useState<any[]>(evs);
-  const resources = [
-    { resourceId: 1, backgroundColor: '#0079FF', title: 'Board room' },
-    { resourceId: 2, backgroundColor: '#FFA447', title: 'Training room' }];
 
   return (
     <div className="App p-2">
       <Scheduler
-        schedulerHeight={500}
-        startHour={0}
-        endHour={23}
-        step={60}
-        locale={hi}
-        timezone={'Asia/Karachi'}
-        resources={resources}
         events={events}
-        resourceFields={{
-          id: 'resourceId',
-          title: 'title',
-          backgroundColor: 'backgroundColor',
-        }}
         fields={{
           id: '_id',
           subject: 'name',
           start: 'startDate',
-          end: 'endDate',
-          backgroundColor: 'backgroundColor',
-          resourceId: 'resourceId',
+          end: 'endDate'
         }}
-        selectedDate={new Date()}
-        views={['day', 'week', 'month]}
-        view={'day'}
       />
     </div>
   );
@@ -86,8 +65,4 @@ function App() {
 
 ## Documenation
 
-<<<<<<< HEAD
-[![Documenatation](https://img.shields.io/twitter/url?label=%40aldabil&style=social&url=https%3A%2F%2Ftwitter.com%2Fintent%2Ffollow%3Fscreen_name%3Daldabil21)](https://twitter.com/intent/follow?screen_name=aldabil21)
-=======
 [Documenatation](https://react-scheduler-pro.vercel.app/docs)
->>>>>>> acfdeb9 (fix)
