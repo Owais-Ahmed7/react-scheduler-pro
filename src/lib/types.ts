@@ -118,6 +118,7 @@ export interface SchedulerProps {
 
   //hour format
   hourFormat?: 12 | 24;
+  timeFormat?: string | undefined;
 
   //locale
   locale?: Locale;
@@ -138,7 +139,7 @@ export interface SchedulerProps {
     isOpen: boolean;
   };
 
-  fields?: fieldsType;
+  fields: fieldsType;
   resourceFields?: {
     id: string;
     title: string;
@@ -162,4 +163,13 @@ export interface SchedulerProps {
 
   //trigger popover
   popover?: { open: boolean; event: any | null };
+}
+
+export interface Store extends SchedulerProps {
+  startHour: DayHours;
+  endHour: DayHours;
+  step: number;
+  fields: fieldsType;
+  view: view;
+  views: view[];
 }

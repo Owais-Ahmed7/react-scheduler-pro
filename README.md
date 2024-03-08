@@ -86,4 +86,8 @@ function App() {
 
 ## Documenation
 
+<<<<<<< HEAD
 [![Documenatation](https://img.shields.io/twitter/url?label=%40aldabil&style=social&url=https%3A%2F%2Ftwitter.com%2Fintent%2Ffollow%3Fscreen_name%3Daldabil21)](https://twitter.com/intent/follow?screen_name=aldabil21)
+=======
+[Documenatation](https://react-scheduler-pro.vercel.app/docs)
+>>>>>>> acfdeb9 (fix)

@@ -1,3 +1,4 @@
+import React from 'react';
 import StoreProvider from './store/provider';
 import SchedulerComponent from './Components';
 import '../App.scss';

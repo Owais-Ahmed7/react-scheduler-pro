@@ -20,10 +20,7 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
-    "jsx": "react-jsx"
+    "jsx": "react"
   },
-  "include": [
-    "src",
-    "global.d.ts"
-  ]
+  "include": ["src/lib/**/*"]
 }

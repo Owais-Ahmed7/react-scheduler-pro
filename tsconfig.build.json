@@ -1,4 +1,10 @@
 {
+<<<<<<< HEAD
+=======
+   "compilerOptions": {
+      "sourceMap": true
+   },
+>>>>>>> acfdeb9 (fix)
    "extends": "./tsconfig.json",
    "include": ["src/lib/**/*"],
    "exclude": ["node_modules", "**/__tests__/**"]

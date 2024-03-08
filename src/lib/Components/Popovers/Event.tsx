@@ -19,7 +19,7 @@ interface EventPopoverTypes {
   setPopperElement: Dispatch<SetStateAction<HTMLDivElement | null>>;
   styles: any;
   attributes: any;
-  timeFormat: string | null;
+  timeFormat: string | undefined | null;
 }
 
 const EventPopover: React.FC<EventPopoverTypes> = ({

@@ -1,7 +1,8 @@
+import React from 'react';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { StoreContext } from './context';
 import initialState from './initialState';
-import { SchedulerProps } from '../types';
+import { Store } from '../types';
 
 interface Props {
   children: React.ReactNode;
@@ -9,7 +10,7 @@ interface Props {
 }
 
 const StoreProvider = ({ children, initial }: Props) => {
-  const [state, setState] = useState<SchedulerProps>({
+  const [state, setState] = useState<Store>({
     ...initialState,
     ...initial,
   });
@@ -24,7 +25,7 @@ const StoreProvider = ({ children, initial }: Props) => {
   );
 
   useEffect(() => {
-    if (!state.views?.includes(state?.view))
+    if (!state.views.includes(state.view))
       throw Error('Selected view does not exsit in views');
     setState((prevState: any) => ({
       ...prevState,
