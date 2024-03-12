@@ -1,20 +1,11 @@
-import React, { ReactNode } from 'react';
+import React from 'react';
 
 //components
 import Header from './Header';
 import Main from './Main';
 import FormModal from './Modals/FormModal';
-
-interface SchedulerProps {
-  events: any[];
-  startHour?: number;
-  endHour?: number;
-  timeDifference?: string[];
-  views?: string[];
-  data?: any[];
-  eventFormContext?: (toggle: () => void, date: Date) => ReactNode;
-  fields?: { id: String; subject: String; start: String; end: String };
-}
+import { SchedulerProps } from '../types';
+import useStore from '../hooks/useStore';
 
 /**
  *
@@ -28,7 +19,8 @@ interface SchedulerProps {
  * @param {Array} props.data - User should pass the data(appointments / events) that are used to shown on Scheduler.
  * @returns
  */
-const Scheduler = (props: SchedulerProps) => {
+const Scheduler: React.FC<SchedulerProps> = () => {
+  console.log(useStore(), 'store');
   return (
     <React.Fragment>
       <div className="scheduler w-100">

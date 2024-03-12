@@ -157,7 +157,7 @@ const ShowMoreEvents: React.FC<ShowMoreEventsProps> = ({
                           ? accessor(resourceFields.backgroundColor, resource)
                           : accessor(fields.backgroundColor, e),
                       }}
-                      className="btn btn-sm btn-primary text-start mb-1 py-1 px-2 text-white w-100"
+                      className="btn btn-sm btn-primary border-0 text-start mb-1 py-1 px-2 text-white w-100"
                     >
                       <h6 className="fs-10 text-start">
                         {accessor(fields.subject, e)}

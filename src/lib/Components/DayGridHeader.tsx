@@ -251,7 +251,7 @@ const RenderHeader = ({
             new Date(event[fields.start]),
             new Date(event[fields.end])
           ) > 0 ||
-          event.isAllDay
+          event[fields.allDay]
         ) {
           const doesIntervalOverlap = areIntervalsOverlapping(
             {
@@ -296,6 +296,7 @@ const RenderHeader = ({
           <MultidayEvents
             multiDayEvents={todayEvents}
             prevNextEvents={prevNextEvents}
+            resource={resource}
             // showMultiDEvents={showAllMultiDEvents}
             eventsIndexes={eventsIndexes}
             weekStart={startOfWk}

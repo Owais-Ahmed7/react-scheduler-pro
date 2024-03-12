@@ -1,4 +1,6 @@
-# React Scheduler Pro Component
+# React Scheduler Pro
+
+React Scheduler Pro is a lightweight and powerful event Calender. React Scheduler Pro – your essential toolkit for effortlessly managing schedules and events within your React applications.
 
 ## Installation
 
@@ -11,6 +13,10 @@ or
 ```jsx
 yarn add react-scheduler-pro
 ```
+
+## Documenation
+
+[Documenatation](https://react-scheduler-pro.vercel.app/docs)
 
 ## Usage
 
@@ -55,14 +61,11 @@ function App() {
           id: '_id',
           subject: 'name',
           start: 'startDate',
-          end: 'endDate'
+          end: 'endDate',
+          allDay: 'isAllDay',
         }}
       />
     </div>
   );
 }
 ```
-
-## Documenation
-
-[Documenatation](https://react-scheduler-pro.vercel.app/docs)

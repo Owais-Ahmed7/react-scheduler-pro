@@ -35,9 +35,9 @@ export type fieldsType = {
   subject: string;
   start: string;
   end: string;
-  backgroundColor: string;
-  resourceId: string;
-  allDay: string;
+  backgroundColor?: string;
+  resourceId?: string;
+  allDay?: string;
 };
 
 // export type event = {
@@ -47,8 +47,6 @@ export type fieldsType = {
 // export type resource = {
 //   [key: string]: string;
 // };
-
-export type onDeleteType = { event: any };
 export type eventFormContextType = {
   toggle: voidFunction;
   start: Date;
@@ -63,8 +61,8 @@ export type allEventsPopoverType = {
   view: view;
   togglePopover: voidFunction;
 };
-export type onEditEventType = { event: any };
-export type onDeleteEventType = { event: any };
+export type onEditEventType = { event: any; resource: any };
+export type onDeleteEventType = { event: any; resource: any };
 export type eventItemType = { event: any; view: view };
 export type resourceType = { resource: any; view: view };
 export type onNavigateType = { date: Date; start: Date; end: Date; view: view };
@@ -143,7 +141,7 @@ export interface SchedulerProps {
   resourceFields?: {
     id: string;
     title: string;
-    backgroundColor: string;
+    backgroundColor?: string;
   };
 
   eventFormContext?: ({

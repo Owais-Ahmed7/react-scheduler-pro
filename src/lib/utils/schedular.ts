@@ -9,11 +9,7 @@ import {
   isAfter,
 } from 'date-fns';
 import { fieldsType } from '../types';
-<<<<<<< HEAD
-import { format, formatInTimeZone, toDate } from 'date-fns-tz';
-=======
 import { formatInTimeZone, toDate } from 'date-fns-tz';
->>>>>>> acfdeb9 (fix)
 
 /* FILTER MULTIDAY EVENTS */
 // export const filterMultiDaySlot = (
@@ -71,33 +67,20 @@ export const filterTodayEvents = (
   date: Date,
   events: any[],
   fields: fieldsType,
-<<<<<<< HEAD
-  timezone: string
-=======
   timezone: string | undefined
->>>>>>> acfdeb9 (fix)
 ) => {
   const eventsList: any[] = [];
   // const eventsList =
   events.forEach((ev) => {
     const event = convertEventTimeZone(ev, fields, timezone);
-<<<<<<< HEAD
-    // if (event.name === 'subject test')
-    //   console.log(event, 'converted to timezone');
-=======
->>>>>>> acfdeb9 (fix)
 
     if (
       isSameDay(event[fields.start], date) &&
       differenceInDaysOmitTime(event[fields.start], event[fields.end]) === 0 &&
-      !event[fields.allDay]
+      // fields.allDay &&
+      !event[fields.allDay || '']
     )
       eventsList.push(event);
-<<<<<<< HEAD
-    // else return {}
-    // eventsList.push(event);
-=======
->>>>>>> acfdeb9 (fix)
   });
 
   const sortByStartDate = eventsList.sort(
@@ -112,16 +95,9 @@ export const traverseCrossingEvents = (
   events: any[],
   event: any,
   fields: any,
-<<<<<<< HEAD
-  timezone: string
-): any[] => {
-  return (events || []).filter((e) => {
-    // const e = convertEventTimeZone(ev, fields, timezone);
-=======
   timezone: string | undefined
 ): any[] => {
   return (events || []).filter((e) => {
->>>>>>> acfdeb9 (fix)
     return areIntervalsOverlapping(
       { start: e[fields.start], end: e[fields.end] },
       { start: event[fields.start], end: event[fields.end] }
@@ -177,11 +153,7 @@ export const distributeEvents = (
   events: any[],
   eventsData: any[],
   fields: any,
-<<<<<<< HEAD
-  timezone: string,
-=======
   timezone: string | undefined,
->>>>>>> acfdeb9 (fix)
   limit?: number | null
 ) => {
   const data: any[] = eventsData;
@@ -196,11 +168,6 @@ export const distributeEvents = (
 
       for (let j = 0; j < col.events.length; j++) {
         const event = col.events[j];
-<<<<<<< HEAD
-        // const event = convertEventTimeZone(col.events[j], fields, timezone);
-        // const ev = convertEventTimeZone(e, fields, timezone);
-=======
->>>>>>> acfdeb9 (fix)
         if (
           areIntervalsOverlapping(
             {
@@ -237,11 +204,7 @@ export const distributeMonthEvents = (
   events: any[],
   eventsData: any[],
   fields: any,
-<<<<<<< HEAD
-  timezone: string
-=======
   timezone: string | undefined
->>>>>>> acfdeb9 (fix)
 ) => {
   const data: any[] = eventsData;
 
@@ -258,12 +221,6 @@ export const distributeMonthEvents = (
       for (let j = 0; j < col.events.length; j++) {
         const event = col.events[j];
         const ev = e;
-<<<<<<< HEAD
-        // const event = convertEventTimeZone(col.events[j], fields, timezone);
-        // const ev = convertEventTimeZone(e, fields, timezone);
-
-=======
->>>>>>> acfdeb9 (fix)
         const e1S = startOfDay(ev[fields.start]);
         const e1E = endOfDay(ev[fields.end]);
 
@@ -310,10 +267,27 @@ export const distributeMonthEvents = (
   return data;
 };
 
+function generateRandomColor() {
+  // Generate random RGB values
+  var r = Math.floor(Math.random() * 256);
+  var g = Math.floor(Math.random() * 256);
+  var b = Math.floor(Math.random() * 256);
+
+  // Convert RGB to hexadecimal
+  var colorCode =
+    '#' +
+    r.toString(16).padStart(2, '0') +
+    g.toString(16).padStart(2, '0') +
+    b.toString(16).padStart(2, '0');
+
+  return colorCode;
+}
+
 export const generateRandomEvents = (total = 300) => {
   const events = [];
   for (let i = 0; i < total; i++) {
     const day = Math.round(i % 34);
+    const color = generateRandomColor();
     events.push({
       _id: Math.random(),
       resourceId: Math.floor(Math.random() * 5),
@@ -328,6 +302,7 @@ export const generateRandomEvents = (total = 300) => {
           new Date().getDate() + day
         )
       ),
+      backgroundColor: color,
       // allDay: Math.random() > 0.5,
     });
   }
@@ -338,11 +313,7 @@ export const generateRandomEvents = (total = 300) => {
 export const convertEventTimeZone = (
   event: any,
   fields: fieldsType,
-<<<<<<< HEAD
-  timeZone?: string
-=======
   timeZone: string | undefined
->>>>>>> acfdeb9 (fix)
 ) => {
   return {
     ...event,
@@ -353,21 +324,13 @@ export const convertEventTimeZone = (
 
 export const systemTimezone: string =
   Intl.DateTimeFormat().resolvedOptions().timeZone;
-<<<<<<< HEAD
-export const getTimeZonedDate = (date: Date, timeZone?: string) => {
-=======
 export const getTimeZonedDate = (date: Date, timeZone: string | undefined) => {
->>>>>>> acfdeb9 (fix)
   return toDate(
     formatInTimeZone(date, timeZone || systemTimezone, 'yyyy-MM-dd HH:mm:ss')
   );
 };
 
-<<<<<<< HEAD
-export const isToday = (date: Date, timezone: string) => {
-=======
 export const isToday = (date: Date, timezone: string | undefined) => {
->>>>>>> acfdeb9 (fix)
   const today = getTimeZonedDate(new Date(), timezone);
   return isSameDay(today, date);
 };

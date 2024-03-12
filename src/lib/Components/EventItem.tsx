@@ -5,7 +5,6 @@ import { usePopper } from 'react-popper';
 import EventPopover from './Popovers/Event';
 import { v4 as uuid } from 'uuid';
 import { accessor } from '../utils/accessor';
-import { on } from 'events';
 
 interface EventItemProps {
   hasPrevious?: boolean;
@@ -40,8 +39,6 @@ const EventItem: React.FC<EventItemProps> = ({
     onClickEvent,
     onDoubleClickEvent,
   }: any = useStore();
-
-  console.log(onClickEvent, 'on click event');
 
   const [popover, setPopover] = useState<HTMLElement | null>(null);
   const [referenceElement, setReferenceElement] =

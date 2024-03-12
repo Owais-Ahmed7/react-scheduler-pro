@@ -12,11 +12,13 @@ module.exports = {
   },
   module: {
     rules: [
-      { test: /\.scss$/, use: ["style-loader", "css-loader", "sass-loader"] },
       {
-        test: /\.(ts|tsx|cjs)?$/,
-        enforce: "pre",
-        use: ["source-map-loader"],
+        test: /\.scss$/,
+        use: [
+          "style-loader", // Inject styles into the DOM
+          "css-loader", // Interprets @import and url() like import/require() and resolves them
+          "sass-loader", // Compiles Sass to CSS
+        ],
       },
       {
         test: /\.tsx?$/,

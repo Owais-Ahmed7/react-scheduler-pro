@@ -9,6 +9,7 @@ interface MultidayProps {
   // showMultiDEvents: boolean;
   // setPopover: Dispatch<SetStateAction<{ event: any; open: boolean }>>;
   // popover: { event: any; open: boolean };
+  resource?: any;
   weekStart: Date;
   weekEnd: Date;
   eventsIndexes: any[];
@@ -20,6 +21,7 @@ interface MultidayProps {
 const MultidayEvents: React.FC<MultidayProps> = ({
   multiDayEvents,
   // showMultiDEvents,
+  resource,
   weekStart,
   weekEnd,
   eventsIndexes,
@@ -69,6 +71,7 @@ const MultidayEvents: React.FC<MultidayProps> = ({
               idx={idx}
               hasPrevious={hasPrev}
               hasNext={hasNext}
+              resource={resource}
               event={event}
               timeFormat="dd MMM yyyy"
               showTime={false}

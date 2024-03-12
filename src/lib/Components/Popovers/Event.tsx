@@ -99,7 +99,7 @@ const EventPopover: React.FC<EventPopoverTypes> = ({
                             e.stopPropagation();
                             togglePopover();
                             if (onEditEvent instanceof Function)
-                              onEditEvent({ event });
+                              onEditEvent({ event, resource });
                             else
                               dispatch('eventDialog', {
                                 date: null,
@@ -125,7 +125,7 @@ const EventPopover: React.FC<EventPopoverTypes> = ({
                           onClick={(e) => {
                             e.stopPropagation();
                             if (onDeleteEvent instanceof Function)
-                              onDeleteEvent({ event });
+                              onDeleteEvent({ event, resource });
                             togglePopover();
                           }}
                           className="btn btn-sm btn-light me-2"
@@ -215,7 +215,7 @@ const EventPopover: React.FC<EventPopoverTypes> = ({
                         </span>
                         <span className="fs-13">
                           {resource
-                            ? accessor(resourceFields.start, resource)
+                            ? accessor(resourceFields.title, resource)
                             : ''}
                         </span>
                       </h6>

@@ -10,13 +10,11 @@
 
 # production
 /build
+/dist
 
-<<<<<<< HEAD
-=======
 # pack
 .tgz
 
->>>>>>> acfdeb9 (fix)
 # misc
 .DS_Store
 .env.local

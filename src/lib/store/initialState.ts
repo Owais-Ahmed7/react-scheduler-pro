@@ -1,13 +1,7 @@
 import { enUS } from 'date-fns/esm/locale';
-<<<<<<< HEAD
-import { SchedulerProps } from '../types';
-
-const initialState: SchedulerProps = {
-=======
 import { Store } from '../types';
 
 const initialState: Store = {
->>>>>>> acfdeb9 (fix)
   schedulerHeight: 600,
 
   resources: [] as any[],
@@ -63,29 +57,16 @@ const initialState: Store = {
   resourceFields: {
     id: 'resourceId',
     title: 'title',
-    backgroundColor: 'backgroundColor',
   },
   fields: {
     id: '_id',
     subject: 'name',
     start: 'startDate',
     end: 'endDate',
-    backgroundColor: 'backgroundColor',
-    resourceId: 'resourceId',
-    allDay: 'isAllDay',
   },
 
-<<<<<<< HEAD
-  eventFormContext: null as SchedulerProps['eventFormContext'] | null,
-
   //trigger popover
   popover: { open: false, event: null as Date | null },
-
-  // eventTemplate: (toggle: () => void, date: Date) => ReactNode,
-=======
-  //trigger popover
-  popover: { open: false, event: null as Date | null },
->>>>>>> acfdeb9 (fix)
 };
 
 export default initialState;
