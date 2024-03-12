@@ -30,8 +30,8 @@ import { Scheduler } from "react-scheduler-pro";
 function App() {
   const evs = [
     {
-      _id: 1122,
-      name: 'abc event',
+      _id: 36,
+      name: 'Owais',
       startDate: new Date(
         new Date(new Date(new Date().setHours(1))).setDate(12)
       ),
@@ -41,8 +41,8 @@ function App() {
       isAllDay: true,
     },
     {
-      _id: 1123,
-      name: 'xyz event',
+      _id: 47,
+      name: 'B',
       startDate: new Date(
         new Date(new Date(new Date().setHours(1))).setDate(13)
       ),
@@ -51,7 +51,17 @@ function App() {
       backgroundColor: '#0079FF',
     },
   ];
-  const [events, setEvents] = useState<any[]>(evs);
+  const [events, setEvents] = useState<
+    {
+      _id: number;
+      name: string;
+      startDate: Date;
+      endDate: Date;
+      backgroundColor?: string;
+      resourceId?: string | number;
+      isAllDay?: boolean;
+    }[]
+  >(evs);
 
   return (
     <div className="App p-2">
