@@ -1,4 +1,4 @@
-import { enUS } from 'date-fns/esm/locale';
+import { enUS } from 'date-fns/locale';
 import { Store } from '../types';
 
 const initialState: Store = {
