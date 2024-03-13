@@ -1,4 +1,3 @@
-import { hi } from 'date-fns/locale';
 import './App.scss';
 import { Scheduler } from './lib';
 import {
@@ -38,7 +37,6 @@ function App() {
         endHour={23}
         step={30}
         timezone="Australia/Hobart"
-        locale={hi}
         events={events}
         fields={{
           id: '_id',

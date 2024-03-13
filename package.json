@@ -1,7 +1,7 @@
 {
   "name": "react-scheduler-pro",
-  "version": "0.3.4",
-  "description": "React scheduler component pro is light weight scheduler package.",
+  "version": "0.3.6",
+  "description": "React scheduler pro is light weight scheduler package.",
   "author": "Owais Ahmad",
   "license": "MIT",
   "files": [
@@ -16,13 +16,15 @@
     "@types/react": "^18.2.8",
     "@types/react-dom": "^18.2.4",
     "@types/uuid": "^9.0.8",
-    "date-fns": "^2.30.0",
-    "date-fns-tz": "^2.0.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-popper": "^2.3.0",
     "sass": "^1.62.1",
     "web-vitals": "^2.1.4"
+  },
+  "peerDependencies": {
+    "date-fns": ">=2.30.0",
+    "date-fns-tz": ">=2.0.0"
   },
   "scripts": {
     "start": "react-scripts start",
