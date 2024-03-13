@@ -3,7 +3,6 @@ import { format } from 'date-fns';
 import useStore from '../hooks/useStore';
 import { usePopper } from 'react-popper';
 import EventPopover from './Popovers/Event';
-import { v4 as uuid } from 'uuid';
 import { accessor } from '../utils/accessor';
 
 interface EventItemProps {
@@ -105,7 +104,6 @@ const EventItem: React.FC<EventItemProps> = ({
   const renderEvent = useMemo(() => {
     return (
       <div
-        key={uuid()}
         className={`d-flex flex-wrap e-appointment p-0 ${className}`}
         style={{
           ...eventStyles,
