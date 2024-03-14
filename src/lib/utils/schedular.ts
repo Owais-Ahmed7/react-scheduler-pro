@@ -8,8 +8,9 @@ import {
   isBefore,
   isAfter,
 } from 'date-fns';
-import { fieldsType } from '../types';
+import { CurrentTimeBarProps, fieldsType } from '../types';
 import { formatInTimeZone, toDate } from 'date-fns-tz';
+import { CELL_HEIGHT } from '../helpers/constants/schedular';
 
 /* FILTER MULTIDAY EVENTS */
 // export const filterMultiDaySlot = (
@@ -333,4 +334,22 @@ export const getTimeZonedDate = (date: Date, timeZone: string | undefined) => {
 export const isToday = (date: Date, timezone: string | undefined) => {
   const today = getTimeZonedDate(new Date(), timezone);
   return isSameDay(today, date);
+};
+
+export const calculateTop = ({
+  today,
+  startHour,
+  step,
+  timezone,
+}: CurrentTimeBarProps): number => {
+  const now = getTimeZonedDate(new Date(), timezone);
+  const getMinutes = now.getMinutes();
+  const computeMinutePercentage = (getMinutes / 60) * CELL_HEIGHT;
+  const CELL_HEIGHT_INTERVAL = CELL_HEIGHT * (60 / step);
+
+  const top =
+    (now.getHours() - startHour) * CELL_HEIGHT_INTERVAL +
+    computeMinutePercentage * (60 / step);
+
+  return top;
 };

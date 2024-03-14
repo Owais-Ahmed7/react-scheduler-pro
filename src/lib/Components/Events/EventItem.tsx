@@ -1,9 +1,9 @@
 import React, { useMemo, useRef, useState } from 'react';
 import { format } from 'date-fns';
-import useStore from '../hooks/useStore';
+import useStore from '../../hooks/useStore';
 import { usePopper } from 'react-popper';
-import EventPopover from './Popovers/Event';
-import { accessor } from '../utils/accessor';
+import EventPopover from '../Popovers/Event';
+import { accessor } from '../../utils/accessor';
 
 interface EventItemProps {
   hasPrevious?: boolean;

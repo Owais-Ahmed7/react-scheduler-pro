@@ -127,6 +127,15 @@ p {
     }
   }
 
+  .current-time {
+    color: rgb(255, 0, 0);
+    // left: 25%;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    background-color: white;
+  }
+
   .current-time-indicator {
     position: absolute;
     width: 100%;

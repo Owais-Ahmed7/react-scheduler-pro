@@ -1,3 +1,13 @@
+export interface CurrentTimeBarProps {
+  today: Date;
+  startHour: number;
+  step: number;
+  renderTime: boolean;
+  hourFormat: 12 | 24;
+  timezone?: string;
+  color?: string;
+}
+
 export type DayHours =
   | 0
   | 1

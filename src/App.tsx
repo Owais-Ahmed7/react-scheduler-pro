@@ -36,7 +36,8 @@ function App() {
         startHour={0}
         endHour={23}
         step={30}
-        timezone="Australia/Hobart"
+        hourFormat={12}
+        timezone="Asia/Karachi"
         events={events}
         fields={{
           id: '_id',
@@ -60,7 +61,7 @@ function App() {
           day: 'دن',
           more: 'مزید',
         }}
-        selectedDate={new Date(2004, 7, 16)}
+        // selectedDate={new Date(2004, 7, 16)}
         views={['day', 'week']}
         onSlot={(props: onSlotType) => {
           const event = {
@@ -76,7 +77,6 @@ function App() {
 
           setEvents((evs) => [...evs, event]);
         }}
-        hourFormat={24}
         // onClickEvent={(props: onClickEventType) => console.log(props, 'props')}
         onDoubleClickEvent={(props: onDoubleClickEventType) =>
           console.log(props, 'props')

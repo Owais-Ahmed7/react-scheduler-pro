@@ -1,8 +1,8 @@
 import { endOfDay, isAfter, isBefore, startOfDay } from 'date-fns';
 import React from 'react';
-import { differenceInDaysOmitTime } from '../utils/schedular';
+import { differenceInDaysOmitTime } from '../../utils/schedular';
 import EventItem from './EventItem';
-import useStore from '../hooks/useStore';
+import useStore from '../../hooks/useStore';
 
 interface MultidayProps {
   multiDayEvents: any[];

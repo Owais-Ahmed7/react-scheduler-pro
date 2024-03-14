@@ -16,7 +16,7 @@ import { isToday } from '../utils/schedular';
 import { usePopper } from 'react-popper';
 import useStore from '../hooks/useStore';
 import { CELL_HEIGHT } from '../helpers/constants/schedular';
-import MonthEvents from '../Components/MonthEvents';
+import MonthEvents from '../Components/Events/MonthEvents';
 import {
   convertEventTimeZone,
   distributeMonthEvents,

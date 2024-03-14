@@ -3,13 +3,13 @@ import {
   distributeEvents,
   getTimeZonedDate,
   traverseCrossingEvents,
-} from '../utils/schedular';
+} from '../../utils/schedular';
 import { differenceInMinutes } from 'date-fns';
-import { isToday } from '../utils/schedular';
-import { CELL_HEIGHT } from '../helpers/constants/schedular';
-import useStore from '../hooks/useStore';
+import { isToday } from '../../utils/schedular';
+import { CELL_HEIGHT } from '../../helpers/constants/schedular';
+import useStore from '../../hooks/useStore';
 import EventItem from './EventItem';
-import CurrentTimeBar from './CurrentTimeBar';
+import CurrentTimeBar from '../CurrentTimeBar';
 
 interface Props {
   events: any[];
@@ -126,7 +126,9 @@ const RenderEvents = ({ events, resource, timezone, today }: Props) => {
           today={today}
           startHour={START_HOUR}
           step={step}
-          minuteHeight={CELL_HEIGHT / step}
+          renderTime={false}
+          hourFormat={hourFormat || 12}
+          // minuteHeight={CELL_HEIGHT / step}
           timezone={timezone}
         />
       )}

@@ -7,20 +7,22 @@ import {
 import {
   addDays,
   addHours,
-  addMilliseconds,
   addMinutes,
   eachMinuteOfInterval,
   format,
+  isSameDay,
+  isSameHour,
   toDate,
 } from 'date-fns';
 import { CELL_HEIGHT } from '../helpers/constants/schedular';
 import useStore from '../hooks/useStore';
 
-import RenderEvents from '../Components/RenderEvents';
-import { getResourcedEvents } from '../utils/schedular';
+import RenderEvents from './Events/RenderEvents';
+import { getResourcedEvents, isToday } from '../utils/schedular';
 import DayGridHeader from './DayGridHeader';
 import { fieldsType } from '../types';
-import { getTimezoneOffset, zonedTimeToUtc } from 'date-fns-tz';
+import { zonedTimeToUtc } from 'date-fns-tz';
+import CurrentTimeBar from './CurrentTimeBar';
 
 interface Props {
   weekDays: number[];
@@ -57,7 +59,7 @@ const TimeGrid: React.FC<Props> = ({
   resources,
   resourceFields,
 }) => {
-  const { dispatch, onSlot }: any = useStore();
+  const { dispatch, onSlot, startHour }: any = useStore();
   const hasResource = Boolean(resources?.length);
 
   const [popover, setPopover] = useState<{ event: any; open: boolean }>({
@@ -69,8 +71,8 @@ const TimeGrid: React.FC<Props> = ({
       ? getResourcedEvents(events, resources, resourceFields, fields)[index]
           ?.resourceEvents || []
       : hasResource && index < 0
-      ? getResourcedEvents(events, resources, resourceFields, fields)
-      : events;
+        ? getResourcedEvents(events, resources, resourceFields, fields)
+        : events;
   };
 
   useEffect(() => {
@@ -215,6 +217,26 @@ const TimeGrid: React.FC<Props> = ({
                     className="e-time-cells-wrap"
                   >
                     <table>
+                      <thead>
+                        {weekDays.map((e, i) => {
+                          const today = addDays(startOfWk, e);
+                          return (
+                            <tr>
+                              <td className="position-relative">
+                                {isToday(today, timezone) && (
+                                  <CurrentTimeBar
+                                    today={today}
+                                    startHour={startHour}
+                                    renderTime={true}
+                                    step={step}
+                                    hourFormat={hourFormat || 12}
+                                  />
+                                )}
+                              </td>
+                            </tr>
+                          );
+                        })}
+                      </thead>
                       <tbody>
                         {(hours || []).map((time, idx) => (
                           <tr key={idx}>

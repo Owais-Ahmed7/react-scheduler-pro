@@ -13,7 +13,7 @@ import {
   startOfDay,
 } from 'date-fns';
 import { isToday } from '../utils/schedular';
-import MultidayEvents from './MultidayEvents';
+import MultidayEvents from './Events/MultidayEvents';
 import useStore from '../hooks/useStore';
 import ShowMoreEvents from './Popovers/ShowMoreEvents';
 import { usePopper } from 'react-popper';

@@ -2,7 +2,7 @@ import React, { useMemo } from 'react';
 import {
   convertEventTimeZone,
   differenceInDaysOmitTime,
-} from '../utils/schedular';
+} from '../../utils/schedular';
 import enUS from 'date-fns/locale/en-US';
 import {
   Locale,
@@ -13,8 +13,8 @@ import {
   startOfWeek,
 } from 'date-fns';
 import EventItem from './EventItem';
-import useStore from '../hooks/useStore';
-import { resourceType } from '../types';
+import useStore from '../../hooks/useStore';
+import { resourceType } from '../../types';
 
 interface Props {
   events: any[];
