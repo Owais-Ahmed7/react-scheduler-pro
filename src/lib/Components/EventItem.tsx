@@ -121,7 +121,7 @@ const EventItem: React.FC<EventItemProps> = ({
         <div ref={setReferenceElement} className="e-appointment-details">
           <div className="d-flex">
             {hasPrevious && (
-              <div>
+              <div className="d-flex align-items-center mx-1">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   height="12"
