@@ -2,6 +2,10 @@
 
 React Scheduler Pro is a lightweight and powerful event Calender. React Scheduler Pro – your essential toolkit for effortlessly managing schedules and events within your React applications.
 
+## Demo
+
+[Example](https://react-scheduler-pro.vercel.app/examples/simple)
+
 ## Installation
 
 ```jsx
