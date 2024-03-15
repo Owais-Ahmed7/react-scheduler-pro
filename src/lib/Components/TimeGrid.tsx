@@ -95,7 +95,7 @@ const TimeGrid: React.FC<Props> = ({
   const hours = eachMinuteOfInterval(
     {
       start: new Date(new Date().setHours(START_HOUR)).setMinutes(0),
-      end: new Date(new Date().setHours(END_HOUR)).setMinutes(0),
+      end: new Date(new Date().setHours(END_HOUR)).setMinutes(step),
     },
     { step }
   );
@@ -187,6 +187,8 @@ const TimeGrid: React.FC<Props> = ({
     );
   };
 
+  // console.log('render time grid', timezone);
+
   return (
     <React.Fragment>
       <div className="w-100">
@@ -221,7 +223,7 @@ const TimeGrid: React.FC<Props> = ({
                         {weekDays.map((e, i) => {
                           const today = addDays(startOfWk, e);
                           return (
-                            <tr>
+                            <tr key={i}>
                               <td className="position-relative">
                                 {isToday(today, timezone) && (
                                   <CurrentTimeBar
@@ -229,6 +231,7 @@ const TimeGrid: React.FC<Props> = ({
                                     startHour={startHour}
                                     renderTime={true}
                                     step={step}
+                                    timezone={timezone}
                                     hourFormat={hourFormat || 12}
                                   />
                                 )}

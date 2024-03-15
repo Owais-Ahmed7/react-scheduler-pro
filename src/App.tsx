@@ -27,17 +27,24 @@ function App() {
       resourceId?: string | number;
       allDay?: string;
     }[]
-  >(generateRandomEvents(200));
+  >(generateRandomEvents(500));
 
+  const [timezone, setTimezone] = useState('Canada/Atlantic');
   return (
     <div className="App p-2">
+      <select value={timezone} onChange={(e) => setTimezone(e.target.value)}>
+        <option>Canada/Atlantic</option>
+        <option>Europe/Moscow</option>
+        <option>Australia/Hobart</option>
+        <option>Asia/Karachi</option>
+      </select>
       <Scheduler
         schedulerHeight={500}
         startHour={0}
         endHour={23}
         step={30}
         hourFormat={12}
-        timezone="Asia/Karachi"
+        timezone={timezone}
         events={events}
         fields={{
           id: '_id',
@@ -48,7 +55,7 @@ function App() {
           allDay: 'allDay',
           resourceId: 'resourceId',
         }}
-        resources={resources}
+        // resources={resources}
         resourceFields={{
           id: '_id',
           title: 'title',
@@ -69,7 +76,7 @@ function App() {
             name: 'Hello',
             startDate: props.start,
             endDate: props.end,
-            resourceId: props.resource._id,
+            resourceId: props.resource?._id,
             // allDay: true,
             backgroundColor: '#1d1d1d',
           };

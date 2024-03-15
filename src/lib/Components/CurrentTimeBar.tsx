@@ -4,8 +4,16 @@ import { CurrentTimeBarProps } from '../types';
 import { format } from 'date-fns';
 
 const CurrentTimeBar = (props: CurrentTimeBarProps) => {
-  const [top, setTop] = useState(calculateTop(props));
-  const [time, setTime] = useState(new Date());
+  const [top, setTop] = useState<number>(calculateTop(props));
+  const [time, setTime] = useState<Date>(
+    getTimeZonedDate(new Date(), props.timezone)
+  );
+  useEffect(() => {
+    const tp = calculateTop(props);
+    setTop(tp);
+    const now = getTimeZonedDate(new Date(), props.timezone);
+    setTime(now);
+  }, [props]);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -16,7 +24,7 @@ const CurrentTimeBar = (props: CurrentTimeBarProps) => {
 
     return () => clearInterval(interval);
     // eslint-disable-next-line
-  }, []);
+  }, [top]);
 
   // Prevent showing bar on top of days/header
   if (top < 0) return null;
