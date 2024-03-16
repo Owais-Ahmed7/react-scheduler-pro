@@ -1,6 +1,6 @@
 {
   "name": "react-scheduler-pro",
-  "version": "0.4.2",
+  "version": "0.4.3",
   "description": "React scheduler pro is light weight scheduler package.",
   "author": "Owais Ahmad",
   "license": "MIT",
@@ -8,9 +8,10 @@
     "*"
   ],
   "dependencies": {
-    "react-popper": "^2.3.0",
+    "@popperjs/core": "^2.11.8",
     "date-fns": "^2.30.0",
-    "date-fns-tz": "^2.0.0"
+    "date-fns-tz": "^2.0.0",
+    "react-popper": "^2.3.0"
   },
   "peerDependencies": {},
   "scripts": {
@@ -62,28 +63,28 @@
     "@testing-library/user-event": "^13.5.0",
     "@types/jest": "^29.5.2",
     "@types/node": "^20.2.5",
-    "@types/uuid": "^9.0.8",
     "@types/react": "^18.2.8",
     "@types/react-dom": "^18.2.4",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
+    "@types/uuid": "^9.0.8",
     "@typescript-eslint/eslint-plugin": "^7.1.1",
     "@typescript-eslint/parser": "^7.1.1",
     "babel-loader": "^9.1.3",
     "css-loader": "^6.10.0",
-    "sass": "^1.62.1",
-    "web-vitals": "^2.1.4",
     "eslint": "^8.57.0",
     "eslint-plugin-react": "^7.34.0",
     "lint-staged": "^15.2.2",
     "prettier": "^3.2.5",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-scripts": "^5.0.1",
+    "sass": "^1.62.1",
     "sass-loader": "^14.1.1",
     "source-map-loader": "^5.0.0",
     "style-loader": "^3.3.4",
-    "react-scripts": "^5.0.1",
     "ts-loader": "^9.5.1",
     "ts-node": "^10.9.2",
     "typescript": "^5.1.3",
+    "web-vitals": "^2.1.4",
     "webpack-cli": "^5.1.4",
     "webpack-node-externals": "^3.0.0"
   }

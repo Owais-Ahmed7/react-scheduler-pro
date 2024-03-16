@@ -1,7 +1,8 @@
-import React, { useMemo, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { format } from 'date-fns';
 import useStore from '../../hooks/useStore';
 import { usePopper } from 'react-popper';
+import { Boundary } from '@popperjs/core';
 import EventPopover from '../Popovers/Event';
 import { accessor } from '../../utils/accessor';
 
@@ -39,12 +40,19 @@ const EventItem: React.FC<EventItemProps> = ({
     onDoubleClickEvent,
   }: any = useStore();
 
+  const [boundary, setBoudnary] = useState<Boundary | null>(null);
   const [popover, setPopover] = useState<HTMLElement | null>(null);
   const [referenceElement, setReferenceElement] =
     useState<HTMLDivElement | null>(null);
   const [popperElement, setPopperElement] = useState<HTMLDivElement | null>(
     null
   );
+
+  useEffect(() => {
+    const element = document.querySelector('.scheduler');
+    setBoudnary(element);
+  }, []);
+
   const { styles, attributes } = usePopper(referenceElement, popperElement, {
     placement: 'left-start',
     modifiers: [
@@ -52,6 +60,12 @@ const EventItem: React.FC<EventItemProps> = ({
         name: 'flip',
         options: {
           fallbackPlacements: ['right-start', 'bottom', 'top'],
+        },
+      },
+      {
+        name: 'preventOverflow',
+        options: {
+          boundary: boundary as Boundary,
         },
       },
       {
