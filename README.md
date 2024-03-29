@@ -1,6 +1,6 @@
 # React Scheduler Pro
 
-React Scheduler Pro is a lightweight and powerful event Calender. React Scheduler Pro – your essential toolkit for effortlessly managing schedules and events within your React applications.
+React Scheduler Pro is a lightweight and powerful event Calender built with Flexbox. React Scheduler Pro – your essential toolkit for effortlessly managing schedules and events within your React applications.
 
 ## Demo
 
