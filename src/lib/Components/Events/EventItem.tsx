@@ -40,7 +40,7 @@ const EventItem: React.FC<EventItemProps> = ({
     onDoubleClickEvent,
   }: any = useStore();
 
-  const [boundary, setBoudnary] = useState<Boundary | null>(null);
+  // const [boundary, setBoudnary] = useState<Boundary | null>(null);
   const [popover, setPopover] = useState<HTMLElement | null>(null);
   const [referenceElement, setReferenceElement] =
     useState<HTMLDivElement | null>(null);
@@ -48,10 +48,10 @@ const EventItem: React.FC<EventItemProps> = ({
     null
   );
 
-  useEffect(() => {
-    const element = document.querySelector('.scheduler');
-    setBoudnary(element);
-  }, []);
+  // useEffect(() => {
+  //   const element = document.querySelector('.scheduler');
+  //   setBoudnary(element);
+  // }, []);
 
   const { styles, attributes } = usePopper(referenceElement, popperElement, {
     placement: 'left-start',
@@ -65,7 +65,9 @@ const EventItem: React.FC<EventItemProps> = ({
       {
         name: 'preventOverflow',
         options: {
-          boundary: boundary as Boundary,
+          altAxis: true,
+          mainAxis: true,
+          boundary: document.querySelector('.scheduler') as Boundary,
         },
       },
       {
@@ -118,7 +120,7 @@ const EventItem: React.FC<EventItemProps> = ({
   const renderEvent = useMemo(() => {
     return (
       <div
-        className={`d-flex flex-wrap e-appointment p-0 ${className}`}
+        className={`d-flex flex-wrap bs-appointment p-0 ${className}`}
         style={{
           ...eventStyles,
           backgroundColor: resource
@@ -132,7 +134,7 @@ const EventItem: React.FC<EventItemProps> = ({
           onClickHandler(e);
         }}
       >
-        <div ref={setReferenceElement} className="e-appointment-details">
+        <div ref={setReferenceElement} className="bs-appointment-details">
           <div className="d-flex">
             {hasPrevious && (
               <div className="d-flex align-items-center mx-1">

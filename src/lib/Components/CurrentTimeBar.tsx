@@ -32,7 +32,10 @@ const CurrentTimeBar = (props: CurrentTimeBarProps) => {
   return (
     <Fragment>
       {props.renderTime ? (
-        <div className="current-time fs-10 position-absolute" style={{ top }}>
+        <div
+          className="bs-current-time fs-10 position-absolute"
+          style={{ top }}
+        >
           {format(time, props.hourFormat === 12 ? 'hh:mm a' : 'HH:mm')}
         </div>
       ) : (

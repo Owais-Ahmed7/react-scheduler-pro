@@ -25,7 +25,7 @@ function App() {
       endDate: Date;
       backgroundColor?: string;
       resourceId?: string | number;
-      allDay?: string;
+      allDay?: boolean;
     }[]
   >(generateRandomEvents(500));
 
@@ -69,7 +69,7 @@ function App() {
           more: 'مزید',
         }}
         // selectedDate={new Date(2004, 7, 16)}
-        views={['day', 'week']}
+        // views={['day', 'week']}
         onSlot={(props: onSlotType) => {
           const event = {
             _id: Math.random(),
@@ -80,7 +80,7 @@ function App() {
             // allDay: true,
             backgroundColor: '#1d1d1d',
           };
-          console.log(event, 'event');
+          // console.log(event, 'event');
 
           setEvents((evs) => [...evs, event]);
         }}

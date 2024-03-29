@@ -150,7 +150,7 @@ const Header: React.FC<HeaderProps> = () => {
         <div className="align-items-center">
           {/* <div>{title || "Brand Title"}</div> */}
           <div>
-            <div className="d-flex justify-content-between">
+            <div className="row justify-content-center">
               <div className="col-12 col-md-6 align-items-center">
                 <div className="d-flex align-items-center justify-content-center">
                   <button
@@ -201,7 +201,7 @@ const Header: React.FC<HeaderProps> = () => {
                   </button>
                 </div>
               </div>
-              <div className="text-end">
+              <div className="col-12 col-md-6 align-items-center text-end">
                 <div className="d-flex justify-content-center">
                   <div className="ms-3">
                     <button

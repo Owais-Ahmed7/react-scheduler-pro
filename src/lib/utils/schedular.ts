@@ -304,7 +304,7 @@ export const generateRandomEvents = (total = 300) => {
         )
       ),
       backgroundColor: color,
-      // allDay: Math.random() > 0.5,
+      allDay: Math.random() > 0.5,
     });
   }
 

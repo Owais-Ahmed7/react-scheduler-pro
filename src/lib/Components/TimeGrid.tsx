@@ -77,9 +77,9 @@ const TimeGrid: React.FC<Props> = ({
 
   useEffect(() => {
     // Get references to the content wrap and time cells wrap
-    const contentWrap = document.querySelector('.e-content-wrap');
-    const timeCellsWrap = document.querySelector('.e-time-cells-wrap');
-    const dateHeader = document.querySelector('.e-date-header-wrapper');
+    const contentWrap = document.querySelector('.bs-time-slot');
+    const timeCellsWrap = document.querySelector('.bs-time-cells-wrap');
+    const dateHeader = document.querySelector('.bs-time-header-content');
     // Add a scroll event listener to the content wrap
     contentWrap?.addEventListener('scroll', function () {
       const scrollTop = contentWrap.scrollTop;
@@ -106,7 +106,7 @@ const TimeGrid: React.FC<Props> = ({
         const date = addDays(startOfWk, e);
 
         return (
-          <td key={i} className="e-day-wrapper overflow-visible">
+          <div key={i} className="e-day-wrapper overflow-visible">
             <div className="e-appointment-wrapper">
               <RenderEvents
                 today={date}
@@ -120,70 +120,62 @@ const TimeGrid: React.FC<Props> = ({
                 resource={resource}
               />
             </div>
-          </td>
+          </div>
         );
       });
     }, [index, resource]);
 
     return (
-      <td style={{ minWidth: '300px' }}>
-        <div className="e-appointment-wrapper position-relative">
-          <table className="e-schedule-table">
-            <tbody>
-              <tr>{renderEvents}</tr>
-            </tbody>
-          </table>
-        </div>
-        <table className="e-schedule-table">
-          <tbody>
-            {(hours || []).map((time, idx) => (
-              <tr key={time.getTime()}>
-                {weekDays.map((e, i) => {
-                  const start = addDays(startOfWk, e);
-                  const concatDate = addMinutes(
-                    addHours(start, time.getHours()),
-                    time.getMinutes()
-                  );
+      <div className="bs-min-width bs-content bs-row bs-column">
+        <div className="bs-row position-relative">{renderEvents}</div>
+        <div>
+          {(hours || []).map((time, idx) => (
+            <div className="bs-row" key={time.getTime()}>
+              {weekDays.map((e, i) => {
+                const start = addDays(startOfWk, e);
+                const concatDate = addMinutes(
+                  addHours(start, time.getHours()),
+                  time.getMinutes()
+                );
+                const end = addMinutes(concatDate, step);
 
-                  return (
-                    <td
-                      key={i}
-                      colSpan={1}
-                      // aria-label={`${zStart.toLocaleString('en', {
-                      //   dateStyle: 'full',
-                      //   timeStyle: 'long',
-                      // })} - ${zEnd.toLocaleString('en', {
-                      //   dateStyle: 'full',
-                      //   timeStyle: 'long',
-                      // })}`}
-                      style={{ height: CELL_HEIGHT }}
-                      onClick={() => {
-                        const zStart = zonedTimeToUtc(concatDate, timezone);
-                        const zEnd = addMinutes(zStart, step);
-                        if (onSlot instanceof Function)
-                          onSlot({
-                            start: zStart,
-                            end: zEnd,
-                            resource,
-                          });
-                        else
-                          dispatch('eventDialog', {
-                            start: zStart,
-                            end: zEnd,
-                            resource,
-                            event: null,
-                            isOpen: true,
-                          });
-                      }}
-                      className="border-top e-date-cells fs-8 py-0 align-middle"
-                    ></td>
-                  );
-                })}
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </td>
+                return (
+                  <div
+                    key={i}
+                    aria-label={`${concatDate.toLocaleString('en', {
+                      dateStyle: 'full',
+                      timeStyle: 'long',
+                    })} - ${end.toLocaleString('en', {
+                      dateStyle: 'full',
+                      timeStyle: 'long',
+                    })}`}
+                    style={{ height: CELL_HEIGHT }}
+                    onClick={() => {
+                      const zStart = zonedTimeToUtc(concatDate, timezone);
+                      const zEnd = addMinutes(zStart, step);
+                      if (onSlot instanceof Function)
+                        onSlot({
+                          start: zStart,
+                          end: zEnd,
+                          resource,
+                        });
+                      else
+                        dispatch('eventDialog', {
+                          start: zStart,
+                          end: zEnd,
+                          resource,
+                          event: null,
+                          isOpen: true,
+                        });
+                    }}
+                    className="border-top bs-date-cells fs-8 py-0"
+                  ></div>
+                );
+              })}
+            </div>
+          ))}
+        </div>
+      </div>
     );
   };
 
@@ -192,106 +184,92 @@ const TimeGrid: React.FC<Props> = ({
   return (
     <React.Fragment>
       <div className="w-100">
-        <div id="e-table" className="mt-3 e-day-view">
-          <table className="e-schedule-table border mb-0">
-            <tbody>
-              <tr>
-                <DayGridHeader
-                  resources={resources}
-                  resourceFields={resourceFields}
-                  hasResource={hasResource}
-                  weekDays={weekDays}
-                  startOfWk={startOfWk}
-                  endOfWk={endOfWk}
-                  locale={locale}
-                  // multiDayPlaceHFactor={multiDayPlaceHFactor}
-                  // showAllMultiDEvents={showAllMultiDEvents}
-                  // setShowMultiDEvents={setShowMultiDEvents}
-                  resourcedEvents={resourcedEvents(-1)}
-                  fields={fields}
-                />
-              </tr>
+        <div className="mt-3 e-day-view">
+          <div className="bs-time-view">
+            <div className="bs-time-header">
+              <DayGridHeader
+                resources={resources}
+                resourceFields={resourceFields}
+                hasResource={hasResource}
+                weekDays={weekDays}
+                startOfWk={startOfWk}
+                endOfWk={endOfWk}
+                locale={locale}
+                // multiDayPlaceHFactor={multiDayPlaceHFactor}
+                // showAllMultiDEvents={showAllMultiDEvents}
+                // setShowMultiDEvents={setShowMultiDEvents}
+                resourcedEvents={resourcedEvents(-1)}
+                fields={fields}
+              />
+            </div>
 
-              <tr>
-                <td>
-                  <div
-                    style={{ height: SHEDULER_HEIGHT }}
-                    className="e-time-cells-wrap"
-                  >
-                    <table>
-                      <thead>
-                        {weekDays.map((e, i) => {
-                          const today = addDays(startOfWk, e);
-                          return (
-                            <tr key={i}>
-                              <td className="position-relative">
-                                {isToday(today, timezone) && (
-                                  <CurrentTimeBar
-                                    today={today}
-                                    startHour={startHour}
-                                    renderTime={true}
-                                    step={step}
-                                    timezone={timezone}
-                                    hourFormat={hourFormat || 12}
-                                  />
-                                )}
-                              </td>
-                            </tr>
-                          );
-                        })}
-                      </thead>
-                      <tbody>
-                        {(hours || []).map((time, idx) => (
-                          <tr key={idx}>
-                            <td
-                              aria-label={time.toISOString()}
-                              style={{ height: CELL_HEIGHT }}
-                              className="border-end border-top fs-12 text-center text-nowrap"
-                            >
-                              <span className="fs-7">
-                                {format(
-                                  time,
-                                  hourFormat === 12 ? 'h:mm a' : 'HH:mm',
-                                  { locale }
-                                )}
-                              </span>
-                            </td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
-                </td>
-                <td>
-                  <div
-                    style={{ height: SHEDULER_HEIGHT }}
-                    className="e-content-wrap"
-                  >
-                    <table
-                      style={{ tableLayout: 'auto' }}
-                      className="e-schedule-table e-content-table overflow-hidden"
-                    >
-                      <tbody>
-                        <tr>
-                          {hasResource ? (
-                            resources.map((rs: any, idx) => (
-                              <RenderDayEvents
-                                key={rs[resourceFields.id]}
-                                resource={rs}
-                                index={idx}
-                              />
-                            ))
-                          ) : (
-                            <RenderDayEvents index={0} />
+            <div className="bs-time-slots">
+              <div className="bs-time-gutter">
+                <div
+                  style={{ height: SHEDULER_HEIGHT }}
+                  className="bs-time-cells-wrap"
+                >
+                  <div>
+                    {weekDays.map((e, i) => {
+                      const today = addDays(startOfWk, e);
+                      return (
+                        <div key={i} className="position-relative">
+                          {isToday(today, timezone) && (
+                            <CurrentTimeBar
+                              today={today}
+                              startHour={startHour}
+                              renderTime={true}
+                              step={step}
+                              timezone={timezone}
+                              hourFormat={hourFormat || 12}
+                            />
                           )}
-                        </tr>
-                      </tbody>
-                    </table>
+                        </div>
+                      );
+                    })}
                   </div>
-                </td>
-              </tr>
-            </tbody>
-          </table>
+                  <div>
+                    {(hours || []).map((time, idx) => (
+                      <div
+                        key={idx}
+                        aria-label={time.toISOString()}
+                        style={{ height: CELL_HEIGHT }}
+                        className="border-top fs-12 text-center text-nowrap"
+                      >
+                        <span className="fs-7">
+                          {format(
+                            time,
+                            hourFormat === 12 ? 'h:mm a' : 'HH:mm',
+                            {
+                              locale,
+                            }
+                          )}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+              <div className="bs-time-slot">
+                <div
+                  style={{ height: SHEDULER_HEIGHT }}
+                  className="bs-content-wrap"
+                >
+                  {hasResource ? (
+                    resources.map((rs: any, idx) => (
+                      <RenderDayEvents
+                        key={rs[resourceFields.id]}
+                        resource={rs}
+                        index={idx}
+                      />
+                    ))
+                  ) : (
+                    <RenderDayEvents index={0} />
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </React.Fragment>

@@ -17,6 +17,7 @@ import MultidayEvents from './Events/MultidayEvents';
 import useStore from '../hooks/useStore';
 import ShowMoreEvents from './Popovers/ShowMoreEvents';
 import { usePopper } from 'react-popper';
+import { Boundary } from '@popperjs/core';
 
 interface Props {
   hasResource: boolean;
@@ -56,7 +57,7 @@ const DayGridHeader: React.FC<Props> = ({
 
   const [showAllMultiDEvents, setShowMultiDEvents] = useState<{
     date: Date | null;
-    events: any[];
+    events: any[] | null;
     resource: any | null;
   }>({
     date: null,
@@ -79,6 +80,14 @@ const DayGridHeader: React.FC<Props> = ({
         },
       },
       {
+        name: 'preventOverflow',
+        options: {
+          altAxis: true,
+          mainAxis: true,
+          boundary: document.querySelector('.scheduler') as Boundary,
+        },
+      },
+      {
         name: 'offset',
         options: {
           offset: [120, 5],
@@ -95,7 +104,7 @@ const DayGridHeader: React.FC<Props> = ({
 
   const renderToggleButton = useMemo(() => {
     return (
-      <td
+      <div
         style={{
           height: '50px',
           // `${computeMultiDPHeight(
@@ -103,7 +112,7 @@ const DayGridHeader: React.FC<Props> = ({
           //   showAllMultiDEvents
           // )}px`,
         }}
-        className="e-all-day-cells border-0"
+        className="bs-all-day-cells border-0"
       >
         <div className="e-all-day-appointment text-center e-appointment-expand">
           {/* <ToggleMultiDayEvents
@@ -112,7 +121,7 @@ const DayGridHeader: React.FC<Props> = ({
             setShowMultiDEvents={setShowMultiDEvents}
           /> */}
         </div>
-      </td>
+      </div>
     );
   }, []);
 
@@ -166,49 +175,33 @@ const DayGridHeader: React.FC<Props> = ({
 
   return (
     <React.Fragment>
-      <td className="e-left-indent">
-        <div className="e-left-indent-wrapper">
-          <table className="e-schedule-table border-end">
-            <tbody>
-              <tr>
-                <td
-                  style={{
-                    height: hasResource ? '40px' : 0,
-                    padding: hasResource ? '8px' : 0,
-                  }}
-                  className="e-resource-cell border-0"
-                ></td>
-              </tr>
-              <tr>
-                <td className="e-header-cells border-0"></td>
-              </tr>
-              <tr>{renderToggleButton}</tr>
-            </tbody>
-          </table>
+      <div className="bs-left-indent">
+        <div className="bs-left-indent-wrapper">
+          <div
+            style={{
+              height: hasResource ? '40px' : 0,
+              padding: hasResource ? '8px' : 0,
+            }}
+            className="bs-resource-cell border-0"
+          ></div>
+          <div className="bs-header-cells border-0"></div>
+          <div>{renderToggleButton}</div>
         </div>
-      </td>
+      </div>
 
-      <td>
-        <div className="e-date-header-container">
-          <div className="e-date-header-wrapper overflow-hidden">
-            <table className="e-schedule-table" style={{ tableLayout: 'auto' }}>
-              <tbody>
-                <tr>
-                  {renderEvents}
-                  <ShowMoreEvents
-                    dateAllEvents={showAllMultiDEvents}
-                    setDateAllEvents={setShowMultiDEvents}
-                    setPopperElement={setPopperElement}
-                    styles={styles}
-                    attributes={attributes}
-                    // timeFormat={hourFormat === 12 ? '' :}
-                  />
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </td>
+      <div className="bs-time-header-content bs-row">
+        {/* <div className="overflow-hidden"> */}
+        {renderEvents}
+        <ShowMoreEvents
+          dateAllEvents={showAllMultiDEvents}
+          setDateAllEvents={setShowMultiDEvents}
+          setPopperElement={setPopperElement}
+          styles={styles}
+          attributes={attributes}
+          // timeFormat={hourFormat === 12 ? '' :}
+        />
+        {/* </div> */}
+      </div>
     </React.Fragment>
   );
 };
@@ -292,7 +285,7 @@ const RenderHeader = ({
         );
 
       return (
-        <td className="e-all-day-appointment-wrapper" key={i}>
+        <div className="bs-all-day-appointment-wrapper" key={i}>
           <MultidayEvents
             multiDayEvents={todayEvents}
             prevNextEvents={prevNextEvents}
@@ -315,7 +308,7 @@ const RenderHeader = ({
                   resource,
                 });
               }}
-              className="btn e-more-indicator position-absolute p-0 w-100 text-start"
+              className="btn bs-more-indicator position-absolute p-0 w-100 text-start"
               data-count="1"
               data-group-index="0"
               style={{
@@ -327,7 +320,7 @@ const RenderHeader = ({
               +{prevNextEvents.length - 2}&nbsp;{message.more}
             </div>
           )}
-        </td>
+        </div>
       );
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -345,69 +338,50 @@ const RenderHeader = ({
   ]);
 
   return (
-    <td style={{ minWidth: '300px' }} colSpan={7}>
+    <div className="bs-min-width bs-row bs-column">
       <div
         style={{
           height: hasResource ? '40px' : 0,
           // padding: hasResource ? '8px' : 0,
         }}
-        className="e-resource-cell text-center"
+        className="bs-resource-cell text-center"
       >
         {hasResource &&
           (resourceTemplate instanceof Function
             ? resourceTemplate({ resource, view })
             : resource[resourceFields.title])}
       </div>
-      <div className="e-events-header">
-        <table className="e-schedule-table">
-          <tbody>
-            <tr>{renderMultiDayEvents}</tr>
-          </tbody>
-        </table>
+      <div className="bs-row">
+        <div className="bs-all-day-appointments">{renderMultiDayEvents}</div>
       </div>
-      <div className="text-center">
-        <table className="e-schedule-table">
-          <tbody>
-            <tr>
-              {(weekDays || []).map((e: any, i: number) => {
-                const date = addDays(startOfWk, e);
-                return (
-                  <td key={i} colSpan={1} className="e-header-cells">
-                    <div
-                      className={
-                        isToday(date, timezone)
-                          ? 'e-header-cells text-primary'
-                          : 'e-header-cells'
-                      }
-                    >
-                      <div>
-                        {format(date, 'd', {
-                          locale,
-                        })}
-                      </div>
-                      <div>
-                        {format(date, 'EEE', {
-                          locale,
-                        })}
-                      </div>
-                    </div>
-                    <div
-                      className="e-all-day-cells"
-                      style={{
-                        height: '50px',
-                        // `${computeMultiDPHeight(
-                        //   multiDayPlaceHFactor.current,
-                        //   showAllMultiDEvents
-                        // )}px`,
-                      }}
-                    ></div>
-                  </td>
-                );
-              })}
-            </tr>
-          </tbody>
-        </table>
+      <div className="bs-time-header-cell bs-row">
+        {(weekDays || []).map((e: any, i: number) => {
+          const date = addDays(startOfWk, e);
+          return (
+            <div key={i} className="bs-header-cells">
+              <div
+                className={
+                  isToday(date, timezone)
+                    ? 'date-cell text-primary'
+                    : 'date-cell'
+                }
+              >
+                <div>
+                  {format(date, 'd', {
+                    locale,
+                  })}
+                </div>
+                <div>
+                  {format(date, 'EEE', {
+                    locale,
+                  })}
+                </div>
+              </div>
+              <div className="bs-all-day-cells"></div>
+            </div>
+          );
+        })}
       </div>
-    </td>
+    </div>
   );
 };

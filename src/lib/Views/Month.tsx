@@ -24,6 +24,8 @@ import {
   sortEventsByTheLengthest,
 } from '../utils/schedular';
 import ShowMoreEvents from '../Components/Popovers/ShowMoreEvents';
+import { zonedTimeToUtc } from 'date-fns-tz';
+import { Boundary } from '@popperjs/core';
 
 const weekDays = [0, 1, 2, 3, 4, 5, 6];
 
@@ -42,6 +44,7 @@ const Month = () => {
     message,
     timezone,
     onSlot,
+    step,
   }: any = useStore();
   const hasResource = Boolean(resources?.length);
 
@@ -66,7 +69,7 @@ const Month = () => {
 
   const [cellWidth, setCellWidth] = useState<Number>(0);
   const [dateAllEvents, setDateAllEvents] = useState<{
-    events: any[];
+    events: null | any[];
     date: Date | null;
     resource: any[] | null;
   }>({ events: [], date: null, resource: null });
@@ -84,23 +87,23 @@ const Month = () => {
     };
     updateWidth();
 
-    function bodyListener(e: any) {
-      const popoverContainer = document.querySelector('.more-events-popover');
-      // console.log('close event popper 1');
-      if (popoverContainer && !popoverContainer.contains(e.target as Node)) {
-        if (Boolean(dateAllEvents.events.length)) {
-          // console.log('close event popper 2');
+    // function bodyListener(e: any) {
+    //   const popoverContainer = document.querySelector('.more-events-popover');
+    //   // console.log('close event popper 1');
+    //   if (popoverContainer && !popoverContainer.contains(e.target as Node)) {
+    //     if (Boolean(dateAllEvents.events?.length)) {
+    //       // console.log('close event popper 2');
 
-          setDateAllEvents({ events: [], date: null, resource: null });
-        }
-      }
-    }
+    //       setDateAllEvents({ events: [], date: null, resource: null });
+    //     }
+    //   }
+    // }
 
-    document.body.addEventListener('click', bodyListener);
+    // document.body.addEventListener('click', bodyListener);
     window.addEventListener('resize', updateWidth);
     return () => {
       window.removeEventListener('resize', updateWidth);
-      document.body.removeEventListener('click', bodyListener);
+      // document.body.removeEventListener('click', bodyListener);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -118,7 +121,15 @@ const Month = () => {
       {
         name: 'flip',
         options: {
-          fallbackPlacements: ['right-start'],
+          fallbackPlacements: ['right-start', 'bottom', 'top', 'left-start'],
+        },
+      },
+      {
+        name: 'preventOverflow',
+        options: {
+          altAxis: true,
+          mainAxis: true,
+          boundary: document.querySelector('.scheduler') as Boundary,
         },
       },
       {
@@ -157,7 +168,7 @@ const Month = () => {
           <React.Fragment>
             {Array.from(eachWeekStart).map((startDay, i) => {
               return (
-                <tr key={i} style={{ height: 100, width: CELL_HEIGHT }}>
+                <div className="bs-min-width bs-row" key={i}>
                   {weekDays.map((d, idx) => {
                     const today = addDays(startDay, d);
                     const eachFirstDayInCalcRow = isSameDay(startDay, today)
@@ -205,9 +216,8 @@ const Month = () => {
 
                     return (
                       <React.Fragment key={today.getTime()}>
-                        <td
-                          colSpan={1}
-                          className="e-work-cells p-0"
+                        <div
+                          className="bs-work-cells p-0"
                           aria-label={`${startOfDay(today).toLocaleString(
                             'en',
                             {
@@ -219,17 +229,23 @@ const Month = () => {
                             timeStyle: 'long',
                           })}`}
                           onClick={() => {
+                            const zStart = zonedTimeToUtc(
+                              startOfDay(today),
+                              timezone
+                            );
                             if (onSlot instanceof Function)
                               onSlot({
-                                start: today,
-                                end: addMinutes(today, 60),
+                                start: zStart,
+                                end: addMinutes(zStart, step),
+                                [fields.allDay]: true,
                                 resource,
                               });
                             else
                               dispatch('eventDialog', {
-                                start: today,
-                                end: addMinutes(today, 60),
+                                start: zStart,
+                                end: addMinutes(zStart, step),
                                 resource,
+                                [fields.allDay]: true,
                                 event: null,
                                 isOpen: true,
                               });
@@ -264,7 +280,7 @@ const Month = () => {
 
                             {prevNextEvents.length > 3 && (
                               <div
-                                className={`btn e-more-indicator text-start position-absolute`}
+                                className={`btn bs-more-indicator text-start position-absolute`}
                                 data-count="1"
                                 data-group-index="0"
                                 onClick={(e) => {
@@ -286,11 +302,11 @@ const Month = () => {
                               </div>
                             )}
                           </div>
-                        </td>
+                        </div>
                       </React.Fragment>
                     );
                   })}
-                </tr>
+                </div>
               );
             })}
           </React.Fragment>
@@ -299,18 +315,12 @@ const Month = () => {
 
       return hasResource ? (
         resources.map((rs: any, idx: number) => (
-          <td key={rs[resourceFields.id]} colSpan={7}>
-            <table className="e-schedule-table">
-              <tbody>{<RenderCells index={idx} resource={rs} />}</tbody>
-            </table>
-          </td>
+          <div className="bs-row bs-column" key={rs[resourceFields.id]}>
+            {<RenderCells index={idx} resource={rs} />}
+          </div>
         ))
       ) : (
-        <td colSpan={7}>
-          <table className="e-schedule-table">
-            <tbody>{<RenderCells />}</tbody>
-          </table>
-        </td>
+        <div className="bs-row bs-column">{<RenderCells />}</div>
       );
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -320,114 +330,67 @@ const Month = () => {
   return (
     <React.Fragment>
       <div className="e-schedule">
-        <div id="e-table" className="mt-3 e-month-view overflow-auto">
-          <table className="table table-bordered">
-            <tbody>
-              <tr>
-                <td className="p-0">
-                  <div className="e-date-header-wrap">
-                    <table
-                      className="e-schedule-table mb-0"
-                      style={{ tableLayout: 'auto' }}
-                    >
-                      <tbody>
-                        <tr>
-                          {hasResource ? (
-                            resources.map((rs: any) => (
-                              <React.Fragment key={rs[resourceFields.id]}>
-                                <td style={{ minWidth: '300px' }}>
-                                  <table className="e-scheduler-table bs-resource-table">
-                                    <tbody>
-                                      <tr>
-                                        <td
-                                          key={rs[resourceFields.id]}
-                                          colSpan={7}
-                                          className="e-resource-cell"
-                                        >
-                                          {resourceTemplate instanceof Function
-                                            ? resourceTemplate({
-                                                resource: rs,
-                                                view,
-                                              })
-                                            : rs[resourceFields.title]}
-                                        </td>
-                                      </tr>
-                                    </tbody>
-                                  </table>
-                                  <table className="e-schedule-table bs-header-table">
-                                    <tbody>
-                                      <tr>
-                                        {daysList.map(
-                                          (day: Date, idx: number) => (
-                                            <td
-                                              key={idx}
-                                              colSpan={1}
-                                              className={
-                                                isToday(day, timezone)
-                                                  ? 'e-header-cells text-primary'
-                                                  : 'e-header-cells'
-                                              }
-                                            >
-                                              {format(day, 'EEE', { locale })}
-                                            </td>
-                                          )
-                                        )}
-                                      </tr>
-                                    </tbody>
-                                  </table>
-                                </td>
-                              </React.Fragment>
-                            ))
-                          ) : (
-                            <React.Fragment>
-                              <td>
-                                <table className="e-schedule-table bs-header-table">
-                                  <tbody>
-                                    <tr>
-                                      {daysList.map(
-                                        (day: Date, idx: number) => (
-                                          <td
-                                            key={idx}
-                                            colSpan={1}
-                                            className="e-header-cells"
-                                          >
-                                            {format(day, 'EEE', { locale })}
-                                          </td>
-                                        )
-                                      )}
-                                    </tr>
-                                  </tbody>
-                                </table>
-                              </td>
-                            </React.Fragment>
-                          )}
-                        </tr>
-                      </tbody>
-                    </table>
+        <div id="e-table" className="mt-3 bs-month-view overflow-auto">
+          <div className="bs-date-header-wrap">
+            <div className="bs-month-header-cell bs-row">
+              {hasResource ? (
+                resources.map((rs: any) => (
+                  <React.Fragment key={rs[resourceFields.id]}>
+                    <div className="bs-min-width bs-row bs-column">
+                      <div>
+                        <div
+                          key={rs[resourceFields.id]}
+                          className="bs-resource-cell"
+                        >
+                          {resourceTemplate instanceof Function
+                            ? resourceTemplate({
+                                resource: rs,
+                                view,
+                              })
+                            : rs[resourceFields.title]}
+                        </div>
+                      </div>
+                      <div className="bs-time-header">
+                        {daysList.map((day: Date, idx: number) => (
+                          <div
+                            key={idx}
+                            className={
+                              isToday(day, timezone)
+                                ? 'bs-header-cells text-primary'
+                                : 'bs-header-cells'
+                            }
+                          >
+                            {format(day, 'EEE', { locale })}
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </React.Fragment>
+                ))
+              ) : (
+                <React.Fragment>
+                  <div className="bs-min-width bs-row">
+                    {daysList.map((day: Date, idx: number) => (
+                      <div key={idx} className="bs-header-cells">
+                        {format(day, 'EEE', { locale })}
+                      </div>
+                    ))}
                   </div>
-                </td>
-              </tr>
-              <tr>
-                <td className="p-0">
-                  <div className="e-content-wrap">
-                    <table className="e-schedule-table e-date-cells table table-bordered mb-0">
-                      <thead></thead>
-                      <tbody>
-                        <tr>{RenderContent}</tr>
-                        <ShowMoreEvents
-                          dateAllEvents={dateAllEvents}
-                          setDateAllEvents={setDateAllEvents}
-                          setPopperElement={setPopperElement}
-                          styles={styles}
-                          attributes={attributes}
-                        />
-                      </tbody>
-                    </table>
-                  </div>
-                </td>
-              </tr>
-            </tbody>
-          </table>
+                </React.Fragment>
+              )}
+            </div>
+
+            <div className="bs-content-wrap">
+              {RenderContent}
+              <ShowMoreEvents
+                dateAllEvents={dateAllEvents}
+                setDateAllEvents={setDateAllEvents}
+                setPopperElement={setPopperElement}
+                styles={styles}
+                attributes={attributes}
+              />
+            </div>
+          </div>
         </div>
       </div>
     </React.Fragment>

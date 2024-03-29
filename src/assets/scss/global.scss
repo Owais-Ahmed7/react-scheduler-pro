@@ -72,26 +72,6 @@
   text-align: center;
 }
 
-.e-time-cells-wrap {
-  td {
-    color: #1d1d1d;
-  }
-}
-
-table {
-  width: 100%;
-  tbody {
-    tr {
-      td {
-        vertical-align: top;
-        padding: 0 !important;
-        margin: 0 !important;
-        height: 100%;
-      }
-    }
-  }
-}
-
 h1,
 h2,
 h3,
@@ -103,31 +83,112 @@ p {
   margin: 0;
 }
 
-.e-schedule-table {
-  border: 0 none;
-  border-collapse: separate;
-  border-spacing: 0;
-  margin: 0;
-  table-layout: fixed;
+.bs-time-view,
+.bs-month-view {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
   width: 100%;
+  border: 1px solid #ddd;
+  min-height: 0;
 
-  .e-more-indicator {
-    color: rgba(0, 0, 0, 0.54);
-    cursor: pointer;
-    font-size: 12px;
-    line-height: 11px;
-    overflow: hidden;
-    padding: 2px 4px;
-    position: absolute;
-    text-overflow: ellipsis;
-    transition: 0.5s;
+  .bs-content-wrap {
+    display: flex;
+    // overflow: auto;
 
-    &:hover {
-      text-decoration: underline;
+    .bs-content {
+      flex: 1;
     }
   }
 
-  .current-time {
+  .bs-time-header {
+    display: flex;
+    overflow: hidden;
+    flex: 0 0 auto;
+    flex-direction: row;
+
+    .bs-time-header-content {
+      overflow: hidden;
+    }
+
+    .bs-left-indent {
+      min-width: 80px;
+    }
+  }
+
+  .bs-time-slots {
+    display: flex;
+    flex: 1 0 0%;
+    align-items: flex-start;
+    width: 100%;
+    // border-top: 2px solid #ddd;
+    // overflow-y: auto;
+    position: relative;
+
+    .bs-time-gutter {
+      display: block;
+      min-width: 80px;
+
+      .bs-time-cells-wrap {
+        position: relative;
+        display: flex;
+        flex: 0 0 auto;
+        overflow: hidden;
+        flex-direction: column;
+      }
+    }
+
+    .bs-time-slot {
+      white-space: nowrap;
+      overflow: auto;
+      text-align: right;
+      width: 100%;
+    }
+  }
+
+  .bs-time-header-cell,
+  .bs-month-header-cell {
+    div {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .bs-all-day-cells {
+      height: 50px;
+      // border-left: 1px solid rgba(0, 0, 0, 0.12);
+
+      // &:first-child {
+      //   border-left-width: 0;
+      // }
+    }
+  }
+
+  .bs-header-cells {
+    padding: 5px 0;
+    // height: 50px;
+    font-size: 13px;
+    border-left: 1px solid rgba(0, 0, 0, 0.12);
+    color: #1d1d1d;
+
+    .date-cell {
+      height: 50px;
+    }
+
+    // :first-child {
+    //   border-left-width: 0;
+    // }
+  }
+
+  .bs-date-cells {
+    flex: 1;
+    border-left: 1px solid rgba(0, 0, 0, 0.12);
+
+    // &:first-child {
+    //   border-left: 0;
+    // }
+  }
+
+  .bs-current-time {
     color: rgb(255, 0, 0);
     // left: 25%;
     left: 0;
@@ -162,6 +223,103 @@ p {
       background-color: rgb(255, 0, 0);
     }
   }
+
+  .bs-all-day-appointments {
+    display: flex;
+    width: 100%;
+
+    .bs-all-day-appointment-wrapper {
+      flex: 1;
+      min-width: 0;
+      position: relative;
+    }
+  }
+}
+
+.bs-min-width {
+  min-width: 250px !important;
+}
+
+.bs-month-view {
+  .bs-date-header-wrap {
+    overflow-x: auto;
+    overflow-y: hidden;
+  }
+
+  // .bs-date-header-wrap {
+  //   overflow-y: hidden;
+  // }
+
+  .bs-work-cells {
+    flex: 1;
+    height: 100px;
+    border-left: 1px solid rgba(0, 0, 0, 0.12);
+    border-top: 1px solid rgba(0, 0, 0, 0.12);
+  }
+}
+
+.bs-appointment {
+  cursor: pointer;
+  background: #0079ff;
+  border: 1px solid #e8eaf6;
+  border-radius: 2px;
+  border-radius: 4px;
+  color: #fff;
+  overflow: hidden;
+  position: absolute;
+
+  .bs-appointment-details {
+    display: flex;
+    justify-content: space-between;
+    flex: auto;
+    line-height: 20px;
+    padding: 0 3px;
+    height: 100%;
+    overflow: hidden;
+  }
+}
+
+.bs-more-indicator {
+  color: rgba(0, 0, 0, 0.54);
+  cursor: pointer;
+  font-size: 12px;
+  line-height: 11px;
+  overflow: hidden;
+  padding: 2px 4px;
+  position: absolute;
+  text-overflow: ellipsis;
+  transition: 0.5s;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.bs-resource-cell {
+  color: rgba(0, 0, 0, 0.87);
+  font-size: 13px;
+  height: 40px;
+  border-left: 1px solid rgba(0, 0, 0, 0.12);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+}
+
+.bs-row {
+  display: flex;
+  width: 100%;
+}
+
+.bs-column {
+  flex-direction: column;
+}
+
+//------------------------------------------------
+
+.e-schedule-table {
+  border: 0 none;
+  display: flex;
+  margin: 0;
+  width: 100%;
+  flex-basis: 100px;
 
   tbody {
     tr {
@@ -203,20 +361,6 @@ p {
   height: 100%;
 }
 
-.e-resource-cell {
-  color: rgba(0, 0, 0, 0.87);
-  font-size: 13px;
-  height: 40px;
-  border-left: 1px solid rgba(0, 0, 0, 0.12);
-  border-bottom: 1px solid rgba(0, 0, 0, 0.12);
-
-  td {
-    &:first-child {
-      border-left-width: 0;
-    }
-  }
-}
-
 .e-date-header-wrapper {
   max-height: unset;
 }
@@ -228,25 +372,10 @@ p {
   width: 100%;
 }
 
-.e-time-cells-wrap {
-  position: relative;
-  overflow: hidden;
-}
-
-.e-content-wrap {
-  overflow: auto;
-}
-
-.e-appointment {
-  cursor: pointer;
-  background: #0079ff;
-  border: 1px solid #e8eaf6;
-  border-radius: 2px;
-  border-radius: 4px;
-  color: #fff;
-  overflow: hidden;
-  position: absolute;
-}
+// .e-time-cells-wrap {
+//   position: relative;
+//   overflow: hidden;
+// }
 
 // .e-all-day-cells .e-date-cell {
 //   vertical-align: bottom;
@@ -257,26 +386,26 @@ p {
 //   }
 // }
 
-.e-date-header-wrapper {
-  table {
-    tbody {
-      tr {
-        td {
-          &:first-child {
-            .e-resource-cell {
-              border-left: none;
-            }
+// .e-date-header-wrapper {
+//   table {
+//     tbody {
+//       tr {
+//         td {
+//           &:first-child {
+//             .e-resource-cell {
+//               border-left: none;
+//             }
 
-            .e-header-cells:first-child {
-              border-left: none;
-            }
+//             .e-header-cells:first-child {
+//               border-left: none;
+//             }
 
-            .e-all-day-cells:first-child {
-              border-left: none;
-            }
-          }
-        }
-      }
-    }
-  }
-}
+//             .e-all-day-cells:first-child {
+//               border-left: none;
+//             }
+//           }
+//         }
+//       }
+//     }
+//   }
+// }
