@@ -111,8 +111,13 @@ const Month = () => {
   }, []);
 
   useEffect(() => {
-    const element = document.querySelector('.scheduler');
-    setBoudnary(element);
+    if (typeof document !== 'undefined') {
+      const element = document.querySelector('.scheduler');
+      // Ensure that element exists before calling setBoudnary
+      if (element) {
+        setBoudnary(element);
+      }
+    }
   }, []);
 
   //popover
