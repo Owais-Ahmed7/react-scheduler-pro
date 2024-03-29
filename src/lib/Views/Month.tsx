@@ -49,7 +49,6 @@ const Month = () => {
   const hasResource = Boolean(resources?.length);
 
   const [boundary, setBoudnary] = useState<Boundary | null>(null);
-
   const monthStart = startOfMonth(selectedDate);
   const monthEnd = endOfMonth(selectedDate);
   const eachWeekStart = useMemo(
@@ -111,12 +110,10 @@ const Month = () => {
   }, []);
 
   useEffect(() => {
-    if (typeof document !== 'undefined') {
-      const element = document.querySelector('.scheduler');
-      // Ensure that element exists before calling setBoudnary
-      if (element) {
-        setBoudnary(element);
-      }
+    const element = document?.querySelector('.scheduler');
+    // Ensure that element exists before calling setBoudnary
+    if (element) {
+      setBoudnary(element);
     }
   }, []);
 

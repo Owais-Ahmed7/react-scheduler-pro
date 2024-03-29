@@ -59,12 +59,10 @@ const ShowMoreEvents: React.FC<ShowMoreEventsProps> = ({
     useState<HTMLDivElement | null>(null);
 
   useEffect(() => {
-    if (typeof document !== 'undefined') {
-      const element = document.querySelector('.scheduler');
-      // Ensure that element exists before calling setBoudnary
-      if (element) {
-        setBoudnary(element);
-      }
+    const element = document?.querySelector('.scheduler');
+    // Ensure that element exists before calling setBoudnary
+    if (element) {
+      setBoudnary(element);
     }
   }, []);
 

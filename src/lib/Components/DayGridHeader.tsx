@@ -1,4 +1,4 @@
-import React, { useMemo, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import {
   convertEventTimeZone,
   differenceInDaysOmitTime,
@@ -55,6 +55,7 @@ const DayGridHeader: React.FC<Props> = ({
   multiDayPlaceHFactor.current = multiDayEventsHFactor;
   // let eventsIndexes: any[] = [];
 
+  const [boundary, setBoudnary] = useState<Boundary | null>(null);
   const [showAllMultiDEvents, setShowMultiDEvents] = useState<{
     date: Date | null;
     events: any[] | null;
@@ -70,6 +71,15 @@ const DayGridHeader: React.FC<Props> = ({
   const [popperElement, setPopperElement] = useState<HTMLDivElement | null>(
     null
   );
+
+  useEffect(() => {
+    const element = document?.querySelector('.scheduler');
+    // Ensure that element exists before calling setBoudnary
+    if (element) {
+      setBoudnary(element);
+    }
+  }, []);
+
   const { styles, attributes } = usePopper(referenceElement, popperElement, {
     placement: 'bottom',
     modifiers: [
@@ -84,7 +94,7 @@ const DayGridHeader: React.FC<Props> = ({
         options: {
           altAxis: true,
           mainAxis: true,
-          boundary: document.querySelector('.scheduler') as Boundary,
+          boundary: boundary as Boundary,
         },
       },
       {
