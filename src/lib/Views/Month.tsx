@@ -48,6 +48,8 @@ const Month = () => {
   }: any = useStore();
   const hasResource = Boolean(resources?.length);
 
+  const [boundary, setBoudnary] = useState<Boundary | null>(null);
+
   const monthStart = startOfMonth(selectedDate);
   const monthEnd = endOfMonth(selectedDate);
   const eachWeekStart = useMemo(
@@ -108,6 +110,11 @@ const Month = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  useEffect(() => {
+    const element = document.querySelector('.scheduler');
+    setBoudnary(element);
+  }, []);
+
   //popover
   const [referenceElement, setReferenceElement] =
     useState<HTMLDivElement | null>(null);
@@ -129,7 +136,7 @@ const Month = () => {
         options: {
           altAxis: true,
           mainAxis: true,
-          boundary: document.querySelector('.scheduler') as Boundary,
+          boundary: boundary as Boundary,
         },
       },
       {

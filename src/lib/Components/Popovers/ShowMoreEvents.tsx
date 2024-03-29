@@ -52,10 +52,17 @@ const ShowMoreEvents: React.FC<ShowMoreEventsProps> = ({
 
   const [popover, setPopover] = useState<{} | null>(null);
 
+  const [boundary, setBoudnary] = useState<Boundary | null>(null);
   const [referenceElement, setReferenceElement] =
     useState<HTMLDivElement | null>(null);
   const [popperElement, setEventPopperElement] =
     useState<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    const element = document.querySelector('.scheduler');
+    setBoudnary(element);
+  }, []);
+
   const { styles: eventStyles, attributes: eventAttributes }: any = usePopper(
     referenceElement,
     popperElement,
@@ -79,7 +86,7 @@ const ShowMoreEvents: React.FC<ShowMoreEventsProps> = ({
           options: {
             altAxis: true,
             mainAxis: true,
-            boundary: document.querySelector('.scheduler') as Boundary,
+            boundary: boundary as Boundary,
           },
         },
         {

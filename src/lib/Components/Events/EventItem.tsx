@@ -40,7 +40,7 @@ const EventItem: React.FC<EventItemProps> = ({
     onDoubleClickEvent,
   }: any = useStore();
 
-  // const [boundary, setBoudnary] = useState<Boundary | null>(null);
+  const [boundary, setBoudnary] = useState<Boundary | null>(null);
   const [popover, setPopover] = useState<HTMLElement | null>(null);
   const [referenceElement, setReferenceElement] =
     useState<HTMLDivElement | null>(null);
@@ -48,10 +48,10 @@ const EventItem: React.FC<EventItemProps> = ({
     null
   );
 
-  // useEffect(() => {
-  //   const element = document.querySelector('.scheduler');
-  //   setBoudnary(element);
-  // }, []);
+  useEffect(() => {
+    const element = document.querySelector('.scheduler');
+    setBoudnary(element);
+  }, []);
 
   const { styles, attributes } = usePopper(referenceElement, popperElement, {
     placement: 'left-start',
@@ -67,7 +67,7 @@ const EventItem: React.FC<EventItemProps> = ({
         options: {
           altAxis: true,
           mainAxis: true,
-          boundary: document.querySelector('.scheduler') as Boundary,
+          boundary: boundary as Boundary,
         },
       },
       {
