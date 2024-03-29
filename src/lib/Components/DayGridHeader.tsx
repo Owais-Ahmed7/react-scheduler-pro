@@ -362,8 +362,8 @@ const RenderHeader = ({
               <div
                 className={
                   isToday(date, timezone)
-                    ? 'date-cell text-primary'
-                    : 'date-cell'
+                    ? 'date-cell text-center text-primary'
+                    : 'date-cell text-center'
                 }
               >
                 <div>

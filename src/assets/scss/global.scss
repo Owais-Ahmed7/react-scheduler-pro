@@ -135,6 +135,7 @@ p {
         flex: 0 0 auto;
         overflow: hidden;
         flex-direction: column;
+        color: #1d1d1d;
       }
     }
 
@@ -148,6 +149,8 @@ p {
 
   .bs-time-header-cell,
   .bs-month-header-cell {
+    color: #1d1d1d;
+
     div {
       flex: 1;
       min-width: 0;
