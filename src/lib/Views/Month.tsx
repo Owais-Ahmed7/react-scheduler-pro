@@ -88,23 +88,9 @@ const Month = () => {
     };
     updateWidth();
 
-    // function bodyListener(e: any) {
-    //   const popoverContainer = document.querySelector('.more-events-popover');
-    //   // console.log('close event popper 1');
-    //   if (popoverContainer && !popoverContainer.contains(e.target as Node)) {
-    //     if (Boolean(dateAllEvents.events?.length)) {
-    //       // console.log('close event popper 2');
-
-    //       setDateAllEvents({ events: [], date: null, resource: null });
-    //     }
-    //   }
-    // }
-
-    // document.body.addEventListener('click', bodyListener);
     window.addEventListener('resize', updateWidth);
     return () => {
       window.removeEventListener('resize', updateWidth);
-      // document.body.removeEventListener('click', bodyListener);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

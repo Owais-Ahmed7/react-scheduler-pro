@@ -12,6 +12,7 @@ import {
   format,
   isSameDay,
   isSameHour,
+  set,
   toDate,
 } from 'date-fns';
 import { CELL_HEIGHT } from '../helpers/constants/schedular';
@@ -47,8 +48,8 @@ const TimeGrid: React.FC<Props> = ({
   startOfWk,
   endOfWk,
   schedulerHeight: SHEDULER_HEIGHT,
-  startHour: START_HOUR,
-  endHour: END_HOUR,
+  startHour,
+  endHour,
   hourFormat,
   selectedDate,
   step,
@@ -59,7 +60,7 @@ const TimeGrid: React.FC<Props> = ({
   resources,
   resourceFields,
 }) => {
-  const { dispatch, onSlot, startHour }: any = useStore();
+  const { dispatch, onSlot }: any = useStore();
   const hasResource = Boolean(resources?.length);
 
   const [popover, setPopover] = useState<{ event: any; open: boolean }>({
@@ -92,12 +93,22 @@ const TimeGrid: React.FC<Props> = ({
     });
   }, [popover]);
 
+  const START_TIME = set(selectedDate, {
+    hours: startHour,
+    minutes: 0,
+    seconds: 0,
+  });
+  const END_TIME = set(selectedDate, {
+    hours: endHour,
+    minutes: step >= 60 ? 0 : step,
+    seconds: 0,
+  });
   const hours = eachMinuteOfInterval(
     {
-      start: new Date(new Date().setHours(START_HOUR)).setMinutes(0),
-      end: new Date(new Date().setHours(END_HOUR)).setMinutes(step),
+      start: START_TIME,
+      end: END_TIME,
     },
-    { step }
+    { step: step }
   );
 
   const RenderDayEvents = ({ resource, index }: any) => {

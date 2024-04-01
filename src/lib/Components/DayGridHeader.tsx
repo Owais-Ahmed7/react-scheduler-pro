@@ -55,7 +55,6 @@ const DayGridHeader: React.FC<Props> = ({
   multiDayPlaceHFactor.current = multiDayEventsHFactor;
   // let eventsIndexes: any[] = [];
 
-  const [boundary, setBoudnary] = useState<Boundary | null>(null);
   const [showAllMultiDEvents, setShowMultiDEvents] = useState<{
     date: Date | null;
     events: any[] | null;
@@ -66,6 +65,7 @@ const DayGridHeader: React.FC<Props> = ({
     resource: null,
   }); //useState<boolean>(false);
 
+  const [boundary, setBoudnary] = useState<Boundary | null>(null);
   const [referenceElement, setReferenceElement] =
     useState<HTMLDivElement | null>(null);
   const [popperElement, setPopperElement] = useState<HTMLDivElement | null>(
