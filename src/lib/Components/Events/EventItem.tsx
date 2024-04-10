@@ -125,107 +125,121 @@ const EventItem: React.FC<EventItemProps> = ({
   const renderEvent = useMemo(() => {
     return (
       <div
-        className={`d-flex flex-wrap bs-appointment p-0 ${className}`}
-        style={{
-          ...eventStyles,
-          backgroundColor: resource
-            ? resource[resourceFields.backgroundColor]
-            : event[fields.backgroundColor],
-        }}
         role="button"
+        className="bs-appointment"
         data-id={`appointment-${idx}`}
         onClick={(e) => {
           e.stopPropagation();
           onClickHandler(e);
         }}
+        style={{
+          ...eventStyles,
+        }}
+        ref={setReferenceElement}
       >
-        <div ref={setReferenceElement} className="bs-appointment-details">
-          <div className="d-flex">
-            {hasPrevious && (
-              <div className="d-flex align-items-center mx-1">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  height="12"
-                  width="7.5"
-                  viewBox="0 0 320 512"
-                >
-                  <path
-                    fill="#ffffff"
-                    d="M9.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l192 192c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L77.3 256 246.6 86.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-192 192z"
-                  />
-                </svg>
+        {eventTemplate instanceof Function ? (
+          eventTemplate({
+            event,
+            view,
+            hasNext,
+            hasPrevious,
+            styles: eventStyles,
+            resource,
+          })
+        ) : (
+          <div
+            className={`bs-default-event-template d-flex flex-wrap h-100 p-0 ${className}`}
+            style={{
+              backgroundColor: resource
+                ? resource[resourceFields.backgroundColor]
+                : event[fields.backgroundColor],
+            }}
+          >
+            <div className="bs-appointment-details">
+              <div className="d-flex">
+                {hasPrevious && (
+                  <div className="d-flex align-items-center mx-1">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      height="12"
+                      width="7.5"
+                      viewBox="0 0 320 512"
+                    >
+                      <path
+                        fill="#ffffff"
+                        d="M9.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l192 192c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L77.3 256 246.6 86.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-192 192z"
+                      />
+                    </svg>
 
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  height="12"
-                  width="7.5"
-                  viewBox="0 0 320 512"
-                >
-                  <path
-                    fill="#ffffff"
-                    d="M9.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l192 192c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L77.3 256 246.6 86.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-192 192z"
-                  />
-                </svg>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      height="12"
+                      width="7.5"
+                      viewBox="0 0 320 512"
+                    >
+                      <path
+                        fill="#ffffff"
+                        d="M9.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l192 192c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L77.3 256 246.6 86.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-192 192z"
+                      />
+                    </svg>
+                  </div>
+                )}
+                <div className="">
+                  <div>
+                    <h6 className="fs-12 mb-0 e-subject">
+                      {accessor(fields.subject, event)}{' '}
+                      {event[fields.allDay] ? '(All Day)' : ''}
+                    </h6>
+                    {showTime && (
+                      <div>
+                        <time className="fs-12">
+                          <span>
+                            {format(new Date(event[fields.start]), timeFormat, {
+                              locale,
+                            })}
+                          </span>
+                          <span className="mx-1">-</span>
+                          <span>
+                            {format(new Date(event[fields.end]), timeFormat, {
+                              locale,
+                            })}
+                          </span>
+                        </time>
+                      </div>
+                    )}
+                  </div>
+                </div>
               </div>
-            )}
-            <div className="">
-              {eventTemplate instanceof Function ? (
-                eventTemplate({ event, view })
-              ) : (
-                <div>
-                  <h6 className="fs-12 mb-0 e-subject">
-                    {accessor(fields.subject, event)}{' '}
-                    {event[fields.allDay] ? '(All Day)' : ''}
-                  </h6>
-                  {showTime && (
-                    <div>
-                      <time className="fs-12">
-                        <span>
-                          {format(new Date(event[fields.start]), timeFormat, {
-                            locale,
-                          })}
-                        </span>
-                        <span className="mx-1">-</span>
-                        <span>
-                          {format(new Date(event[fields.end]), timeFormat, {
-                            locale,
-                          })}
-                        </span>
-                      </time>
-                    </div>
-                  )}
+              {hasNext && (
+                <div className="d-flex align-items-center mx-1">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    height="12"
+                    width="7.5"
+                    viewBox="0 0 320 512"
+                  >
+                    <path
+                      fill="#ffffff"
+                      d="M310.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-192 192c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L242.7 256 73.4 86.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l192 192z"
+                    />
+                  </svg>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    height="12"
+                    width="7.5"
+                    viewBox="0 0 320 512"
+                    className="ms-n2"
+                  >
+                    <path
+                      fill="#ffffff"
+                      d="M310.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-192 192c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L242.7 256 73.4 86.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l192 192z"
+                    />
+                  </svg>
                 </div>
               )}
             </div>
           </div>
-          {hasNext && (
-            <div className="d-flex align-items-center mx-1">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                height="12"
-                width="7.5"
-                viewBox="0 0 320 512"
-              >
-                <path
-                  fill="#ffffff"
-                  d="M310.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-192 192c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L242.7 256 73.4 86.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l192 192z"
-                />
-              </svg>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                height="12"
-                width="7.5"
-                viewBox="0 0 320 512"
-                className="ms-n2"
-              >
-                <path
-                  fill="#ffffff"
-                  d="M310.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-192 192c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L242.7 256 73.4 86.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l192 192z"
-                />
-              </svg>
-            </div>
-          )}
-        </div>
+        )}
       </div>
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps

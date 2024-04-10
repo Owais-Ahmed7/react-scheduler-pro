@@ -45,6 +45,7 @@ const Month = () => {
     timezone,
     onSlot,
     step,
+    slotGetter,
   }: any = useStore();
   const hasResource = Boolean(resources?.length);
 
@@ -209,10 +210,15 @@ const Month = () => {
                       };
                     }
 
+                    // let styles = { classnames: '', styles: {} };
+                    // if (slotGetter instanceof Function)
+                    //   styles = slotGetter(today);
+
                     return (
                       <React.Fragment key={today.getTime()}>
                         <div
-                          className="bs-work-cells p-0"
+                          className={`bs-work-cells p-0`} // className={`bs-work-cells p-0 ${styles.classnames}`}
+                          // style={styles.styles}
                           aria-label={`${startOfDay(today).toLocaleString(
                             'en',
                             {

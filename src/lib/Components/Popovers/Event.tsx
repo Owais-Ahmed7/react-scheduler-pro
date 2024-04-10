@@ -87,8 +87,8 @@ const EventPopover: React.FC<EventPopoverTypes> = ({
                   <div
                     style={{
                       backgroundColor: resource
-                        ? resource[resourceFields.backgroundColor]
-                        : event[fields.backgroundColor],
+                        ? accessor(resourceFields.backgroundColor, resource)
+                        : accessor(fields.backgroundColor, event),
                     }}
                     className="popover-head p-3"
                   >

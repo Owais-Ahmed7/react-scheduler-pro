@@ -264,13 +264,17 @@ p {
 
 .bs-appointment {
   cursor: pointer;
-  background: #0079ff;
   border: 1px solid #e8eaf6;
   border-radius: 2px;
   border-radius: 4px;
   color: #fff;
   overflow: hidden;
   position: absolute;
+
+  .bs-default-event-template {
+    background: #0079ff;
+    width: 100%;
+  }
 
   .bs-appointment-details {
     display: flex;

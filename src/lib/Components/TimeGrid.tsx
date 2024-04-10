@@ -60,7 +60,7 @@ const TimeGrid: React.FC<Props> = ({
   resources,
   resourceFields,
 }) => {
-  const { dispatch, onSlot }: any = useStore();
+  const { dispatch, onSlot, slotGetter }: any = useStore();
   const hasResource = Boolean(resources?.length);
 
   const [popover, setPopover] = useState<{ event: any; open: boolean }>({
@@ -150,6 +150,11 @@ const TimeGrid: React.FC<Props> = ({
                 );
                 const end = addMinutes(concatDate, step);
 
+                let styles = { classnames: '', styles: {} };
+                if (slotGetter instanceof Function)
+                  styles = slotGetter({ date: concatDate });
+                const style = { height: CELL_HEIGHT, ...styles.styles };
+
                 return (
                   <div
                     key={i}
@@ -160,7 +165,7 @@ const TimeGrid: React.FC<Props> = ({
                       dateStyle: 'full',
                       timeStyle: 'long',
                     })}`}
-                    style={{ height: CELL_HEIGHT }}
+                    style={style}
                     onClick={() => {
                       const zStart = zonedTimeToUtc(concatDate, timezone);
                       const zEnd = addMinutes(zStart, step);
@@ -179,7 +184,7 @@ const TimeGrid: React.FC<Props> = ({
                           isOpen: true,
                         });
                     }}
-                    className="border-top bs-date-cells fs-8 py-0"
+                    className={`border-top bs-date-cells fs-8 py-0 ${styles.classnames}`}
                   ></div>
                 );
               })}
@@ -240,24 +245,30 @@ const TimeGrid: React.FC<Props> = ({
                     })}
                   </div>
                   <div>
-                    {(hours || []).map((time, idx) => (
-                      <div
-                        key={idx}
-                        aria-label={time.toISOString()}
-                        style={{ height: CELL_HEIGHT }}
-                        className="border-top fs-12 text-center text-nowrap"
-                      >
-                        <span className="fs-7">
-                          {format(
-                            time,
-                            hourFormat === 12 ? 'h:mm a' : 'HH:mm',
-                            {
-                              locale,
-                            }
-                          )}
-                        </span>
-                      </div>
-                    ))}
+                    {(hours || []).map((time, idx) => {
+                      let styles = { classnames: '', styles: {} };
+                      if (slotGetter instanceof Function)
+                        styles = slotGetter({ date: time });
+                      const style = { height: CELL_HEIGHT, ...styles.styles };
+                      return (
+                        <div
+                          key={idx}
+                          aria-label={time.toISOString()}
+                          style={style}
+                          className={`border-top fs-12 text-center text-nowrap ${styles.classnames}`} //
+                        >
+                          <span className="fs-7">
+                            {format(
+                              time,
+                              hourFormat === 12 ? 'h:mm a' : 'HH:mm',
+                              {
+                                locale,
+                              }
+                            )}
+                          </span>
+                        </div>
+                      );
+                    })}
                   </div>
                 </div>
               </div>

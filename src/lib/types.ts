@@ -65,6 +65,7 @@ export type eventFormContextType = {
   event: any;
   resource: any;
 };
+export type slotGetterType = { date: Date };
 export type eventPopoverType = { event: any; togglePopover: voidFunction };
 export type allEventsPopoverType = {
   date: Date;
@@ -74,7 +75,14 @@ export type allEventsPopoverType = {
 };
 export type onEditEventType = { event: any; resource: any };
 export type onDeleteEventType = { event: any; resource: any };
-export type eventItemType = { event: any; view: view };
+export type eventItemType = {
+  event: any;
+  view: view;
+  hasNext: boolean;
+  hasPrevious: boolean;
+  resource: any;
+  styles: any;
+};
 export type resourceType = { resource: any; view: view };
 export type onNavigateType = { date: Date; start: Date; end: Date; view: view };
 export type onViewType = { view: view };
@@ -108,6 +116,8 @@ export interface SchedulerProps {
 
   //modal size
   modalSize?: 'sm' | 'md' | 'lg' | 'xl';
+
+  slotGetter?: (props: slotGetterType) => { styles?: any; classnames?: any };
 
   //handle prev next
   onNavigate?: (props: onNavigateType) => void | null;

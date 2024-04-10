@@ -281,7 +281,7 @@ function generateRandomColor() {
     g.toString(16).padStart(2, '0') +
     b.toString(16).padStart(2, '0');
 
-  return colorCode;
+  return { rgb: { r, g, b }, color: colorCode };
 }
 
 export const generateRandomEvents = (total = 300) => {
@@ -304,7 +304,7 @@ export const generateRandomEvents = (total = 300) => {
         )
       ),
       backgroundColor: color,
-      allDay: Math.random() > 0.5,
+      // allDay: Math.random() > 0.5,
     });
   }
 

@@ -112,6 +112,10 @@ p {
   margin-bottom: 0;
 }
 
+.h-100 {
+  height: 100%;
+}
+
 .w-100 {
   width: 100%;
 }
@@ -382,8 +386,11 @@ p {
   border: var(--bs-btn-border-width) solid var(--bs-btn-border-color);
   border-radius: var(--bs-btn-border-radius);
   background-color: var(--bs-btn-bg);
-  transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out,
-    border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+  transition:
+    color 0.15s ease-in-out,
+    background-color 0.15s ease-in-out,
+    border-color 0.15s ease-in-out,
+    box-shadow 0.15s ease-in-out;
 }
 
 .btn-sm {
