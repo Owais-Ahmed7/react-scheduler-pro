@@ -7,7 +7,7 @@ import {
   onDoubleClickEventType,
   onEditEventType,
   onSlotType,
-  slotGetterType,
+  slotGutterType,
 } from './lib/types';
 import { generateRandomEvents } from './lib/utils/schedular';
 import { useState } from 'react';
@@ -281,11 +281,18 @@ function App() {
           day: 'دن',
           more: 'مزید',
         }}
-        // slotGetter={({ date }: slotGetterType) => {
-        //   return isToday(date)
-        //     ? { styles: { backgroundColor: 'red' } }
-        //     : { styles: { backgroundColor: 'lightgreen' } };
+        // timeGutter={({ date }: slotGutterType) => {
+        //   // return isToday(date)
+        //   return { styles: { backgroundColor: '#D20062', color: 'white' } };
+        //   // : { styles: { backgroundColor: '#BED7DC' } };
         // }}
+        slotPropGetter={({ date }: slotGutterType) => {
+          return date.getHours() < 10
+            ? { styles: { backgroundColor: '#D20062', color: 'white' } }
+            : date.getHours() > 15
+              ? { styles: { backgroundColor: '#BED7DC' } }
+              : { styles: {} };
+        }}
         // selectedDate={new Date(2004, 7, 16)}
         // views={['day', 'week']}
         onSlot={(props: onSlotType) => {

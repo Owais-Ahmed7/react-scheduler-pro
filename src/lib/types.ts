@@ -65,7 +65,7 @@ export type eventFormContextType = {
   event: any;
   resource: any;
 };
-export type slotGetterType = { date: Date };
+export type slotGutterType = { date: Date };
 export type eventPopoverType = { event: any; togglePopover: voidFunction };
 export type allEventsPopoverType = {
   date: Date;
@@ -117,7 +117,10 @@ export interface SchedulerProps {
   //modal size
   modalSize?: 'sm' | 'md' | 'lg' | 'xl';
 
-  slotGetter?: (props: slotGetterType) => { styles?: any; classnames?: any };
+  slotPropGetter?: (props: slotGutterType) => {
+    styles?: any;
+    classnames?: string;
+  };
 
   //handle prev next
   onNavigate?: (props: onNavigateType) => void | null;

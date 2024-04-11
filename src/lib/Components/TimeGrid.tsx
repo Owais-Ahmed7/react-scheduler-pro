@@ -60,7 +60,7 @@ const TimeGrid: React.FC<Props> = ({
   resources,
   resourceFields,
 }) => {
-  const { dispatch, onSlot, slotGetter }: any = useStore();
+  const { dispatch, onSlot, slotPropGetter }: any = useStore();
   const hasResource = Boolean(resources?.length);
 
   const [popover, setPopover] = useState<{ event: any; open: boolean }>({
@@ -151,8 +151,8 @@ const TimeGrid: React.FC<Props> = ({
                 const end = addMinutes(concatDate, step);
 
                 let styles = { classnames: '', styles: {} };
-                if (slotGetter instanceof Function)
-                  styles = slotGetter({ date: concatDate });
+                if (slotPropGetter instanceof Function)
+                  styles = slotPropGetter({ date: concatDate });
                 const style = { height: CELL_HEIGHT, ...styles.styles };
 
                 return (
@@ -247,8 +247,8 @@ const TimeGrid: React.FC<Props> = ({
                   <div>
                     {(hours || []).map((time, idx) => {
                       let styles = { classnames: '', styles: {} };
-                      if (slotGetter instanceof Function)
-                        styles = slotGetter({ date: time });
+                      if (slotPropGetter instanceof Function)
+                        styles = slotPropGetter({ date: time });
                       const style = { height: CELL_HEIGHT, ...styles.styles };
                       return (
                         <div
