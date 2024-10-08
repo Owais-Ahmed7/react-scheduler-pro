@@ -14,4 +14,4 @@ const chunk = (array: any[], size: number) => {
   return result;
 };
 
-export default chunk
+export default chunk;

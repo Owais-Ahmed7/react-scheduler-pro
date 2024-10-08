@@ -7,7 +7,7 @@ import {
   onDoubleClickEventType,
   onEditEventType,
   onSlotType,
-  slotGutterType,
+  slotGetterType,
 } from './lib/types';
 import { generateRandomEvents } from './lib/utils/schedular';
 import { useState } from 'react';
@@ -281,12 +281,12 @@ function App() {
           day: 'دن',
           more: 'مزید',
         }}
-        // timeGutter={({ date }: slotGutterType) => {
+        // timeGutter={({ date }: slotGetterType) => {
         //   // return isToday(date)
         //   return { styles: { backgroundColor: '#D20062', color: 'white' } };
         //   // : { styles: { backgroundColor: '#BED7DC' } };
         // }}
-        slotPropGetter={({ date }: slotGutterType) => {
+        slotPropGetter={({ date }: slotGetterType) => {
           return date.getHours() < 10
             ? { styles: { backgroundColor: '#D20062', color: 'white' } }
             : date.getHours() > 15

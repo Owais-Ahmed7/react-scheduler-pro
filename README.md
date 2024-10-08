@@ -83,3 +83,12 @@ function App() {
   );
 }
 ```
+
+## Contribute
+
+Show your ❤️ and support by giving a ⭐. Any suggestions are welcome! Take a look at the contributing guide.
+
+## Join The Community
+
+Help us improve Scheduler Pro! Join us on [Slack](https://join.slack.com/t/reactschedulerpro/shared_invite/zt-2s3ef22s5-KOKl~HnyKIZ6PVzvZSmpeg).
+(Slack invite links do expire. If you can't get in, just file an issue and we'll get a new link.)
