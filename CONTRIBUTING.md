@@ -18,18 +18,13 @@ Please note we have a code of conduct, please follow it in all your interactions
 
 ## Setup
 
-### Pre-requisites
-
-- _Node:_ `^16.0.0`
-- _Yarn_
-
 ### Install
 
 Clone the repository and create a local branch:
 
 ```sh
-git clone https://github.com/fkhadra/react-toastify.git
-cd react-toastify
+git clone https://github.com/Owais-Ahmed7/react-scheduler-pro.git
+cd react-scheduler-pro
 
 git checkout -b my-branch
 ```
@@ -39,12 +34,10 @@ Install dependencies:
 ```sh
 yarn install
 // then
-yarn setup
+yarn start
 ```
 
 ## Developing
-
-How it works ? The library don't use a state management library like redux or mobx to dispatch the notifications. Instead it uses a dead simple pubsub.
 
 ```sh
 # launch the playground
@@ -56,16 +49,6 @@ yarn test
 # Prettify all the things
 yarn prettier
 ```
-
-### Project structure
-
-#### Scss
-
-All the style rules lives in the `scss` directory. The filename are self-explanatory about their content.
-
-#### Example dir
-
-The playground let you test your changes, it's like the demo of react-scheduler-pro. Most of the time you don't need to modify it unless you add new features.
 
 ## License
 
