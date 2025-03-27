@@ -11,6 +11,7 @@ import {
   format,
   isSameDay,
   startOfDay,
+  startOfWeek,
 } from 'date-fns';
 import { isToday } from '../utils/schedular';
 import MultidayEvents from './Events/MultidayEvents';

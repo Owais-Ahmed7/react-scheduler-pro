@@ -195,8 +195,6 @@ const TimeGrid: React.FC<Props> = ({
     );
   };
 
-  // console.log('render time grid', timezone);
-
   return (
     <React.Fragment>
       <div className="w-100">

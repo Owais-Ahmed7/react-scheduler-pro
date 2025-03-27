@@ -46,6 +46,7 @@ const Month = () => {
     onSlot,
     step,
     slotGetter,
+    weekStartsOn,
   }: any = useStore();
   const hasResource = Boolean(resources?.length);
 
@@ -59,7 +60,7 @@ const Month = () => {
           start: monthStart,
           end: monthEnd,
         },
-        { weekStartsOn: 0 }
+        { weekStartsOn }
       ),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [monthStart.toISOString(), monthEnd.toISOString()]

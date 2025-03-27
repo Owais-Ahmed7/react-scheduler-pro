@@ -105,6 +105,11 @@ export interface SchedulerProps {
   //dispatch
   dispatch?: disptach;
 
+  weekDays?: {
+    day: (0 | 1 | 2 | 3 | 4 | 5 | 6)[];
+    week: (0 | 1 | 2 | 3 | 4 | 5 | 6)[];
+  };
+
   //message
   message?: {
     today: string;
@@ -152,7 +157,7 @@ export interface SchedulerProps {
   endHour?: DayHours;
 
   //month
-  weekStartOn?: days;
+  weekStartsOn?: days;
 
   //new any, prev event
   eventDialog?: {

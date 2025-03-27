@@ -8,6 +8,7 @@ const Day = () => {
     schedulerHeight: SCHEDULER_HEIGHT,
     startHour: START_HOUR,
     endHour: END_HOUR,
+    // weekDays,
     hourFormat,
     selectedDate,
     step,

@@ -7,6 +7,11 @@ const initialState: Store = {
   resources: [] as any[],
   events: [] as any[],
 
+  weekDays: {
+    day: [0],
+    week: [0, 1, 2, 3, 4, 5, 6],
+  },
+
   //message
   message: {
     today: 'Today',
@@ -45,7 +50,7 @@ const initialState: Store = {
   endHour: 23,
 
   //month
-  weekStartOn: 6,
+  weekStartsOn: 0,
 
   //new event, prev event
   eventDialog: {
