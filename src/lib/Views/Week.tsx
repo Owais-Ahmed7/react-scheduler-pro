@@ -20,12 +20,12 @@ const Week = () => {
     resourceFields,
     weekStartsOn,
   }: any = useStore();
-  const weekDays = [0, 1, 2, 3, 4, 5, 6];
+  const displayDays = [0, 1, 2, 3, 4, 5, 6];
 
   return (
     <React.Fragment>
       <TimeGrid
-        weekDays={weekDays}
+        weekDays={displayDays}
         startOfWk={startOfDay(startOfWeek(selectedDate, { weekStartsOn }))}
         endOfWk={endOfDay(endOfWeek(selectedDate, { weekStartsOn }))}
         schedulerHeight={SCHEDULER_HEIGHT}

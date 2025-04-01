@@ -21,6 +21,8 @@ import {
 //utility functions
 import useStore from '../hooks/useStore';
 
+import { view } from '../types';
+
 interface HeaderProps {}
 const Header: React.FC<HeaderProps> = () => {
   const {
@@ -28,10 +30,11 @@ const Header: React.FC<HeaderProps> = () => {
     view,
     selectedDate,
     dispatch,
-    message: { month, week, day, today },
+    message,
     onView,
     locale,
     onNavigate,
+    weekDays,
   }: any = useStore();
   const SELECTED_DATE = 'selectedDate';
 
@@ -50,7 +53,7 @@ const Header: React.FC<HeaderProps> = () => {
 
       start = startOfDay(weekStart);
       end = endOfDay(weekEnd);
-    } else if (view === 'week') {
+    } else if (view === 'week' || view === 'workweek') {
       date = addWeeks(selectedDate, 1);
       dispatch('multiDayEventsHFactor', 0);
       dispatch(SELECTED_DATE, date);
@@ -85,8 +88,7 @@ const Header: React.FC<HeaderProps> = () => {
 
       start = startOfDay(weekStart);
       end = endOfDay(weekEnd);
-      start = weekStart;
-    } else if (view === 'week') {
+    } else if (view === 'week' || view === 'workweek') {
       date = subWeeks(selectedDate, 1);
       dispatch('multiDayEventsHFactor', 0);
       dispatch(SELECTED_DATE, date);
@@ -128,6 +130,19 @@ const Header: React.FC<HeaderProps> = () => {
             { locale }
           )
         );
+      case 'workweek':
+        const workweekDays = weekDays?.workweek;
+        const weekStart = startOfWeek(selectedDate, { weekStartsOn: 0 });
+        const firstDay = addDays(weekStart, workweekDays[0]);
+        const lastDay = addDays(
+          weekStart,
+          workweekDays[workweekDays.length - 1]
+        );
+        return (
+          format(firstDay, 'dd MMM yyyy', { locale }) +
+          ' - ' +
+          format(lastDay, 'dd MMM yyyy', { locale })
+        );
       case 'day':
         return format(selectedDate, 'dd MMMM yyyy', { locale });
       default:
@@ -140,7 +155,6 @@ const Header: React.FC<HeaderProps> = () => {
       dispatch('view', view);
       onView instanceof Function && onView({ view });
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     [view]
   );
 
@@ -178,26 +192,17 @@ const Header: React.FC<HeaderProps> = () => {
                     onClick={handleNext}
                   >
                     <svg
-                      className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiSvgIcon-root MuiSvgIcon-fontSizeLarge css-1shn170"
+                      className="fs-14 m-auto"
                       focusable="false"
                       aria-hidden="true"
                       viewBox="0 0 24 24"
+                      data-testid="ArrowForwardIosIcon"
                       fill="#212529"
                       width={20}
                       height={20}
                     >
                       <path d="M6.23 20.23 8 22l10-10L8 2 6.23 3.77 14.46 12z"></path>
                     </svg>
-                    {/* <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="16"
-                      height="16"
-                      fill="currentColor"
-                      className="bi bi-caret-right"
-                      viewBox="0 0 16 16"
-                    >
-                      <path d="M6 12.796V3.204L11.481 8 6 12.796zm.659.753 5.48-4.796a1 1 0 0 0 0-1.506L6.66 2.451C6.011 1.885 5 2.345 5 3.204v9.592a1 1 0 0 0 1.659.753z" />
-                    </svg> */}
                   </button>
                 </div>
               </div>
@@ -214,48 +219,25 @@ const Header: React.FC<HeaderProps> = () => {
                           : 'btn btn-sm btn-light'
                       }
                     >
-                      {today}
+                      {message.today}
                     </button>
                   </div>
                   <div className="d-flex align-items-center">|</div>
                   <div className="ms-3">
                     <div className="btn-group" role="group">
-                      {views.includes('day') && (
+                      {views.map((v: view) => (
                         <button
-                          onClick={() => changeView('day')}
+                          key={v}
+                          onClick={() => changeView(v)}
                           className={
-                            view === 'day'
+                            view === v
                               ? 'btn btn-sm btn-light text-primary'
                               : 'btn btn-sm btn-light'
                           }
                         >
-                          {day}
+                          {message[v]}
                         </button>
-                      )}
-                      {views.includes('week') && (
-                        <button
-                          onClick={() => changeView('week')}
-                          className={
-                            view === 'week'
-                              ? 'btn btn-sm btn-light text-primary'
-                              : 'btn btn-sm btn-light'
-                          }
-                        >
-                          {week}
-                        </button>
-                      )}
-                      {views.includes('month') && (
-                        <button
-                          onClick={() => changeView('month')}
-                          className={
-                            view === 'month'
-                              ? 'btn btn-sm btn-light text-primary'
-                              : 'btn btn-sm btn-light'
-                          }
-                        >
-                          {month}
-                        </button>
-                      )}
+                      ))}
                     </div>
                   </div>
                 </div>

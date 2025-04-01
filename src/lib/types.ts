@@ -37,7 +37,7 @@ export type DayHours =
 
 export type voidFunction = () => void;
 
-export type view = 'day' | 'week' | 'month';
+export type view = 'day' | 'week' | 'month' | 'workweek' | string;
 
 export type days = 0 | 1 | 2 | 3 | 4 | 5 | 6;
 
@@ -106,8 +106,10 @@ export interface SchedulerProps {
   dispatch?: disptach;
 
   weekDays?: {
-    day: (0 | 1 | 2 | 3 | 4 | 5 | 6)[];
-    week: (0 | 1 | 2 | 3 | 4 | 5 | 6)[];
+    workweek?: (0 | 1 | 2 | 3 | 4 | 5 | 6)[];
+    custom?: {
+      [key: string]: (0 | 1 | 2 | 3 | 4 | 5 | 6)[];
+    };
   };
 
   //message
@@ -116,6 +118,7 @@ export interface SchedulerProps {
     month: string;
     week: string;
     day: string;
+    workweek: string;
     more: string;
   };
 

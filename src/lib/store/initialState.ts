@@ -8,8 +8,8 @@ const initialState: Store = {
   events: [] as any[],
 
   weekDays: {
-    day: [0],
-    week: [0, 1, 2, 3, 4, 5, 6],
+    workweek: [1, 2, 3, 4, 5],
+    // custom: {},
   },
 
   //message
@@ -18,6 +18,7 @@ const initialState: Store = {
     month: 'Month',
     week: 'Week',
     day: 'Day',
+    workweek: 'Work Week',
     more: 'More',
   },
 
@@ -32,7 +33,7 @@ const initialState: Store = {
 
   //view
   view: 'week',
-  views: ['day', 'week', 'month'],
+  views: ['day', 'week', 'month', 'workweek'],
 
   //date
   selectedDate: new Date(),

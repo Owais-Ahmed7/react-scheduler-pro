@@ -4,11 +4,12 @@ import React, { useMemo } from 'react';
 import Day from '../Views/Day';
 import Week from '../Views/Week';
 import Month from '../Views/Month';
+import WorkWeek from '../Views/WorkWeek';
 import useStore from '../hooks/useStore';
 
 interface Props {}
 const Main: React.FC<Props> = () => {
-  const { view } = useStore();
+  const { view, weekDays } = useStore();
 
   const Views = useMemo(() => {
     switch (view) {
@@ -18,10 +19,16 @@ const Main: React.FC<Props> = () => {
         return <Week />;
       case 'day':
         return <Day />;
+      case 'workweek':
+        return <WorkWeek />;
       default:
+        // Check if it's a custom view
+        if (weekDays?.custom && weekDays.custom[view]) {
+          return <Week />;
+        }
         return '';
     }
-  }, [view]);
+  }, [view, weekDays]);
 
   return (
     <React.Fragment>

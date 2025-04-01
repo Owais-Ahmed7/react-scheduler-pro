@@ -259,6 +259,10 @@ function App() {
         hourFormat={12}
         // weekStartOn={3}
         weekStartsOn={0}
+        // views={['day', 'week', 'workweek']}
+        weekDays={{
+          workweek: [1, 2, 4, 5],
+        }}
         // weekDays={{ day: [2], week: [0, 1, 2, 3, 4] }}
         timezone={timezone}
         events={events}
