@@ -43,7 +43,7 @@ yarn start
 yarn start
 
 # Run tests
-yarn test
+yarn test🤮
 
 # Prettify all the things
 yarn prettier
