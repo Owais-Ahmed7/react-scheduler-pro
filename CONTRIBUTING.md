@@ -42,7 +42,7 @@ yarn start
 # launch the playground
 yarn start
 
-# Run tests 💩
+# Run tests
 yarn test
 
 # Prettify all the things
