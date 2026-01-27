@@ -35,7 +35,7 @@ function App() {
   const evs = [
     {
       _id: 36,
-      name: 'Owais',
+      name: 'Bike Riding',
       startDate: new Date(
         new Date(new Date(new Date().setHours(1))).setDate(12)
       ),
@@ -46,7 +46,7 @@ function App() {
     },
     {
       _id: 47,
-      name: 'B',
+      name: 'Buying perfumes',
       startDate: new Date(
         new Date(new Date(new Date().setHours(1))).setDate(13)
       ),
