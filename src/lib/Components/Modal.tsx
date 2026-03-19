@@ -1,5 +1,6 @@
 import React, { ReactNode } from 'react';
 import Portal from './Portal';
+import useFocusTrap from '../hooks/useFocusTrap';
 
 interface ModalProps {
   isOpen: boolean;
@@ -14,6 +15,8 @@ const Modal: React.FC<ModalProps> = ({
   size = 'md',
   children,
 }) => {
+  const focusTrapRef = useFocusTrap(isOpen);
+
   if (!isOpen) return <div></div>;
 
   return (
@@ -22,16 +25,22 @@ const Modal: React.FC<ModalProps> = ({
         <div
           style={{ display: isOpen ? 'block' : 'none' }}
           className="scheduler-modal"
-          // onClick={(e) => {
-          //   e.stopPropagation();
-          //   toggle();
-          // }}
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="scheduler-modal-title"
+          ref={focusTrapRef}
+          onKeyDown={(e) => {
+            if (e.key === 'Escape' && toggle) {
+              e.stopPropagation();
+              toggle();
+            }
+          }}
         >
           <div className={`modal-dialog modal-${size}`}>
             <div className="modal-content">{children}</div>
           </div>
         </div>
-        <div className="scheduler-modal-backdrop" />
+        <div className="scheduler-modal-backdrop" onClick={toggle} />
       </div>
     </Portal>
   );
@@ -46,9 +55,13 @@ const ModalHeader = ({
 }) => {
   return (
     <div className="modal-header d-flex justify-content-between">
-      {children}
+      <span id="scheduler-modal-title">{children}</span>
       <div>
-        <button onClick={toggle} className="btn btn-sm btn-secondary">
+        <button
+          onClick={toggle}
+          className="btn btn-sm btn-secondary"
+          aria-label="Close dialog"
+        >
           X
         </button>
       </div>

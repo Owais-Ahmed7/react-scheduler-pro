@@ -19,10 +19,10 @@ const WorkWeek = () => {
     resources,
     resourceFields,
     weekStartsOn,
-  }: any = useStore();
+  } = useStore();
 
   // Use workweek configuration if available, otherwise fallback to weekdays (Mon-Fri)
-  const displayDays = weekDays?.workweek;
+  const displayDays = weekDays?.workweek || [1, 2, 3, 4, 5];
 
   return (
     <React.Fragment>
@@ -36,11 +36,11 @@ const WorkWeek = () => {
         hourFormat={hourFormat}
         selectedDate={selectedDate}
         step={step}
-        events={events}
+        events={events || []}
         locale={locale}
-        timezone={timezone}
+        timezone={timezone || ''}
         fields={fields}
-        resources={resources}
+        resources={resources || []}
         resourceFields={resourceFields}
       />
     </React.Fragment>

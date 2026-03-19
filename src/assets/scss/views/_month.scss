@@ -14,8 +14,8 @@
   .bs-resource-table {
     tbody {
       td {
-        border-color: rgba(0, 0, 0, 0.12) !important;
-        border-style: solid !important;
+        border-color: var(--rsp-border-color) !important;
+        border-style: var(--rsp-border-style) !important;
         border-width: 1px 1px 0 0 !important;
 
         .e-resource-cell {
@@ -51,12 +51,12 @@
   .bs-header-table {
     tbody {
       td {
-        background: #fff;
-        border-color: rgba(0, 0, 0, 0.12) !important;
-        border-style: solid !important;
+        background: var(--rsp-bg);
+        border-color: var(--rsp-border-color) !important;
+        border-style: var(--rsp-border-style) !important;
         border-width: 1px 1px 1px 0 !important;
-        color: rgba(0, 0, 0, 0.87);
-        font-size: 12px;
+        color: var(--rsp-text);
+        font-size: var(--rsp-font-size-sm);
         vertical-align: middle;
         text-align: left;
         padding: 0 5px !important;
@@ -100,15 +100,11 @@
     height: 70px;
     vertical-align: top;
     width: 36px;
-    border-color: rgba(0, 0, 0, 0.12);
-    border-style: solid;
+    border-color: var(--rsp-border-color);
+    border-style: var(--rsp-border-style);
     border-width: 0 1px 1px 0;
-    color: rgba(0, 0, 0, 0.87);
+    color: var(--rsp-text);
     padding: 0;
-
-    // &:hover {
-    //   background-color: #e0f4ff !important;
-    // }
   }
 }
 
@@ -129,7 +125,7 @@
 
 .e-subject {
   flex: auto;
-  font-size: 13px;
+  font-size: var(--rsp-font-size-md);
   font-weight: 500;
   overflow: hidden;
   text-overflow: ellipsis;

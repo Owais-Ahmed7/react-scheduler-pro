@@ -15,11 +15,19 @@ interface FormModalProps {
 const FormModal: React.FC<FormModalProps> = () => {
   const {
     eventFormContext,
-    eventDialog: { start, end, resource, event, isOpen },
+    eventDialog,
     dispatch,
     view,
     modalSize,
-  }: any = useStore();
+  } = useStore();
+
+  const { start, end, resource, event, isOpen } = eventDialog as {
+    start?: Date;
+    end?: Date;
+    resource?: Record<string, unknown>;
+    event: Record<string, unknown> | null;
+    isOpen: boolean;
+  };
 
   const toggle = () =>
     dispatch('eventDialog', { date: null, event, isOpen: false });
@@ -31,7 +39,7 @@ const FormModal: React.FC<FormModalProps> = () => {
           <ModalHeader toggle={() => toggle()}>Appointment</ModalHeader>
           <ModalBody>
             {typeof eventFormContext === 'function' &&
-              eventFormContext({ event, toggle, start, end, resource, view })}
+              eventFormContext({ event, toggle, start: start || new Date(), end: end || new Date(), resource: resource || null })}
             {/* This is the schedular form modal */}
             {/* <div className="mt-2 mb-2">{children}</div> */}
           </ModalBody>

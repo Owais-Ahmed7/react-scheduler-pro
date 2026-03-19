@@ -4,8 +4,8 @@ import { Store } from '../types';
 const initialState: Store = {
   schedulerHeight: 600,
 
-  resources: [] as any[],
-  events: [] as any[],
+  resources: [],
+  events: [],
 
   weekDays: {
     workweek: [1, 2, 3, 4, 5],
@@ -25,7 +25,7 @@ const initialState: Store = {
   //modal size
   modalSize: 'md',
 
-  dispatch: (name: string, value: string) => {},
+  dispatch: (_name: string, _value: unknown) => {},
 
   //date formats
   // dayFormat: '',
@@ -55,8 +55,8 @@ const initialState: Store = {
 
   //new event, prev event
   eventDialog: {
-    date: null as Date | null,
-    event: null as any | null,
+    date: null,
+    event: null,
     isOpen: false,
   },
 
@@ -71,8 +71,12 @@ const initialState: Store = {
     end: 'endDate',
   },
 
+  // Drag and drop
+  draggable: true,
+  resizable: true,
+
   //trigger popover
-  popover: { open: false, event: null as Date | null },
+  popover: { open: false, event: null },
 };
 
 export default initialState;

@@ -26,12 +26,12 @@ import {
 import ShowMoreEvents from '../Components/Popovers/ShowMoreEvents';
 import { zonedTimeToUtc } from 'date-fns-tz';
 import { Boundary } from '@popperjs/core';
+import { EventColumn, MappedEvent, Resource, ShowMoreEventsState } from '../types';
 
 const weekDays = [0, 1, 2, 3, 4, 5, 6];
 
 const Month = () => {
   const {
-    weekStartOn,
     selectedDate,
     fields,
     events,
@@ -45,9 +45,8 @@ const Month = () => {
     timezone,
     onSlot,
     step,
-    slotGetter,
     weekStartsOn,
-  }: any = useStore();
+  } = useStore();
   const hasResource = Boolean(resources?.length);
 
   const [boundary, setBoudnary] = useState<Boundary | null>(null);
@@ -70,12 +69,8 @@ const Month = () => {
     return weekDays.map((d) => addDays(eachWeekStart[0], d));
   }, [eachWeekStart]);
 
-  const [cellWidth, setCellWidth] = useState<Number>(0);
-  const [dateAllEvents, setDateAllEvents] = useState<{
-    events: null | any[];
-    date: Date | null;
-    resource: any[] | null;
-  }>({ events: [], date: null, resource: null });
+  const [cellWidth, setCellWidth] = useState<number>(0);
+  const [dateAllEvents, setDateAllEvents] = useState<ShowMoreEventsState>({ events: [], date: null, resource: null });
 
   const tableCellRef = useRef(null);
 
@@ -147,40 +142,40 @@ const Month = () => {
   const RenderContent = useMemo(
     () => {
       // const sortedEvents = sortEventsByStartDate(events);
-      const sortedEvents = sortEventsByTheLengthest(events, fields);
-      const resourcedEvents = (index: number) => {
+      const sortedEvents = sortEventsByTheLengthest(events || [], fields);
+      const resourcedEvents = (index: number): MappedEvent[] => {
         if (hasResource)
           return getResourcedEvents(
             sortedEvents,
-            resources,
+            resources || [],
             resourceFields,
             fields
-          )[index]?.resourceEvents;
+          )[index]?.resourceEvents || [];
         else return sortedEvents;
       };
 
-      const RenderCells = ({ index, resource }: any) => {
-        let eventsIndexes: any[] = [];
+      const RenderCells = ({ index, resource }: { index?: number; resource?: Resource }) => {
+        let eventsIndexes: { rows: EventColumn[] }[] = [];
         return (
           <React.Fragment>
             {Array.from(eachWeekStart).map((startDay, i) => {
               return (
-                <div className="bs-min-width bs-row" key={i}>
+                <div className="bs-min-width bs-row" role="row" key={i}>
                   {weekDays.map((d, idx) => {
                     const today = addDays(startDay, d);
                     const eachFirstDayInCalcRow = isSameDay(startDay, today)
                       ? today
                       : null;
 
-                    let todayEvents: any[] = [];
-                    let prevNextEvents: any[] = [];
+                    let todayEvents: MappedEvent[] = [];
+                    let prevNextEvents: MappedEvent[] = [];
 
-                    resourcedEvents(index)?.forEach((ev: any) => {
+                    resourcedEvents(index ?? 0)?.forEach((ev) => {
                       const e = convertEventTimeZone(ev, fields, timezone);
                       const doesIntervalOverlap = areIntervalsOverlapping(
                         {
-                          start: e[fields.start],
-                          end: e[fields.end],
+                          start: e[fields.start] as Date,
+                          end: e[fields.end] as Date,
                         },
                         {
                           start: startOfDay(today),
@@ -190,7 +185,7 @@ const Month = () => {
 
                       if (
                         (eachFirstDayInCalcRow && doesIntervalOverlap) ||
-                        isSameDay(e[fields.start], today)
+                        isSameDay(e[fields.start] as Date, today)
                       ) {
                         todayEvents.push(e);
                       }
@@ -218,6 +213,8 @@ const Month = () => {
                     return (
                       <React.Fragment key={today.getTime()}>
                         <div
+                          role="gridcell"
+                          tabIndex={0}
                           className={`bs-work-cells p-0`} // className={`bs-work-cells p-0 ${styles.classnames}`}
                           // style={styles.styles}
                           aria-label={`${startOfDay(today).toLocaleString(
@@ -230,16 +227,41 @@ const Month = () => {
                             dateStyle: 'full',
                             timeStyle: 'long',
                           })}`}
+                          onKeyDown={(e) => {
+                            if (e.key === 'Enter' || e.key === ' ') {
+                              e.preventDefault();
+                              const zStart = zonedTimeToUtc(
+                                startOfDay(today),
+                                timezone || ''
+                              );
+                              if (onSlot instanceof Function)
+                                onSlot({
+                                  start: zStart,
+                                  end: addMinutes(zStart, step),
+                                  [fields.allDay || 'allDay']: true,
+                                  resource,
+                                });
+                              else
+                                dispatch('eventDialog', {
+                                  start: zStart,
+                                  end: addMinutes(zStart, step),
+                                  resource,
+                                  [fields.allDay || 'allDay']: true,
+                                  event: null,
+                                  isOpen: true,
+                                });
+                            }
+                          }}
                           onClick={() => {
                             const zStart = zonedTimeToUtc(
                               startOfDay(today),
-                              timezone
+                              timezone || ''
                             );
                             if (onSlot instanceof Function)
                               onSlot({
                                 start: zStart,
                                 end: addMinutes(zStart, step),
-                                [fields.allDay]: true,
+                                [fields.allDay || 'allDay']: true,
                                 resource,
                               });
                             else
@@ -247,7 +269,7 @@ const Month = () => {
                                 start: zStart,
                                 end: addMinutes(zStart, step),
                                 resource,
-                                [fields.allDay]: true,
+                                [fields.allDay || 'allDay']: true,
                                 event: null,
                                 isOpen: true,
                               });
@@ -267,7 +289,7 @@ const Month = () => {
                           <div className="e-appointment-wrapper position-relative">
                             <MonthEvents
                               events={todayEvents}
-                              allEvents={events}
+                              allEvents={events || []}
                               resource={resource}
                               eventsIndexes={eventsIndexes[i]?.rows || []}
                               today={today}
@@ -291,7 +313,7 @@ const Month = () => {
                                   setDateAllEvents({
                                     events: prevNextEvents,
                                     date: today,
-                                    resource,
+                                    resource: resource || null,
                                   });
                                 }}
                                 style={{
@@ -316,8 +338,8 @@ const Month = () => {
       };
 
       return hasResource ? (
-        resources.map((rs: any, idx: number) => (
-          <div className="bs-row bs-column" key={rs[resourceFields.id]}>
+        (resources || []).map((rs, idx: number) => (
+          <div className="bs-row bs-column" key={rs[resourceFields.id] as string}>
             {<RenderCells index={idx} resource={rs} />}
           </div>
         ))
@@ -336,12 +358,12 @@ const Month = () => {
           <div className="bs-date-header-wrap">
             <div className="bs-month-header-cell bs-row">
               {hasResource ? (
-                resources.map((rs: any) => (
-                  <React.Fragment key={rs[resourceFields.id]}>
+                (resources || []).map((rs) => (
+                  <React.Fragment key={rs[resourceFields.id] as string}>
                     <div className="bs-min-width bs-row bs-column">
                       <div>
                         <div
-                          key={rs[resourceFields.id]}
+                          key={rs[resourceFields.id] as string}
                           className="bs-resource-cell"
                         >
                           {resourceTemplate instanceof Function
@@ -349,7 +371,7 @@ const Month = () => {
                                 resource: rs,
                                 view,
                               })
-                            : rs[resourceFields.title]}
+                            : rs[resourceFields.title] as string}
                         </div>
                       </div>
                       <div className="bs-time-header">
@@ -382,7 +404,7 @@ const Month = () => {
               )}
             </div>
 
-            <div className="bs-content-wrap">
+            <div className="bs-content-wrap" role="grid" aria-label="Month calendar grid">
               {RenderContent}
               <ShowMoreEvents
                 dateAllEvents={dateAllEvents}

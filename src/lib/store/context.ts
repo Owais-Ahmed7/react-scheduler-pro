@@ -1,8 +1,9 @@
 // StoreContext.js
-import React, { createContext, useReducer } from 'react';
+import { createContext } from 'react';
 import initialState from './initialState';
+import { Store } from '../types';
 
-export const StoreContext = createContext(initialState);
+export const StoreContext = createContext<Store>(initialState);
 
 // const StoreProvider = ({ children }: any) => {
 //   const [state, dispatch] = useReducer(storeReducer, initialState);

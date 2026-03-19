@@ -1,5 +1,5 @@
 .border {
-  border: var(--bs-border-width) var(--bs-border-style) var(--bs-border-color) !important;
+  border: var(--rsp-border-width) var(--rsp-border-style) var(--rsp-border-color) !important;
 }
 
 .border-0 {
@@ -7,8 +7,8 @@
 }
 
 .border-top {
-  border-top: var(--bs-border-width) var(--bs-border-style)
-    var(--bs-border-color) !important;
+  border-top: var(--rsp-border-width) var(--rsp-border-style)
+    var(--rsp-border-color) !important;
 }
 
 .border-top-0 {
@@ -16,8 +16,8 @@
 }
 
 .border-end {
-  border-right: var(--bs-border-width) var(--bs-border-style)
-    var(--bs-border-color) !important;
+  border-right: var(--rsp-border-width) var(--rsp-border-style)
+    var(--rsp-border-color) !important;
 }
 
 .border-end-0 {
@@ -25,8 +25,8 @@
 }
 
 .border-bottom {
-  border-bottom: var(--bs-border-width) var(--bs-border-style)
-    var(--bs-border-color) !important;
+  border-bottom: var(--rsp-border-width) var(--rsp-border-style)
+    var(--rsp-border-color) !important;
 }
 
 .border-bottom-0 {
@@ -34,8 +34,8 @@
 }
 
 .border-start {
-  border-left: var(--bs-border-width) var(--bs-border-style)
-    var(--bs-border-color) !important;
+  border-left: var(--rsp-border-width) var(--rsp-border-style)
+    var(--rsp-border-color) !important;
 }
 
 .border-start-0 {

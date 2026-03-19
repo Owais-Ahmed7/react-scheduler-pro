@@ -14,19 +14,19 @@ import {
 } from 'date-fns';
 import EventItem from './EventItem';
 import useStore from '../../hooks/useStore';
-import { resourceType } from '../../types';
+import { EventColumn, MappedEvent, Resource } from '../../types';
 
 interface Props {
-  events: any[];
-  allEvents: any[];
-  resource?: resourceType;
-  eventsIndexes: any[];
+  events: MappedEvent[];
+  allEvents: MappedEvent[];
+  resource?: Resource;
+  eventsIndexes: EventColumn[];
   cellWidth: number;
   today: Date;
   dayIndex: number;
   startDay: Date;
   eachWeekStart: Date[];
-  prevNextEvents: any[];
+  prevNextEvents: MappedEvent[];
   eachFirstDayInCalcRow: Date | null;
   daysList: Date[];
 }
@@ -45,7 +45,7 @@ const MonthEvents: React.FC<Props> = ({
   eachFirstDayInCalcRow,
   daysList,
 }) => {
-  const { fields, timezone }: any = useStore();
+  const { fields, timezone } = useStore();
 
   const renderEvents = useMemo(() => {
     return events.slice(0, 3).map((ev, idx) => {
@@ -53,30 +53,30 @@ const MonthEvents: React.FC<Props> = ({
       const event = ev;
       const fromPrevWeek =
         !!eachFirstDayInCalcRow &&
-        isBefore(event[fields.start], eachFirstDayInCalcRow);
+        isBefore(event[fields.start] as Date, eachFirstDayInCalcRow);
       const start =
         fromPrevWeek && eachFirstDayInCalcRow
           ? eachFirstDayInCalcRow
-          : event[fields.start];
+          : (event[fields.start] as Date);
 
       const toNextWeek =
-        differenceInCalendarWeeks(new Date(event[fields.end]), start, {
+        differenceInCalendarWeeks(new Date(event[fields.end] as Date), start, {
           weekStartsOn: 0,
           locale: enUS as unknown as Locale & { customProperty: string },
         }) > 0;
 
       let eventLength =
-        differenceInDaysOmitTime(start, new Date(event[fields.end])) + 1;
+        differenceInDaysOmitTime(start, new Date(event[fields.end] as Date)) + 1;
 
       if (toNextWeek) {
         // Rethink it
-        const NotAccurateWeekStart = startOfWeek(event[fields.start]);
+        const NotAccurateWeekStart = startOfWeek(event[fields.start] as Date);
         const closestStart = closestTo(NotAccurateWeekStart, eachWeekStart);
         if (closestStart) {
           eventLength =
             daysList.length -
             (!eachFirstDayInCalcRow
-              ? differenceInDays(event[fields.start], closestStart)
+              ? differenceInDays(event[fields.start] as Date, closestStart)
               : 0);
         }
       }
@@ -89,7 +89,7 @@ const MonthEvents: React.FC<Props> = ({
       let topFactor = 0;
       for (let i = 0; i < eventsIndexes.length; i++) {
         const eventInColumn = eventsIndexes[i].events.find(
-          (e: any) => e[fields.id] === event[fields.id]
+          (e) => e[fields.id] === event[fields.id]
         );
 
         if (i > 2) break;

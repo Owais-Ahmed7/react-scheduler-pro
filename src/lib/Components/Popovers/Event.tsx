@@ -11,14 +11,16 @@ import { format } from 'date-fns';
 import { createPortal } from 'react-dom';
 import Portal from '../Portal';
 import { accessor } from '../../utils/accessor';
+import useFocusTrap from '../../hooks/useFocusTrap';
+import { MappedEvent, Resource } from '../../types';
 
 interface EventPopoverTypes {
-  resource?: any;
-  event: any;
-  setPopover: any;
+  resource?: Resource | null;
+  event: MappedEvent | null;
+  setPopover: (event: MappedEvent | null) => void;
   setPopperElement: Dispatch<SetStateAction<HTMLDivElement | null>>;
-  styles: any;
-  attributes: any;
+  styles: Record<string, React.CSSProperties>;
+  attributes: Record<string, Record<string, string> | undefined>;
   timeFormat: string | undefined | null;
 }
 
@@ -40,7 +42,7 @@ const EventPopover: React.FC<EventPopoverTypes> = ({
     onEditEvent,
     onDeleteEvent,
     dispatch,
-  }: any = useStore();
+  } = useStore();
 
   // useEffect(() => {
   //   document.body.addEventListener('click', function (e) {
@@ -54,9 +56,9 @@ const EventPopover: React.FC<EventPopoverTypes> = ({
   // }, []);
 
   const togglePopover = () => setPopover(null);
+  const focusTrapRef = useFocusTrap(Boolean(event));
 
-  // Example usage:
-  // console.log(nestedPropertyValue);
+  const eventSubject = event ? accessor(fields.subject, event) : '';
 
   return (
     <React.Fragment>
@@ -69,7 +71,19 @@ const EventPopover: React.FC<EventPopoverTypes> = ({
             style={{ ...styles.popper, zIndex: 2 }}
             {...attributes.popper}
           >
-            <div className="popover">
+            <div
+              className="popover"
+              role="dialog"
+              aria-modal="true"
+              aria-label={`Event details: ${eventSubject}`}
+              ref={focusTrapRef}
+              onKeyDown={(e) => {
+                if (e.key === 'Escape') {
+                  e.stopPropagation();
+                  togglePopover();
+                }
+              }}
+            >
               {createPortal(
                 <div
                   className="popover-overlay"
@@ -81,25 +95,26 @@ const EventPopover: React.FC<EventPopoverTypes> = ({
                 document.body
               )}
               {eventPopoverTemplate instanceof Function ? (
-                eventPopoverTemplate({ event, togglePopover })
+                eventPopoverTemplate({ event: event!, togglePopover })
               ) : (
                 <>
                   <div
                     style={{
-                      backgroundColor: resource
-                        ? accessor(resourceFields.backgroundColor, resource)
-                        : accessor(fields.backgroundColor, event),
+                      backgroundColor: (resource
+                        ? accessor(resourceFields.backgroundColor || '', resource)
+                        : accessor(fields.backgroundColor || '', event!)) as string,
                     }}
                     className="popover-head p-3"
                   >
                     <div>
                       <div className="d-flex justify-content-end">
                         <button
+                          aria-label="Edit event"
                           onClick={(e) => {
                             e.stopPropagation();
                             togglePopover();
                             if (onEditEvent instanceof Function)
-                              onEditEvent({ event, resource });
+                              onEditEvent({ event: event!, resource: resource || null });
                             else
                               dispatch('eventDialog', {
                                 date: null,
@@ -111,6 +126,7 @@ const EventPopover: React.FC<EventPopoverTypes> = ({
                           className="btn btn-sm btn-light me-2"
                         >
                           <svg
+                            aria-hidden="true"
                             xmlns="http://www.w3.org/2000/svg"
                             width="16"
                             height="16"
@@ -122,15 +138,17 @@ const EventPopover: React.FC<EventPopoverTypes> = ({
                           </svg>
                         </button>
                         <button
+                          aria-label="Delete event"
                           onClick={(e) => {
                             e.stopPropagation();
                             if (onDeleteEvent instanceof Function)
-                              onDeleteEvent({ event, resource });
+                              onDeleteEvent({ event: event!, resource: resource || null });
                             togglePopover();
                           }}
                           className="btn btn-sm btn-light me-2"
                         >
                           <svg
+                            aria-hidden="true"
                             xmlns="http://www.w3.org/2000/svg"
                             width="16"
                             height="16"
@@ -142,6 +160,7 @@ const EventPopover: React.FC<EventPopoverTypes> = ({
                           </svg>
                         </button>
                         <button
+                          aria-label="Close popover"
                           onClick={(e) => {
                             e.stopPropagation();
                             togglePopover();
@@ -149,6 +168,7 @@ const EventPopover: React.FC<EventPopoverTypes> = ({
                           className="btn btn-sm btn-light"
                         >
                           <svg
+                            aria-hidden="true"
                             xmlns="http://www.w3.org/2000/svg"
                             width="16"
                             height="16"
@@ -163,7 +183,7 @@ const EventPopover: React.FC<EventPopoverTypes> = ({
                     </div>
                     <div className="text-start">
                       <h5 className="text-white mt-3">
-                        {accessor(fields.subject, event)}
+                        {accessor(fields.subject, event!) as string}
                       </h5>
                     </div>
                   </div>
@@ -171,6 +191,7 @@ const EventPopover: React.FC<EventPopoverTypes> = ({
                     <h6 className="d-flex align-items-center">
                       <span className="me-2">
                         <svg
+                          aria-hidden="true"
                           xmlns="http://www.w3.org/2000/svg"
                           width="16"
                           height="16"
@@ -183,7 +204,7 @@ const EventPopover: React.FC<EventPopoverTypes> = ({
                       </span>
                       <span className="fs-13">
                         {format(
-                          accessor(fields.start, event),
+                          accessor(fields.start, event!) as Date,
                           timeFormat ? timeFormat : 'd MMM yyyy hh:mm a',
                           {
                             locale,
@@ -191,7 +212,7 @@ const EventPopover: React.FC<EventPopoverTypes> = ({
                         )}{' '}
                         -{' '}
                         {format(
-                          accessor(fields.end, event),
+                          accessor(fields.end, event!) as Date,
                           timeFormat ? timeFormat : 'd MMM yyyy hh:mm a',
                           {
                             locale,
@@ -203,6 +224,7 @@ const EventPopover: React.FC<EventPopoverTypes> = ({
                       <h6 className="d-flex align-items-center mt-2">
                         <span className="me-2">
                           <svg
+                            aria-hidden="true"
                             xmlns="http://www.w3.org/2000/svg"
                             width="16"
                             height="16"
@@ -215,7 +237,7 @@ const EventPopover: React.FC<EventPopoverTypes> = ({
                         </span>
                         <span className="fs-13">
                           {resource
-                            ? accessor(resourceFields.title, resource)
+                            ? (accessor(resourceFields.title, resource) as string)
                             : ''}
                         </span>
                       </h6>

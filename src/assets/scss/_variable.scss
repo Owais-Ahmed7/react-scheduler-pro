@@ -1,17 +1,99 @@
-$--bs-border-width: 1px;
-$--bs-border-style: solid;
-$--bs-border-color: #dee2e6;
-$--bs-border-color-translucent: rgba(0, 0, 0, 0.175);
-$--bs-border-radius: 0.375rem;
-$--bs-border-radius-sm: 0.25rem;
-$--bs-border-radius-lg: 0.5rem;
-$--bs-border-radius-xl: 1rem;
-$--bs-border-radius-2xl: 2rem;
-$--bs-border-radius-pill: 50rem;
+// ==============================================
+// CSS Custom Properties (Design Tokens)
+// ==============================================
+// All colors and key values are exposed as CSS custom
+// properties so consumers can theme without overriding.
+// Prefix: --rsp- (react-scheduler-pro)
+// ==============================================
 
-//table
-$--bs-body-color: #212529;
+:root {
+  // Colors
+  --rsp-primary: #0079ff;
+  --rsp-primary-light: #e0f4ff;
+  --rsp-primary-dark: #0056b3;
 
-//text
-$--bs-white-rgb: 255, 255, 255;
-$--bs-text-opacity: 1;
+  --rsp-bg: #ffffff;
+  --rsp-bg-secondary: #f8f9fa;
+  --rsp-bg-hover: #e0f4ff;
+
+  --rsp-text: #1d1d1d;
+  --rsp-text-secondary: rgba(0, 0, 0, 0.54);
+  --rsp-text-inverse: #ffffff;
+
+  --rsp-border-color: rgba(0, 0, 0, 0.12);
+  --rsp-border-width: 1px;
+  --rsp-border-style: solid;
+
+  // Event
+  --rsp-event-bg: #0079ff;
+  --rsp-event-text: #ffffff;
+  --rsp-event-border: #e8eaf6;
+  --rsp-event-radius: 4px;
+
+  // Current time indicator
+  --rsp-current-time-color: rgb(255, 0, 0);
+
+  // Typography
+  --rsp-font-family: 'Muli', sans-serif;
+  --rsp-font-size-xs: 8px;
+  --rsp-font-size-sm: 12px;
+  --rsp-font-size-md: 13px;
+  --rsp-font-size-lg: 14px;
+
+  // Spacing
+  --rsp-cell-height: 50px;
+  --rsp-header-height: 40px;
+  --rsp-resource-cell-height: 40px;
+
+  // Shadows
+  --rsp-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  --rsp-shadow-lg: 0 4px 16px rgba(0, 0, 0, 0.2);
+
+  // Transitions
+  --rsp-transition: 0.2s ease;
+
+  // Button
+  --rsp-btn-bg: #f8f9fa;
+  --rsp-btn-text: #212529;
+  --rsp-btn-border: #dee2e6;
+  --rsp-btn-hover-bg: #e9ecef;
+  --rsp-btn-active-bg: #dee2e6;
+
+  // More indicator
+  --rsp-more-text: rgba(0, 0, 0, 0.54);
+}
+
+// Dark theme
+[data-theme="dark"],
+.rsp-dark {
+  --rsp-primary: #4da6ff;
+  --rsp-primary-light: #1a3a5c;
+  --rsp-primary-dark: #80bfff;
+
+  --rsp-bg: #1e1e1e;
+  --rsp-bg-secondary: #2d2d2d;
+  --rsp-bg-hover: #2a3a4a;
+
+  --rsp-text: #e0e0e0;
+  --rsp-text-secondary: rgba(255, 255, 255, 0.54);
+  --rsp-text-inverse: #1e1e1e;
+
+  --rsp-border-color: rgba(255, 255, 255, 0.12);
+
+  --rsp-event-bg: #4da6ff;
+  --rsp-event-text: #ffffff;
+  --rsp-event-border: #3d3d5c;
+
+  --rsp-current-time-color: #ff4444;
+
+  --rsp-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+  --rsp-shadow-lg: 0 4px 16px rgba(0, 0, 0, 0.5);
+
+  --rsp-btn-bg: #2d2d2d;
+  --rsp-btn-text: #e0e0e0;
+  --rsp-btn-border: #404040;
+  --rsp-btn-hover-bg: #3d3d3d;
+  --rsp-btn-active-bg: #4d4d4d;
+
+  --rsp-more-text: rgba(255, 255, 255, 0.54);
+}

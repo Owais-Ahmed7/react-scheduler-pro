@@ -8,56 +8,17 @@ import {
   isBefore,
   isAfter,
 } from 'date-fns';
-import { CurrentTimeBarProps, fieldsType } from '../types';
+import {
+  CurrentTimeBarProps,
+  EventColumn,
+  MappedEvent,
+  Resource,
+  ResourceFields,
+  ResourcedEventsEntry,
+  fieldsType,
+} from '../types';
 import { formatInTimeZone, toDate } from 'date-fns-tz';
 import { CELL_HEIGHT } from '../helpers/constants/schedular';
-
-/* FILTER MULTIDAY EVENTS */
-// export const filterMultiDaySlot = (
-//   //not used
-//   events: any[],
-//   date: Date | Date[],
-//   timeZone?: string,
-//   lengthOnly?: boolean
-// ) => {
-//   const isMultiDates = Array.isArray(date);
-//   const list: any[] = [];
-//   const multiPerDay: Record<string, any[]> = {};
-//   for (let i = 0; i < events.length; i++) {
-//     const event = convertEventTimeZone(events[i],  timeZone);
-//     let withinSlot =
-//       event.allDay ||
-//       differenceInDaysOmitTime(event.startDate, event.endDate) > 0;
-//     if (!withinSlot) continue;
-//     if (isMultiDates) {
-//       withinSlot = date.some((weekday) =>
-//         isWithinInterval(weekday, {
-//           start: startOfDay(event.startDate),
-//           end: endOfDay(event.endDate),
-//         })
-//       );
-//     } else {
-//       withinSlot = isWithinInterval(date, {
-//         start: startOfDay(event.startDate),
-//         end: endOfDay(event.endDate),
-//       });
-//     }
-
-//     if (withinSlot) {
-//       list.push(event);
-//       const start = format(event.startDate, 'yyyy-MM-dd');
-//       multiPerDay[start] = (multiPerDay[start] || []).concat(event);
-//     }
-//   }
-
-//   if (isMultiDates && lengthOnly) {
-//     return (
-//       Object.values(multiPerDay).sort((a, b) => b.length - a.length)?.[0] || []
-//     );
-//   }
-
-//   return list;
-// };
 
 /**
  *
@@ -66,18 +27,18 @@ import { CELL_HEIGHT } from '../helpers/constants/schedular';
  */
 export const filterTodayEvents = (
   date: Date,
-  events: any[],
+  events: MappedEvent[],
   fields: fieldsType,
   timezone: string | undefined
-) => {
-  const eventsList: any[] = [];
+): MappedEvent[] => {
+  const eventsList: MappedEvent[] = [];
   // const eventsList =
   events.forEach((ev) => {
     const event = convertEventTimeZone(ev, fields, timezone);
 
     if (
-      isSameDay(event[fields.start], date) &&
-      differenceInDaysOmitTime(event[fields.start], event[fields.end]) === 0 &&
+      isSameDay(event[fields.start] as Date, date) &&
+      differenceInDaysOmitTime(event[fields.start] as Date, event[fields.end] as Date) === 0 &&
       // fields.allDay &&
       !event[fields.allDay || '']
     )
@@ -85,7 +46,7 @@ export const filterTodayEvents = (
   });
 
   const sortByStartDate = eventsList.sort(
-    (a: any, b: any) => a[fields.start] - b[fields.start]
+    (a, b) => (a[fields.start] as Date).getTime() - (b[fields.start] as Date).getTime()
   );
 
   return sortByStartDate;
@@ -93,15 +54,15 @@ export const filterTodayEvents = (
 
 /* FIND CORSSING EVENTS */
 export const traverseCrossingEvents = (
-  events: any[],
-  event: any,
-  fields: any,
+  events: MappedEvent[],
+  event: MappedEvent,
+  fields: fieldsType,
   timezone: string | undefined
-): any[] => {
+): MappedEvent[] => {
   return (events || []).filter((e) => {
     return areIntervalsOverlapping(
-      { start: e[fields.start], end: e[fields.end] },
-      { start: event[fields.start], end: event[fields.end] }
+      { start: e[fields.start] as Date, end: e[fields.end] as Date },
+      { start: event[fields.start] as Date, end: event[fields.end] as Date }
     );
   });
 };
@@ -109,32 +70,32 @@ export const traverseCrossingEvents = (
 export const computeMultiDPHeight = (
   val: number,
   showAllMultiDEvents: boolean
-) => {
+): number => {
   return val > 2 && !showAllMultiDEvents ? 3 * 25 : val * 25;
 };
 
-export const differenceInDaysOmitTime = (start: Date, end: Date) => {
+export const differenceInDaysOmitTime = (start: Date, end: Date): number => {
   return differenceInDays(endOfDay(addSeconds(end, -1)), startOfDay(start));
 };
 
-export const sortEventsByTheLengthest = (events: any[], fields: any) => {
+export const sortEventsByTheLengthest = (events: MappedEvent[], fields: fieldsType): MappedEvent[] => {
   return events.sort((a, b) => {
-    const aDiff = a[fields.end].getTime() - a[fields.start].getTime();
-    const bDiff = b[fields.end].getTime() - b[fields.start].getTime();
+    const aDiff = (a[fields.end] as Date).getTime() - (a[fields.start] as Date).getTime();
+    const bDiff = (b[fields.end] as Date).getTime() - (b[fields.start] as Date).getTime();
     return bDiff - aDiff;
   });
 };
 
 export const getResourcedEvents = (
-  events: any[],
-  resources: any,
-  resourceFields: any,
-  fields: any
-) => {
-  const rsEvents: any[] = [];
+  events: MappedEvent[],
+  resources: Resource[],
+  resourceFields: ResourceFields,
+  fields: fieldsType
+): ResourcedEventsEntry[] => {
+  const rsEvents: ResourcedEventsEntry[] = [];
   for (const event of events) {
     const findIdIndex = resources.findIndex(
-      (fl: any) => fl[resourceFields.id] === event[fields.resourceId]
+      (fl) => fl[resourceFields.id] === event[fields.resourceId || '']
     );
 
     if (rsEvents[findIdIndex]) {
@@ -151,16 +112,16 @@ export const getResourcedEvents = (
 };
 
 export const distributeEvents = (
-  events: any[],
-  eventsData: any[],
-  fields: any,
+  events: MappedEvent[],
+  eventsData: EventColumn[],
+  fields: fieldsType,
   timezone: string | undefined,
   limit?: number | null
-) => {
-  const data: any[] = eventsData;
+): EventColumn[] => {
+  const data: EventColumn[] = eventsData;
 
-  events.forEach((ev: any) => {
-    let index = null;
+  events.forEach((ev) => {
+    let index: number | null = null;
 
     for (let i = 0; i < data.length; i++) {
       let col = data[i];
@@ -172,12 +133,12 @@ export const distributeEvents = (
         if (
           areIntervalsOverlapping(
             {
-              start: ev[fields.start],
-              end: ev[fields.end],
+              start: ev[fields.start] as Date,
+              end: ev[fields.end] as Date,
             },
             {
-              start: event[fields.start],
-              end: event[fields.end],
+              start: event[fields.start] as Date,
+              end: event[fields.end] as Date,
             }
           )
         ) {
@@ -202,16 +163,16 @@ export const distributeEvents = (
 };
 
 export const distributeMonthEvents = (
-  events: any[],
-  eventsData: any[],
-  fields: any,
+  events: MappedEvent[],
+  eventsData: EventColumn[],
+  fields: fieldsType,
   timezone: string | undefined
-) => {
-  const data: any[] = eventsData;
+): EventColumn[] => {
+  const data: EventColumn[] = eventsData;
 
-  /* EVENTS DISTRIBUTING ALGORITHM © OWAIS AHMAD */
-  events.forEach((e: any) => {
-    let index = null;
+  /* EVENTS DISTRIBUTING ALGORITHM */
+  events.forEach((e) => {
+    let index: number | null = null;
 
     for (let i = 0; i < data.length; i++) {
       if (i > 2) return;
@@ -222,11 +183,11 @@ export const distributeMonthEvents = (
       for (let j = 0; j < col.events.length; j++) {
         const event = col.events[j];
         const ev = e;
-        const e1S = startOfDay(ev[fields.start]);
-        const e1E = endOfDay(ev[fields.end]);
+        const e1S = startOfDay(ev[fields.start] as Date);
+        const e1E = endOfDay(ev[fields.end] as Date);
 
-        const e2S = startOfDay(event[fields.start]);
-        const e2E = endOfDay(event[fields.end]);
+        const e2S = startOfDay(event[fields.start] as Date);
+        const e2E = endOfDay(event[fields.end] as Date);
 
         const con1 =
           (isBefore(e1S, e2S) || isSameDay(e1S, e2S)) &&
@@ -268,7 +229,7 @@ export const distributeMonthEvents = (
   return data;
 };
 
-function generateRandomColor() {
+function generateRandomColor(): { rgb: { r: number; g: number; b: number }; color: string } {
   // Generate random RGB values
   var r = Math.floor(Math.random() * 256);
   var g = Math.floor(Math.random() * 256);
@@ -312,26 +273,26 @@ export const generateRandomEvents = (total = 300) => {
 };
 
 export const convertEventTimeZone = (
-  event: any,
+  event: MappedEvent,
   fields: fieldsType,
   timeZone: string | undefined
-) => {
+): MappedEvent => {
   return {
     ...event,
-    [fields.start]: getTimeZonedDate(event[fields.start], timeZone),
-    [fields.end]: getTimeZonedDate(event[fields.end], timeZone),
+    [fields.start]: getTimeZonedDate(event[fields.start] as Date, timeZone),
+    [fields.end]: getTimeZonedDate(event[fields.end] as Date, timeZone),
   };
 };
 
 export const systemTimezone: string =
   Intl.DateTimeFormat().resolvedOptions().timeZone;
-export const getTimeZonedDate = (date: Date, timeZone: string | undefined) => {
+export const getTimeZonedDate = (date: Date, timeZone: string | undefined): Date => {
   return toDate(
     formatInTimeZone(date, timeZone || systemTimezone, 'yyyy-MM-dd HH:mm:ss')
   );
 };
 
-export const isToday = (date: Date, timezone: string | undefined) => {
+export const isToday = (date: Date, timezone: string | undefined): boolean => {
   const today = getTimeZonedDate(new Date(), timezone);
   return isSameDay(today, date);
 };

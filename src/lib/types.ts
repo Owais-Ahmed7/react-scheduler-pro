@@ -1,3 +1,5 @@
+import { CSSProperties } from 'react';
+
 export interface CurrentTimeBarProps {
   today: Date;
   startHour: number;
@@ -51,84 +53,170 @@ export type fieldsType = {
   allDay?: string;
 };
 
-// export type event = {
-//   [key: string]: string | Date;
-// };
+// Base event type - represents any user-provided event after field mapping.
+// Uses Record since the exact shape depends on the user's field configuration.
+export type MappedEvent = Record<string, unknown>;
 
-// export type resource = {
-//   [key: string]: string;
-// };
+// Resource type - represents any user-provided resource.
+export type Resource = Record<string, unknown>;
+
+// Resource fields configuration
+export interface ResourceFields {
+  id: string;
+  title: string;
+  backgroundColor?: string;
+}
+
+// Event dialog state
+export interface EventDialogState {
+  date: Date | null;
+  event: MappedEvent | null;
+  isOpen: boolean;
+  resource?: Resource;
+  start?: Date;
+  end?: Date;
+  [key: string]: unknown;
+}
+
+// Popover state
+export interface PopoverState {
+  open: boolean;
+  event: MappedEvent | null;
+}
+
+// Message interface
+export interface SchedulerMessage {
+  today: string;
+  month: string;
+  week: string;
+  day: string;
+  workweek: string;
+  more: string;
+  [key: string]: string; // Allow custom view labels
+}
+
+// WeekDays configuration
+export interface WeekDaysConfig {
+  workweek?: days[];
+  custom?: {
+    [key: string]: days[];
+  };
+}
+
+// Dispatch function type
+export type DispatchFn = (name: string, value: unknown) => void;
+
+// Slot property getter return type
+export interface SlotPropGetterResult {
+  styles?: CSSProperties;
+  classnames?: string;
+}
+
+// Distributed event column - used by event distribution algorithm
+export interface EventColumn {
+  events: MappedEvent[];
+}
+
+// Resourced events entry
+export interface ResourcedEventsEntry {
+  resourceEvents: MappedEvent[];
+}
+
+// Show more events state
+export interface ShowMoreEventsState {
+  date: Date | null;
+  events: MappedEvent[] | null;
+  resource: Resource | null;
+}
+
 export type eventFormContextType = {
   toggle: voidFunction;
   start: Date;
   end: Date;
-  event: any;
-  resource: any;
+  event: MappedEvent | null;
+  resource: Resource | null;
 };
 export type slotGetterType = { date: Date };
-export type eventPopoverType = { event: any; togglePopover: voidFunction };
+export type eventPopoverType = {
+  event: MappedEvent;
+  togglePopover: voidFunction;
+};
 export type allEventsPopoverType = {
-  date: Date;
-  events: any[];
+  date: Date | null;
+  events: MappedEvent[] | null;
   view: view;
   togglePopover: voidFunction;
 };
-export type onEditEventType = { event: any; resource: any };
-export type onDeleteEventType = { event: any; resource: any };
+export type onEditEventType = { event: MappedEvent; resource: Resource | null };
+export type onDeleteEventType = {
+  event: MappedEvent;
+  resource: Resource | null;
+};
 export type eventItemType = {
-  event: any;
+  event: MappedEvent;
   view: view;
   hasNext: boolean;
   hasPrevious: boolean;
-  resource: any;
-  styles: any;
+  resource: Resource | null;
+  styles: CSSProperties;
 };
-export type resourceType = { resource: any; view: view };
-export type onNavigateType = { date: Date; start: Date; end: Date; view: view };
+export type resourceType = { resource: Resource; view: view };
+export type onNavigateType = {
+  date: Date | null;
+  start: Date | null;
+  end: Date | null;
+  view: view;
+};
 export type onViewType = { view: view };
-export type onSlotType = { start: Date; end: Date; resource: any };
+export type onSlotType = {
+  start: Date;
+  end: Date;
+  resource?: Resource;
+  [key: string]: unknown;
+};
 export type onDoubleClickEventType = {
-  event: any;
-  resource: any;
+  event: MappedEvent;
+  resource: Resource | null;
 };
 export type onClickEventType = {
-  event: any;
-  resource: any;
+  event: MappedEvent;
+  resource: Resource | null;
 };
-export type disptach = (name: string, value: string) => void;
+export type onEventDropType = {
+  event: MappedEvent;
+  start: Date;
+  end: Date;
+  resource?: Resource;
+  originalEvent: MappedEvent;
+};
+
+export type onEventResizeType = {
+  event: MappedEvent;
+  start: Date;
+  end: Date;
+  originalEvent: MappedEvent;
+};
+
+/** @deprecated Use DispatchFn instead */
+export type dispatch = DispatchFn;
 
 export interface SchedulerProps {
   schedulerHeight?: number;
-  events: any[] | null;
-  resources?: any[] | null;
+  events: MappedEvent[] | null;
+  resources?: Resource[] | null;
 
   //dispatch
-  dispatch?: disptach;
+  dispatch?: DispatchFn;
 
-  weekDays?: {
-    workweek?: (0 | 1 | 2 | 3 | 4 | 5 | 6)[];
-    custom?: {
-      [key: string]: (0 | 1 | 2 | 3 | 4 | 5 | 6)[];
-    };
-  };
+  weekDays?: WeekDaysConfig;
 
   //message
-  message?: {
-    today: string;
-    month: string;
-    week: string;
-    day: string;
-    workweek: string;
-    more: string;
-  };
+  message?: SchedulerMessage;
 
   //modal size
   modalSize?: 'sm' | 'md' | 'lg' | 'xl';
 
-  slotPropGetter?: (props: slotGetterType) => {
-    styles?: any;
-    classnames?: string;
-  };
+  slotPropGetter?: (props: slotGetterType) => SlotPropGetterResult;
 
   //handle prev next
   onNavigate?: (props: onNavigateType) => void | null;
@@ -138,6 +226,12 @@ export interface SchedulerProps {
   onDeleteEvent?: (props: onDeleteEventType) => void | null;
   onClickEvent?: (props: onClickEventType) => void | null;
   onDoubleClickEvent?: (props: onDoubleClickEventType) => void | null;
+
+  // Drag and drop
+  draggable?: boolean;
+  resizable?: boolean;
+  onEventDrop?: (props: onEventDropType) => void | null;
+  onEventResize?: (props: onEventResizeType) => void | null;
 
   //view
   view?: view;
@@ -162,19 +256,11 @@ export interface SchedulerProps {
   //month
   weekStartsOn?: days;
 
-  //new any, prev event
-  eventDialog?: {
-    date: Date | null;
-    event: any | null;
-    isOpen: boolean;
-  };
+  //new event, prev event
+  eventDialog?: EventDialogState;
 
   fields: fieldsType;
-  resourceFields?: {
-    id: string;
-    title: string;
-    backgroundColor?: string;
-  };
+  resourceFields?: ResourceFields;
 
   eventFormContext?: ({
     toggle,
@@ -192,7 +278,7 @@ export interface SchedulerProps {
   resourceTemplate?: (props: resourceType) => JSX.Element | null;
 
   //trigger popover
-  popover?: { open: boolean; event: any | null };
+  popover?: PopoverState;
 }
 
 export interface Store extends SchedulerProps {
@@ -202,4 +288,18 @@ export interface Store extends SchedulerProps {
   fields: fieldsType;
   view: view;
   views: view[];
+  dispatch: DispatchFn;
+  selectedDate: Date;
+  locale: Locale;
+  weekStartsOn: days;
+  schedulerHeight: number;
+  message: SchedulerMessage;
+  eventDialog: EventDialogState;
+  modalSize: 'sm' | 'md' | 'lg' | 'xl';
+  weekDays: WeekDaysConfig;
+  resourceFields: ResourceFields;
+  popover: PopoverState;
+  hourFormat: 12 | 24;
+  // Internal state properties
+  multiDayEventsHFactor?: number;
 }

@@ -10,18 +10,37 @@ import { CELL_HEIGHT } from '../../helpers/constants/schedular';
 import useStore from '../../hooks/useStore';
 import EventItem from './EventItem';
 import CurrentTimeBar from '../CurrentTimeBar';
+import { EventColumn, MappedEvent, Resource } from '../../types';
 
 interface Props {
-  events: any[];
-  resource?: any;
+  events: MappedEvent[];
+  resource?: Resource;
   timezone?: string;
   today: Date;
-  // day: Date;
-  // setPopover: Dispatch<SetStateAction<{ event: any; open: boolean }>>;
-  // popover: { event: any; open: boolean };
+  onDragStart?: (
+    event: MappedEvent,
+    mouseEvent: React.MouseEvent | React.TouchEvent,
+    resource?: Resource,
+    eventElement?: HTMLElement
+  ) => void;
+  onResizeStart?: (
+    event: MappedEvent,
+    mouseEvent: React.MouseEvent | React.TouchEvent,
+    resource?: Resource,
+    eventElement?: HTMLElement
+  ) => void;
+  draggedEventId?: unknown;
 }
 
-const RenderEvents = ({ events, resource, timezone, today }: Props) => {
+const RenderEvents = ({
+  events,
+  resource,
+  timezone,
+  today,
+  onDragStart,
+  onResizeStart,
+  draggedEventId,
+}: Props) => {
   const {
     startHour: START_HOUR,
     endHour: END_HOUR,
@@ -33,15 +52,12 @@ const RenderEvents = ({ events, resource, timezone, today }: Props) => {
   const INTERVAL = step;
 
   const renderEvents = useMemo(() => {
-    return (events || []).map((event: any, idx) => {
-      // const event = convertEventTimeZone(ev, fields, timezone); //remove convert timezone : 1
-      const getHour = new Date(event[fields.start]).getHours();
-      const getMinutes = new Date(event[fields.start]).getMinutes();
+    return (events || []).map((event, idx) => {
+      const getHour = new Date(event[fields.start] as Date).getHours();
+      const getMinutes = new Date(event[fields.start] as Date).getMinutes();
       const computeMinutePercentage = (getMinutes / 60) * CELL_HEIGHT;
 
-      //algorithm
       const crossingEvents = traverseCrossingEvents(
-        //remove convert timezone : 2
         events,
         event,
         fields,
@@ -52,9 +68,8 @@ const RenderEvents = ({ events, resource, timezone, today }: Props) => {
       let left;
 
       let checkBigger = 0;
-      let maxCrossingEvent: any = {};
+      let maxCrossingEvent: MappedEvent[] = [];
       crossingEvents.forEach((ev) => {
-        // const ev = convertEventTimeZone(e, fields, timezone);
         const cEvents = traverseCrossingEvents(events, ev, fields, timezone);
 
         if (cEvents.length > checkBigger) {
@@ -63,7 +78,7 @@ const RenderEvents = ({ events, resource, timezone, today }: Props) => {
         }
       });
       const totalEvents = maxCrossingEvent || [];
-      let widthFactor: any[] = [];
+      let widthFactor: EventColumn[] = [];
       widthFactor = distributeEvents(
         totalEvents,
         widthFactor,
@@ -79,18 +94,18 @@ const RenderEvents = ({ events, resource, timezone, today }: Props) => {
 
       const height =
         (differenceInMinutes(
-          new Date(event[fields.end]),
-          new Date(event[fields.start])
+          new Date(event[fields.end] as Date),
+          new Date(event[fields.start] as Date)
         ) *
           CELL_HEIGHT_INTERVAL) /
         60;
       width = (90 / widthFactor.length || 1) - 1;
 
-      let leftFactor = null;
-      let eventInColumn = null;
+      let leftFactor: number | null = null;
+      let eventInColumn: MappedEvent | undefined = undefined;
       for (let i = 0; i < widthFactor.length; i++) {
         eventInColumn = widthFactor[i].events.find(
-          (e: any) => e[fields.id] === event[fields.id]
+          (e) => e[fields.id] === event[fields.id]
         );
 
         if (eventInColumn) {
@@ -100,6 +115,9 @@ const RenderEvents = ({ events, resource, timezone, today }: Props) => {
       }
 
       left = (leftFactor ?? 0) * (width + 1);
+
+      const isDraggedEvent =
+        draggedEventId != null && event[fields.id] === draggedEventId;
 
       return (
         <EventItem
@@ -114,10 +132,24 @@ const RenderEvents = ({ events, resource, timezone, today }: Props) => {
             height: `${height}px`,
             width: `${width}%`,
           }}
+          onDragStart={onDragStart}
+          onResizeStart={onResizeStart}
+          isDraggedEvent={isDraggedEvent}
         />
       );
     });
-  }, [events, fields, timezone, INTERVAL, START_HOUR, resource, hourFormat]);
+  }, [
+    events,
+    fields,
+    timezone,
+    INTERVAL,
+    START_HOUR,
+    resource,
+    hourFormat,
+    onDragStart,
+    onResizeStart,
+    draggedEventId,
+  ]);
 
   return (
     <React.Fragment>
@@ -128,7 +160,6 @@ const RenderEvents = ({ events, resource, timezone, today }: Props) => {
           step={step}
           renderTime={false}
           hourFormat={hourFormat || 12}
-          // minuteHeight={CELL_HEIGHT / step}
           timezone={timezone}
         />
       )}

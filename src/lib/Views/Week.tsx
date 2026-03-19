@@ -19,7 +19,7 @@ const Week = () => {
     resources,
     resourceFields,
     weekStartsOn,
-  }: any = useStore();
+  } = useStore();
   const displayDays = [0, 1, 2, 3, 4, 5, 6];
 
   return (
@@ -34,11 +34,11 @@ const Week = () => {
         hourFormat={hourFormat}
         selectedDate={selectedDate}
         step={step}
-        events={events}
+        events={events || []}
         locale={locale}
-        timezone={timezone}
+        timezone={timezone || ''}
         fields={fields}
-        resources={resources}
+        resources={resources || []}
         resourceFields={resourceFields}
       />
     </React.Fragment>

@@ -13,23 +13,15 @@ import { format } from 'date-fns';
 import { accessor } from '../../utils/accessor';
 import { Boundary } from '@popperjs/core';
 import useClickAway from '../../hooks/useClickAway';
+import useFocusTrap from '../../hooks/useFocusTrap';
+import { MappedEvent, Resource, ShowMoreEventsState } from '../../types';
 
 interface ShowMoreEventsProps {
-  dateAllEvents: {
-    events: any[] | null;
-    date: Date | null;
-    resource: any[] | null;
-  };
-  setDateAllEvents: Dispatch<
-    SetStateAction<{
-      events: any[] | null;
-      date: Date | null;
-      resource: any[] | null;
-    }>
-  >;
+  dateAllEvents: ShowMoreEventsState;
+  setDateAllEvents: Dispatch<SetStateAction<ShowMoreEventsState>>;
   setPopperElement: Dispatch<SetStateAction<HTMLDivElement | null>>;
-  styles: any;
-  attributes: any;
+  styles: Record<string, React.CSSProperties>;
+  attributes: Record<string, Record<string, string> | undefined>;
   timeFormat?: string | null;
 }
 
@@ -46,11 +38,11 @@ const ShowMoreEvents: React.FC<ShowMoreEventsProps> = ({
     view,
     allEventsPopoverTemplate,
     resourceFields,
-    onDoubleClick,
+    onDoubleClickEvent,
     dispatch,
-  }: any = useStore();
+  } = useStore();
 
-  const [popover, setPopover] = useState<{} | null>(null);
+  const [popover, setPopover] = useState<MappedEvent | null>(null);
 
   const [boundary, setBoudnary] = useState<Boundary | null>(null);
   const [referenceElement, setReferenceElement] =
@@ -60,13 +52,12 @@ const ShowMoreEvents: React.FC<ShowMoreEventsProps> = ({
 
   useEffect(() => {
     const element = document?.querySelector('.scheduler');
-    // Ensure that element exists before calling setBoudnary
     if (element) {
       setBoudnary(element);
     }
   }, []);
 
-  const { styles: eventStyles, attributes: eventAttributes }: any = usePopper(
+  const { styles: eventStyles, attributes: eventAttributes } = usePopper(
     referenceElement,
     popperElement,
     {
@@ -111,11 +102,11 @@ const ShowMoreEvents: React.FC<ShowMoreEventsProps> = ({
     });
   };
 
-  const onClick = (event: any) => {
+  const onClick = (event: MappedEvent) => {
     setPopover(event);
   };
 
-  const onDoubleClck = ({ event, resource }: any) => {
+  const onDoubleClck = ({ event, resource }: { event: MappedEvent; resource: Resource | null }) => {
     dispatch('eventDialog', {
       date: null,
       event: event,
@@ -124,16 +115,16 @@ const ShowMoreEvents: React.FC<ShowMoreEventsProps> = ({
     });
   };
 
-  const timer: any = useRef();
+  const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const onClickHandler = (e: any, event: any) => {
-    clearTimeout(timer.current);
+  const onClickHandler = (e: React.MouseEvent, event: MappedEvent) => {
+    if (timer.current) clearTimeout(timer.current);
 
     if (e.detail === 1) {
       timer.current = setTimeout(() => onClick(event), 200);
     } else if (e.detail === 2) {
-      onDoubleClick instanceof Function
-        ? onDoubleClick({ event, resource })
+      onDoubleClickEvent instanceof Function
+        ? onDoubleClickEvent({ event, resource })
         : onDoubleClck({ event, resource });
     }
   };
@@ -142,6 +133,8 @@ const ShowMoreEvents: React.FC<ShowMoreEventsProps> = ({
     setDateAllEvents({ events: null, date: null, resource: null });
     setPopover(null);
   }) as React.RefObject<HTMLDivElement>;
+
+  const focusTrapRef = useFocusTrap(Boolean(events?.length));
 
   return (
     <React.Fragment>
@@ -158,7 +151,21 @@ const ShowMoreEvents: React.FC<ShowMoreEventsProps> = ({
             }}
             {...attributes.popper}
           >
-            <div ref={popperRef}>
+            <div
+              ref={(el) => {
+                (popperRef as React.MutableRefObject<HTMLDivElement | null>).current = el;
+                (focusTrapRef as React.MutableRefObject<HTMLDivElement | null>).current = el;
+              }}
+              role="dialog"
+              aria-modal="true"
+              aria-label={`Events for ${date ? format(date, 'd MMM') : ''}`}
+              onKeyDown={(e) => {
+                if (e.key === 'Escape') {
+                  e.stopPropagation();
+                  togglePopover();
+                }
+              }}
+            >
               {allEventsPopoverTemplate instanceof Function ? (
                 allEventsPopoverTemplate({ date, events, view, togglePopover })
               ) : (
@@ -171,6 +178,7 @@ const ShowMoreEvents: React.FC<ShowMoreEventsProps> = ({
                     </div>
                     <div>
                       <button
+                        aria-label="Close"
                         onClick={() => {
                           togglePopover();
                         }}
@@ -189,24 +197,15 @@ const ShowMoreEvents: React.FC<ShowMoreEventsProps> = ({
                         }}
                         key={idx}
                         style={{
-                          backgroundColor: resource
-                            ? accessor(resourceFields.backgroundColor, resource)
-                            : accessor(fields.backgroundColor, e),
+                          backgroundColor: (resource
+                            ? accessor(resourceFields.backgroundColor || '', resource)
+                            : accessor(fields.backgroundColor || '', e)) as string,
                         }}
                         className="btn btn-sm btn-primary border-0 text-start mb-1 py-1 px-2 text-white w-100"
                       >
                         <h6 className="fs-10 text-start">
-                          {accessor(fields.subject, e)}
+                          {accessor(fields.subject, e) as string}
                         </h6>
-                        {/* <time className="">
-                <span>
-                  {format(e[fields.start], 'dd MMM yyyy')}
-                </span>
-                <span>-</span>
-                <span>
-                  {format(e[fields.end], 'dd MMM yyyy')}
-                </span>
-              </time> */}
                       </div>
                     ))}
                     <EventPopover

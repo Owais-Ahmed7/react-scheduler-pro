@@ -3,24 +3,21 @@ import React from 'react';
 import { differenceInDaysOmitTime } from '../../utils/schedular';
 import EventItem from './EventItem';
 import useStore from '../../hooks/useStore';
+import { EventColumn, MappedEvent, Resource } from '../../types';
 
 interface MultidayProps {
-  multiDayEvents: any[];
-  // showMultiDEvents: boolean;
-  // setPopover: Dispatch<SetStateAction<{ event: any; open: boolean }>>;
-  // popover: { event: any; open: boolean };
-  resource?: any;
+  multiDayEvents: MappedEvent[];
+  resource?: Resource;
   weekStart: Date;
   weekEnd: Date;
-  eventsIndexes: any[];
-  prevNextEvents: any[];
+  eventsIndexes: EventColumn[];
+  prevNextEvents: MappedEvent[];
   hasResource: boolean;
   today: Date;
 }
 
 const MultidayEvents: React.FC<MultidayProps> = ({
   multiDayEvents,
-  // showMultiDEvents,
   resource,
   weekStart,
   weekEnd,
@@ -35,19 +32,19 @@ const MultidayEvents: React.FC<MultidayProps> = ({
     <React.Fragment key={today.getTime()}>
       {(multiDayEvents.slice(0, 2) || []) //showMultiDEvents ? multiDayEvents : multiDayEvents.slice(0, 3)) || []
         .map((event, idx) => {
-          const hasPrev = isBefore(startOfDay(event[fields.start]), weekStart);
-          const hasNext = isAfter(endOfDay(event[fields.end]), weekEnd);
+          const hasPrev = isBefore(startOfDay(event[fields.start] as Date), weekStart);
+          const hasNext = isAfter(endOfDay(event[fields.end] as Date), weekEnd);
           const eventLength =
             differenceInDaysOmitTime(
-              hasPrev ? weekStart : event[fields.start],
-              hasNext ? weekEnd : event[fields.end]
+              hasPrev ? weekStart : (event[fields.start] as Date),
+              hasNext ? weekEnd : (event[fields.end] as Date)
             ) + 1;
 
           let topFactor = 0;
-          let eventInColumn;
+          let eventInColumn: MappedEvent | undefined;
           for (let i = 0; i < eventsIndexes?.length; i++) {
             eventInColumn = eventsIndexes[i].events.find(
-              (e: any) => e[fields.id] === event[fields.id]
+              (e) => e[fields.id] === event[fields.id]
             );
 
             if (eventInColumn) {

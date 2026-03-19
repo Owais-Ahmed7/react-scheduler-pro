@@ -10,35 +10,31 @@
   position: fixed;
   top: 0;
   width: 100%;
-  z-index: 2;
-  font-family: 'Gothic', sans-serif;
   z-index: 1005;
+  font-family: var(--rsp-font-family);
 
   .modal-dialog {
     position: relative;
     width: auto;
-    margin: 1.75rem;
-    pointer-events: none;
     margin: auto;
-
+    pointer-events: none;
     display: flex;
     align-items: center;
     min-height: calc(100% - 1.75rem * 2);
-    // z-index: 1005;
 
     .modal-content {
-      background-color: #fff !important;
+      background-color: var(--rsp-bg) !important;
       position: relative;
       display: flex;
       flex-direction: column;
       width: 100%;
       pointer-events: auto;
-      background-color: var(--bs-modal-bg);
       background-clip: padding-box;
-      border: 1px solid rgba(0, 0, 0, 0.175);
+      border: var(--rsp-border-width) var(--rsp-border-style) var(--rsp-border-color);
       border-radius: 0.3rem;
       outline: 0;
       padding: 1rem 1.5rem;
+      color: var(--rsp-text);
     }
   }
 

@@ -1,23 +1,47 @@
 {
   "name": "react-scheduler-pro",
-  "version": "1.3.1",
-  "description": "React scheduler pro is light weight scheduler package.",
+  "version": "2.0.0",
+  "description": "A professional, lightweight, and fully-featured React scheduler component with drag-and-drop, resource views, timezone support, and full TypeScript support.",
   "author": "Owais Ahmad",
   "license": "MIT",
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/index.d.mts",
+        "default": "./dist/index.mjs"
+      },
+      "require": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      }
+    },
+    "./styles.css": "./dist/styles.css"
+  },
   "files": [
-    "*"
+    "dist"
   ],
+  "sideEffects": [
+    "**/*.css"
+  ],
+  "peerDependencies": {
+    "react": ">=16.8.0",
+    "react-dom": ">=16.8.0"
+  },
   "dependencies": {
     "@popperjs/core": "^2.11.8",
     "date-fns": "^2.30.0",
     "date-fns-tz": "^2.0.0",
-    "react-popper": "^2.3.0",
-    "typescript": "^5.6.2"
+    "react-popper": "^2.3.0"
   },
   "scripts": {
     "start": "react-scripts start",
-    "webpack": "webpack",
-    "pack": "rm -rf dist && npm run webpack && npm run post:pack",
+    "build": "tsup && npm run build:css",
+    "build:css": "sass src/assets/scss/global.scss dist/styles.css --style=compressed --no-source-map",
+    "webpack": "webpack --config webpack.config.legacy.js",
+    "pack": "rm -rf dist && npm run build && npm run post:pack",
     "local:pack": "npm run pack && cd dist && npm pack && mv *.tgz ../",
     "post:pack": "node ./scripts/post-pack.js",
     "format": "prettier --check .",
@@ -26,7 +50,7 @@
     "lint:fix": "eslint . --fix",
     "types": "tsc --noEmit",
     "pre:commit": "lint-staged",
-    "test": "jest",
+    "test": "react-scripts test --watchAll=false",
     "test:watch": "jest --watch",
     "test:ci": "jest --ci"
   },
@@ -36,13 +60,27 @@
   },
   "keywords": [
     "react",
+    "react-scheduler",
+    "react-calendar",
     "calendar",
     "scheduler",
-    "appointments scheduler",
-    "events scheduler",
-    "resource scheduler"
+    "event-calendar",
+    "appointments",
+    "booking",
+    "scheduling",
+    "timeline",
+    "typescript",
+    "typescript-calendar",
+    "react-big-calendar-alternative",
+    "fullcalendar-alternative",
+    "lightweight-scheduler",
+    "modern-calendar",
+    "react-18",
+    "date-picker",
+    "event-management",
+    "resource-scheduler"
   ],
-  "homepage": "",
+  "homepage": "https://react-scheduler-pro.vercel.app",
   "bugs": {
     "url": "https://github.com/Owais-Ahmed7/react-scheduler-pro/issues"
   },
@@ -81,8 +119,10 @@
     "sass-loader": "^14.1.1",
     "source-map-loader": "^5.0.0",
     "style-loader": "^3.3.4",
+    "ts-jest": "^29.4.6",
     "ts-loader": "^9.5.1",
     "ts-node": "^10.9.2",
+    "tsup": "^8.0.0",
     "web-vitals": "^2.1.4",
     "webpack-cli": "^5.1.4",
     "webpack-node-externals": "^3.0.0"

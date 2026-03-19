@@ -30,7 +30,7 @@ function App() {
       resourceId?: string | number;
       allDay?: boolean;
     }[]
-  >(generateRandomEvents(250));
+  >(generateRandomEvents(5));
 
   // const evs = [
   //   {
@@ -308,13 +308,13 @@ function App() {
             name: 'Hello',
             startDate: props.start,
             endDate: props.end,
-            resourceId: props.resource?._id,
+            resourceId: props.resource?._id as string | number | undefined,
             // allDay: true,
             backgroundColor: '#1d1d1d',
           };
           // console.log(event, 'event');
 
-          setEvents((evs) => [...evs, event]);
+          setEvents((evs) => [...evs, event] as typeof evs);
         }}
         eventTemplate={({
           event,
@@ -331,18 +331,22 @@ function App() {
                   : 'd-fle p-2 justify-content-between h-100'
               }
               style={{
-                backgroundColor: `rgba(${event.backgroundColor.rgb?.r}, ${event.backgroundColor.rgb?.g}, ${event.backgroundColor.rgb?.b}, 0.6)`,
+                backgroundColor: `rgba(${(event.backgroundColor as { rgb?: { r: number; g: number; b: number } })?.rgb?.r}, ${(event.backgroundColor as { rgb?: { r: number; g: number; b: number } })?.rgb?.g}, ${(event.backgroundColor as { rgb?: { r: number; g: number; b: number } })?.rgb?.b}, 0.6)`,
                 color: '#1d1d1d',
                 textAlign: 'start',
-                borderLeft: `7px solid rgba(${event.backgroundColor.rgb?.r}, ${event.backgroundColor.rgb?.g}, ${event.backgroundColor.rgb?.b}, 1)`,
+                borderLeft: `7px solid rgba(${(event.backgroundColor as { rgb?: { r: number; g: number; b: number } })?.rgb?.r}, ${(event.backgroundColor as { rgb?: { r: number; g: number; b: number } })?.rgb?.g}, ${(event.backgroundColor as { rgb?: { r: number; g: number; b: number } })?.rgb?.b}, 1)`,
               }}
             >
-              <div>{event.name}</div>
+              <div>{event.name as string}</div>
               <div>
                 <time className="fs-12">
-                  <span>{format(new Date(event.startDate), 'hh:mm a')}</span>
+                  <span>
+                    {format(new Date(event.startDate as Date), 'hh:mm a')}
+                  </span>
                   <span className="mx-1">-</span>
-                  <span>{format(new Date(event.endDate), 'hh:mm a')}</span>
+                  <span>
+                    {format(new Date(event.endDate as Date), 'hh:mm a')}
+                  </span>
                 </time>
               </div>
               <div>

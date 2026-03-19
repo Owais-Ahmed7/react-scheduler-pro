@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { Dispatch, SetStateAction, useEffect, useMemo, useRef, useState } from 'react';
 import {
   convertEventTimeZone,
   differenceInDaysOmitTime,
@@ -19,21 +19,27 @@ import useStore from '../hooks/useStore';
 import ShowMoreEvents from './Popovers/ShowMoreEvents';
 import { usePopper } from 'react-popper';
 import { Boundary } from '@popperjs/core';
+import {
+  EventColumn,
+  MappedEvent,
+  Resource,
+  ResourceFields,
+  ResourcedEventsEntry,
+  ShowMoreEventsState,
+  fieldsType,
+} from '../types';
 
 interface Props {
   hasResource: boolean;
-  resources?: any;
+  resources?: Resource[];
   resourceIndex?: number;
-  resourceFields?: any;
+  resourceFields?: ResourceFields;
   weekDays: number[];
   startOfWk: Date;
   endOfWk: Date;
   locale: Locale;
-  // multiDayPlaceHFactor: { current: number };
-  // showAllMultiDEvents: boolean;
-  resourcedEvents: any[];
-  fields: any;
-  // setShowMultiDEvents: Dispatch<SetStateAction<boolean>>;
+  resourcedEvents: MappedEvent[] | ResourcedEventsEntry[];
+  fields: fieldsType;
 }
 
 const DayGridHeader: React.FC<Props> = ({
@@ -44,27 +50,19 @@ const DayGridHeader: React.FC<Props> = ({
   startOfWk,
   endOfWk,
   locale,
-  // multiDayPlaceHFactor,
-  // showAllMultiDEvents,
   resourcedEvents,
   fields,
-  // setShowMultiDEvents,
 }) => {
-  const { multiDayEventsHFactor, hourFormat }: any = useStore();
+  const { multiDayEventsHFactor, hourFormat } = useStore();
 
   const multiDayPlaceHFactor = useRef(0);
-  multiDayPlaceHFactor.current = multiDayEventsHFactor;
-  // let eventsIndexes: any[] = [];
+  multiDayPlaceHFactor.current = multiDayEventsHFactor || 0;
 
-  const [showAllMultiDEvents, setShowMultiDEvents] = useState<{
-    date: Date | null;
-    events: any[] | null;
-    resource: any | null;
-  }>({
+  const [showAllMultiDEvents, setShowMultiDEvents] = useState<ShowMoreEventsState>({
     date: null,
     events: [],
     resource: null,
-  }); //useState<boolean>(false);
+  });
 
   const [boundary, setBoudnary] = useState<Boundary | null>(null);
   const [referenceElement, setReferenceElement] =
@@ -75,7 +73,6 @@ const DayGridHeader: React.FC<Props> = ({
 
   useEffect(() => {
     const element = document?.querySelector('.scheduler');
-    // Ensure that element exists before calling setBoudnary
     if (element) {
       setBoudnary(element);
     }
@@ -118,19 +115,10 @@ const DayGridHeader: React.FC<Props> = ({
       <div
         style={{
           height: '50px',
-          // `${computeMultiDPHeight(
-          //   multiDayPlaceHFactor.current,
-          //   showAllMultiDEvents
-          // )}px`,
         }}
         className="bs-all-day-cells border-0"
       >
         <div className="e-all-day-appointment text-center e-appointment-expand">
-          {/* <ToggleMultiDayEvents
-            multiDayPlaceHFactor={multiDayPlaceHFactor.current}
-            show={showAllMultiDEvents}
-            setShowMultiDEvents={setShowMultiDEvents}
-          /> */}
         </div>
       </div>
     );
@@ -138,9 +126,9 @@ const DayGridHeader: React.FC<Props> = ({
 
   const renderEvents = useMemo(() => {
     return hasResource ? (
-      resources.map((rs: any, idx: number) => (
+      (resources || []).map((rs, idx: number) => (
         <RenderHeader
-          key={rs[resourceFields.id]}
+          key={rs[resourceFields?.id || 'id'] as string}
           resource={rs}
           index={idx}
           weekDays={weekDays}
@@ -201,7 +189,6 @@ const DayGridHeader: React.FC<Props> = ({
       </div>
 
       <div className="bs-time-header-content bs-row">
-        {/* <div className="overflow-hidden"> */}
         {renderEvents}
         <ShowMoreEvents
           dateAllEvents={showAllMultiDEvents}
@@ -209,15 +196,29 @@ const DayGridHeader: React.FC<Props> = ({
           setPopperElement={setPopperElement}
           styles={styles}
           attributes={attributes}
-          // timeFormat={hourFormat === 12 ? '' :}
         />
-        {/* </div> */}
       </div>
     </React.Fragment>
   );
 };
 
 export default DayGridHeader;
+
+interface RenderHeaderProps {
+  resource?: Resource;
+  index: number;
+  weekDays: number[];
+  startOfWk: Date;
+  endOfWk: Date;
+  hasResource: boolean;
+  resources?: Resource[];
+  resourceFields?: ResourceFields;
+  locale: Locale;
+  resourcedEvents: MappedEvent[] | ResourcedEventsEntry[];
+  fields: fieldsType;
+  setReferenceElement: Dispatch<SetStateAction<HTMLDivElement | null>>;
+  setShowMultiDEvents: Dispatch<SetStateAction<ShowMoreEventsState>>;
+}
 
 const RenderHeader = ({
   resource,
@@ -233,34 +234,34 @@ const RenderHeader = ({
   fields,
   setReferenceElement,
   setShowMultiDEvents,
-}: any) => {
-  const { resourceTemplate, view, message, timezone }: any = useStore();
+}: RenderHeaderProps) => {
+  const { resourceTemplate, view, message, timezone } = useStore();
 
   const renderMultiDayEvents = useMemo(() => {
-    return (weekDays || []).map((e: any, i: number) => {
+    return (weekDays || []).map((e: number, i: number) => {
       const today = addDays(startOfWk, e);
       const eachFirstDayInCalcRow = isSameDay(startOfWk, today) ? today : null;
 
-      let todayEvents: any[] = [];
-      let prevNextEvents: any[] = [];
+      let todayEvents: MappedEvent[] = [];
+      let prevNextEvents: MappedEvent[] = [];
 
       const events = hasResource
-        ? resourcedEvents[index ?? 0]?.resourceEvents
-        : resourcedEvents;
+        ? (resourcedEvents as ResourcedEventsEntry[])[index ?? 0]?.resourceEvents
+        : (resourcedEvents as MappedEvent[]);
 
-      events?.forEach((e: any) => {
+      events?.forEach((e: MappedEvent) => {
         const event = convertEventTimeZone(e, fields, timezone);
         if (
           differenceInDaysOmitTime(
-            new Date(event[fields.start]),
-            new Date(event[fields.end])
+            new Date(event[fields.start] as Date),
+            new Date(event[fields.end] as Date)
           ) > 0 ||
-          event[fields.allDay]
+          event[fields.allDay || '']
         ) {
           const doesIntervalOverlap = areIntervalsOverlapping(
             {
-              start: startOfDay(event[fields.start]),
-              end: endOfDay(event[fields.end]),
+              start: startOfDay(event[fields.start] as Date),
+              end: endOfDay(event[fields.end] as Date),
             },
             {
               start: startOfDay(today),
@@ -270,7 +271,7 @@ const RenderHeader = ({
 
           if (
             (eachFirstDayInCalcRow && doesIntervalOverlap) ||
-            isSameDay(event[fields.start], today)
+            isSameDay(event[fields.start] as Date, today)
           ) {
             todayEvents.push(event);
           }
@@ -281,13 +282,13 @@ const RenderHeader = ({
         }
       });
 
-      let eventsIndexes: any = [];
+      let eventsIndexes: EventColumn[] = [];
       if (prevNextEvents.length)
         eventsIndexes = distributeEvents(
           prevNextEvents.sort(
-            (a: any, b: any) =>
-              new Date(a[fields.start]).getTime() -
-              new Date(b[fields.start]).getTime()
+            (a, b) =>
+              new Date(a[fields.start] as Date).getTime() -
+              new Date(b[fields.start] as Date).getTime()
           ),
           eventsIndexes || [],
           fields,
@@ -301,14 +302,13 @@ const RenderHeader = ({
             multiDayEvents={todayEvents}
             prevNextEvents={prevNextEvents}
             resource={resource}
-            // showMultiDEvents={showAllMultiDEvents}
             eventsIndexes={eventsIndexes}
             weekStart={startOfWk}
             weekEnd={endOfWk}
             hasResource={hasResource}
             today={today}
           />
-          {prevNextEvents.length > 2 && ( //&& !showAllMultiDEvents
+          {prevNextEvents.length > 2 && (
             <div
               onClick={(e) => {
                 e.stopPropagation();
@@ -316,7 +316,7 @@ const RenderHeader = ({
                 setShowMultiDEvents({
                   date: today,
                   events: prevNextEvents,
-                  resource,
+                  resource: resource || null,
                 });
               }}
               className="btn bs-more-indicator position-absolute p-0 w-100 text-start"
@@ -336,13 +336,11 @@ const RenderHeader = ({
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
-    // multiDayPlaceHFactor,
     weekDays,
     startOfWk,
     resourcedEvents,
     resources,
     fields,
-    // showAllMultiDEvents,
     endOfWk,
     hasResource,
     setShowMultiDEvents,
@@ -353,20 +351,19 @@ const RenderHeader = ({
       <div
         style={{
           height: hasResource ? '40px' : 0,
-          // padding: hasResource ? '8px' : 0,
         }}
         className="bs-resource-cell text-center"
       >
         {hasResource &&
           (resourceTemplate instanceof Function
-            ? resourceTemplate({ resource, view })
-            : resource[resourceFields.title])}
+            ? resourceTemplate({ resource: resource as Resource, view })
+            : resource?.[resourceFields?.title || 'title'] as string)}
       </div>
       <div className="bs-row">
         <div className="bs-all-day-appointments">{renderMultiDayEvents}</div>
       </div>
       <div className="bs-time-header-cell bs-row">
-        {(weekDays || []).map((e: any, i: number) => {
+        {(weekDays || []).map((e: number, i: number) => {
           const date = addDays(startOfWk, e);
           return (
             <div key={i} className="bs-header-cells">
