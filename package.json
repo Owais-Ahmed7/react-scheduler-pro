@@ -1,6 +1,6 @@
 {
   "name": "react-scheduler-pro",
-  "version": "2.0.0",
+  "version": "3.0.0",
   "description": "A professional, lightweight, and fully-featured React scheduler component with drag-and-drop, resource views, timezone support, and full TypeScript support.",
   "author": "Owais Ahmad",
   "license": "MIT",
